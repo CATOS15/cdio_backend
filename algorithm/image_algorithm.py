@@ -1,1 +1,2 @@
-print("I like dick and algorithms")
+#Lav en analyse af et 7-kabale setup
+print("t")
