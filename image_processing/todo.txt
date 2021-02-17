@@ -1,0 +1,14 @@
+inititialization (card_layout)
+#recognize tableau (currently)
+#recognize foundation
+#recognize waste
+
+tick (image_processing)
+#recognize single card, color and suit
+
+end game
+
+#Note
+starting: 7 columns in tableau
+4 columns in foundation
+1 column in waste
