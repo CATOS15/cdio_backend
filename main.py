@@ -1,4 +1,5 @@
-from flask import Flask
+from flask import Flask, request
+
 
 app = Flask(__name__)
 app.config['SECRET_KEY'] = 'back3nd_!cdio'
@@ -6,6 +7,12 @@ app.config['SECRET_KEY'] = 'back3nd_!cdio'
 @app.route('/')
 def hello():
     return "Test commit"
+
+@app.route('/upload', methods = ['POST'])
+def calculateImage():
+    imagefile = request.files.get('image', '')
+    print(imagefile.filename)
+    return "OK", 200
 
 if __name__ == '__main__':
     #Vi vil optimalt gerne knytte denne til port 80 
