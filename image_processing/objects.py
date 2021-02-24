@@ -24,4 +24,6 @@ class TemplateInfo:
         self.drawSquare = drawSquare
 
     def compare_template(self, img_grey):
+     self.templ_image = cv2.bitwise_not(self.templ_image)
+     cv2.imwrite("image_processing/templates/card/result/templ_test.png", self.templ_image)
      return cv2.matchTemplate(img_grey, self.templ_image, g_match_alg) 
