@@ -8,6 +8,16 @@ app.config['SECRET_KEY'] = 'back3nd_!cdio'
 def hello():
     return "Test commit"
 
+@app.route('/test', methods = ['POST'])
+def test_endpoint():
+    print(request.form)
+    return "OK", 200
+
+@app.route('/testImage', methods = ['POST'])
+def test_endpoint2():
+    print(request.data)
+    return "OK", 200
+
 @app.route('/upload', methods = ['POST'])
 def calculateImage():
     imagefile = request.files.get('image', '')
