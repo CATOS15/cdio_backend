@@ -1,8 +1,11 @@
 from flask import Flask, request
+import werkzeug
 
 
 app = Flask(__name__)
 app.config['SECRET_KEY'] = 'back3nd_!cdio'
+app.config["IMAGE_UPLOADS"] = "C:/Users/Nikolai/Desktop/Python/cdio_backend"
+# app.config["IMAGE_TEST"] = url("C:\Users\Nikolai\Desktop\Python\cdio_backend")
 
 @app.route('/')
 def hello():
@@ -20,7 +23,9 @@ def test_endpoint2():
 
 @app.route('/upload', methods = ['POST'])
 def calculateImage():
-    imagefile = request.files.get('image', '')
+    imagefile = request.files.get('file', '')
+    filename = werkzeug.utils.secure_filename(imagefile.filename)
+    imagefile.save(filename)
     print(imagefile.filename)
     return "OK", 200
 
