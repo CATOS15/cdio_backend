@@ -1,13 +1,17 @@
-import os
-#g_img imports cv2 & numpy
-from g_img import * 
-from image_processing import locate_figure
+#I HAVE A SHITTY LINTER, DON'T JUDGE
+from g_img import *
+from map_image import *
 
-number_success = locate_figure(number_match, g_threshold, w_number, h_number, g_red_square)
-suit_success = locate_figure(suit_diamonds_match, g_threshold, w_suit_diamonds, h_suit_diamonds, g_green_square)
-# locate_figure(suit_heart_match, g_threshold, w_suit_heart, h_suit_heart, g_blue_square)
+path_card_high_res = './image_processing/templates/test/3_diamonds_hearts_high_res.png'
+high_res_color = cv2.imread(path_card_high_res)
 
-cv2.imwrite(result_image, g_img_color)
+img_input = set_resolution(high_res_color, g_img_color)
 
+img_grey = change_contour(img_input)
 
+# heart, diamonds, number = match_template_suit(img_grey, g_match_alg)
+img1 = locate_figure(img_input, img_grey, g_templ_objs['heart'])
+img2 = locate_figure(img1, img_grey, g_templ_objs['diamond'])
+img3 = locate_figure(img2, img_grey, g_templ_objs['number'][Cards.Three])
 
+cv2.imwrite(result_image, img3)

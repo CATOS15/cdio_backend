@@ -12,3 +12,9 @@ end game
 starting: 7 columns in tableau
 4 columns in foundation
 1 column in waste
+
+
+Next:
+	Make acceptable image processing
+		- setup for recording
+		- change image into predefined size, to ensure template matching works 
