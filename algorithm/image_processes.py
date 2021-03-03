@@ -1,1 +1,1 @@
-print("I like pussy and image recognizition")
+print("...")
