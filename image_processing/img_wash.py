@@ -8,16 +8,17 @@ def store_images(images, path):
         cv2.imwrite(path.format(i), img)
 
 # MORMORS MØRKERUM BITCH'ÈS
-def wash_img(img):
-    img_grey = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)
+def wash_img(img, cunts_1_sample):
+    # img_grey = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)
     lower, upper = 170, 255
 
     # use threshold to identify patterns
-    ret_sample1, thresh_sample1 = cv2.threshold(img_grey, lower, upper, 0)
+    # ret_sample1, thresh_sample1 = cv2.threshold(img_grey, lower, upper, 0)
     
     # seperate all cards
-    cunts_1_sample = contours_sample1(
-        thresh_sample1, cv2.RETR_TREE, cv2.CHAIN_APPROX_SIMPLE)
+    # cunts_1_sample = cb_contour(
+    #     thresh_sample1, cv2.RETR_TREE, cv2.CHAIN_APPROX_SIMPLE)
+
     wash_split_img = []
     for img_sample1 in cunts_1_sample:
         wash_split_img.append(img_sample1)
@@ -59,13 +60,6 @@ def __lighting(img, lower, upper):
     return cv2.adaptiveThreshold(img, upper, cv2.ADAPTIVE_THRESH_GAUSSIAN_C, cv2.THRESH_BINARY, pixel_neighborhood, subtract_mean)
     # return th
 
-
-
-
-
-
-
-
 def __clear_image(img, alg1):
     # define array
     blur = cv2.GaussianBlur(img, (5, 5), 0)
@@ -90,26 +84,4 @@ def __contrast_flip_images(img_cunts, alg1):
     return imgs
 
 
-# require certain img format
 
-# crazy expectations
-    # ratio (delay)
-    # rotate image
-
-# Must have same resolution for template match (DONE)
-
-# Contour
-    # Find each card as an object
-    # Set Contrast really high for each object (maybe)
-    # Go through each object and look for Suit
-    # Go through each object and look for Number
-
-
-# Compare Template w. img
- # TM_COEFF
-
-
-# Different angles
-
-
-# Consider blur (delay)

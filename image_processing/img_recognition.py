@@ -17,22 +17,28 @@ high_res_color = cv2.imread(path_card_high_res)
 # write_to(result_image_sp1, flow_simple_res_suits, flow_simple_res_numbers)
 
 #cmp resized template and image.
-flow_two = Flow(ratio_img_resolution, None, wash_img, compare)
-flow_two_img = flow_two.execute_resolution(high_res_color, g_img_ideal_color)
-flow_two_washed_images = flow_two.execute_wash(flow_two_img)
-avg_columns_width = avg_columns_width(flow_two_washed_images)
+# flow_two = Flow(ratio_img_resolution, None, wash_img, compare, contours_sample1)
+# flow_two_img = flow_two.execute_resolution(high_res_color, g_img_ideal_color)
+# flow_two_threshold = define_threshold(flow_two_img, g_lower_threshold, g_upper_threshold)
 
-resized_suits = ratio_template_resolution(g_suits, avg_columns_width,g_ideal_card_suit_width,g_ideal_card_suit_height)
-resized_numbers = ratio_template_resolution(g_numbers, avg_columns_width,g_ideal_card_number_width,g_ideal_card_number_height)
-res_suits, res_numbers = flow_two.cb_compare(flow_two_img, flow_two_washed_images, resized_suits, resized_numbers)
+# flow_two_contours = flow_two.execute_contour(flow_two_threshold, cv2.RETR_TREE, cv2.CHAIN_APPROX_SIMPLE)
+# flow_two_washed_images = flow_two.execute_wash(flow_two_img, flow_two_contours)
+# avg_columns_width = avg_columns_width(flow_two_washed_images)
 
-write_to(result_image_sp2, res_suits, res_numbers)
-# cv2.imshow("resized_suits",resized_suits[0].templ_image)
-# cv2.imshow("resized_numbers",resized_numbers[0].templ_image)
-# cv2.waitKey(0)
+# resized_suits = ratio_template_resolution(g_suits, avg_columns_width,g_ideal_card_suit_width,g_ideal_card_suit_height)
+# resized_numbers = ratio_template_resolution(g_numbers, avg_columns_width,g_ideal_card_number_width,g_ideal_card_number_height)
+# res_suits, res_numbers = flow_two.cb_compare(flow_two_img, flow_two_washed_images, resized_suits, resized_numbers)
+
+# write_to(result_image_sp2, res_suits, res_numbers)
+
+#Next time
+#flow_three = Flow(..)
+# write_to(result_image_sp3, res_suits, res_numbers)
 
 #TODO
 
+#Make Contour work for a single solitaire 
+    #Make contour work for a new, different solitaire
 #research
     #Feature Detection 
 

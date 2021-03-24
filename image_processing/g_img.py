@@ -17,6 +17,10 @@ g_ideal_card_suit_height = 7/55
 g_ideal_card_number_width = (7)/55
 g_ideal_card_number_height = (10)/55
 
+#contours threshold
+g_lower_threshold = 170
+g_upper_threshold = 255
+
 # an image should be resized to around this resolution
 g_img_ideal_color = (1086, 2048, 3)
 

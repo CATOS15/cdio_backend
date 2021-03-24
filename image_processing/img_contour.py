@@ -1,5 +1,13 @@
 import cv2
 import numpy as np
+# from g_img import *
+
+
+def define_threshold(img, lower, upper):
+    img_grey = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)
+    #use threshold to identify patterns
+    ret_sample1, thresh_sample1 = cv2.threshold(img_grey, lower,upper, 0)
+    return thresh_sample1
 
 def contours_sample1(img_thresh, alg1, alg2):
     contours, hierachy = cv2.findContours(
