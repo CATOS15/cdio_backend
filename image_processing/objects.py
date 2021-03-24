@@ -1,5 +1,6 @@
 import cv2
 from g_shared import *
+from img_contour import *
 
 
 # Algorithm for template matching
