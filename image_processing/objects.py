@@ -1,13 +1,11 @@
 import cv2
+from g_shared import *
 
-from enum import Enum
-
-Suit = Enum('Suits', 'Spade Heart Diamonds Club')
-Cards = Enum(
-    'Cards', 'Ace Two Three Four Five Six Seven Eight Nine Ten Eleven Twelf Thirteen')
 
 # Algorithm for template matching
 g_match_alg = cv2.TM_CCOEFF_NORMED
+# g_match_alg = cv2.TM_SQDIFF
+
 
 class DrawSquare:
     def __init__(self, color, thicc):
@@ -23,7 +21,12 @@ class TemplateInfo:
         self.height = height
         self.drawSquare = drawSquare
 
-    def compare_template(self, img_grey):
-     self.templ_image = cv2.bitwise_not(self.templ_image)
-     cv2.imwrite("image_processing/templates/card/result/templ_test.png", self.templ_image)
-     return cv2.matchTemplate(img_grey, self.templ_image, g_match_alg) 
+    def compare_template(self, washed_img):                        
+        flipped = cv2.bitwise_not(self.templ_image)
+        blur = cv2.GaussianBlur(flipped, (5, 5), 0)
+        ret, th = cv2.threshold(
+            blur, 0, 255, cv2.THRESH_BINARY_INV+cv2.THRESH_OTSU)
+        cv2.imwrite(path_template_sp1.format(0), th)
+        return cv2.matchTemplate(washed_img, th, g_match_alg)
+
+        # return cv2.matchTemplate(washed_img, self.templ_image, g_match_alg)

@@ -1,6 +1,7 @@
 from cv2 import cv2
 import numpy as np
 import os
+from g_shared import *
 from objects import *
 # if you don't start the directory at cdio_backend, check win/linux/etc. and set base_path appropriately
 # base_path = os.getcwd()
@@ -11,7 +12,7 @@ path_template_suit_hearts = 'image_processing/templates/suits/3_hearts_suit_temp
 # path_tpe_suit_clubs = ''
 
 # global variables
-g_threshold = 0.80
+g_threshold = 0.30
 g_red_square = (0, 0, 255)
 g_green_square = (0, 255, 0)
 g_blue_square = (255, 0, 0)
@@ -66,10 +67,11 @@ __tmpl_diamond = TemplateInfo(__template_suit_diamonds, g_threshold,
 __tmpl_three = TemplateInfo(
     __template_number, 0.65, __w_number, __h_number, DrawSquare(g_blue_square, 2))
 
-__tmpl_number_objects = {Cards.Three:__tmpl_three}
+# __tmpl_number_objects = {Cards.Three:__tmpl_three}
 
-g_templ_objs = {'heart': __tmpl_heart,
-                'diamond': __tmpl_diamond, 'number': __tmpl_number_objects}
+# g_templ_objs = {'heart': __tmpl_heart,
+#                 'diamond': __tmpl_diamond, 'number': __tmpl_number_objects}
 
-# store results
-result_image = 'image_processing/templates/card/result/res.png'
+g_suits = [__tmpl_heart]
+g_numbers = [__tmpl_three]
+

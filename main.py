@@ -1,5 +1,6 @@
 from flask import Flask, request
-import werkzeug
+import json
+import time
 
 
 app = Flask(__name__)
@@ -24,10 +25,17 @@ def test_endpoint2():
 @app.route('/upload', methods = ['POST'])
 def calculateImage():
     imagefile = request.files.get('file', '')
-    filename = werkzeug.utils.secure_filename(imagefile.filename)
-    imagefile.save(filename)
+    imagefile.save("image.jpg")
     print(imagefile.filename)
-    return "OK", 200
+
+    dictionary ={   
+        "firstcard": "ad",   
+        "secondcard": "kc",   
+        "movemessage": "move your ad to your kc"
+    }   
+
+    json_object = json.dumps(dictionary)
+    return json_object
 
 if __name__ == '__main__':
     #Vi vil optimalt gerne knytte denne til port 80 
