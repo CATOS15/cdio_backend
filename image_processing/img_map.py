@@ -1,7 +1,7 @@
 import cv2
 import numpy as np
 from g_img import *
-# from PIL import Image
+
 
 def print_img(img):
     return
@@ -14,7 +14,7 @@ def store_images(images, path):
     for i, img in enumerate(images):
         cv2.imwrite(path.format(i), img)
 
-#MORMORS MØRKERUM BITCH
+#MORMORS MØRKERUM BITCH'ÈS
 def wash_img(img):
     img_grey = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)
 
