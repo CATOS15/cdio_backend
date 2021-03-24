@@ -4,7 +4,7 @@ from img_compare import *
 from img_resolution import *
 
 #input
-path_card_high_res = './image_processing/templates/test/full_solitare_1.png'
+path_card_high_res = './image_processing/templates/test/full_solitare_1_2.png'
 high_res_color = cv2.imread(path_card_high_res)
 
 

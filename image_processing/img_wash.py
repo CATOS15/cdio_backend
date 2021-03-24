@@ -24,7 +24,7 @@ def wash_img(img):
     # use OSTU to clear up noice from cards
     img_1_clear = __contrast_flip_images(
         wash_split_img, cv2.THRESH_BINARY+cv2.THRESH_OTSU)
-    store_images(img_1_clear, path_contours_sp1)
+    store_images(img_1_clear, path_contours_sp2)
 
     return img_1_clear
 
