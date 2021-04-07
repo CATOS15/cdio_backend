@@ -32,7 +32,7 @@ fountains = [
     Fountain(1, suit.HEART),
     Fountain(2, suit.SPADE),
     Fountain(0, suit.CLUBS)
-]
+] 
 
 stacks = [
     [Card(13, suit.SPADE), Card(12, suit.DIAMOND), Card(11, suit.CLUBS), Card(10, suit.DIAMOND), Card(9, suit.CLUBS)],
@@ -140,16 +140,28 @@ def _45_points(move):
     return 0
 
 def _25_points(move):
-    #Frier en plads så en konge kan rykke der hen (Det specielle her er at det kun er godt hvis der er en konge der kan rykkes til det tomme felt ellers er det rigtig dårligt)
-    if move.fromCardIndex == 0 and move.fromCard.number != 13 and len(move.toStack) > 0:
+    #Frier en plads så en konge kan rykke der hen
+    alreadyEmtpy = False
+    for stack in stacks:
+        if len(stack) == 0:
+            alreadyEmtpy = True
+            break
+    if move.fromCardIndex == 0 and move.fromCard.number != 13 and len(move.toStack) > 0 and not alreadyEmtpy:
         return 25
     return 0
-
+    
 def _10_points(move):
     #Alle ting der giver 10 point er næsten ubrugelige (Gør ingen forskel) - Undtagelsen er hvis du skal rykke kort til Fountain og nogle kort blokerer
     if move.fromCardIndex > 0 and move.fromStack[move.fromCardIndex - 1] != None and type(move.toStack) is list:
         return 10
     return 0
+
+def _2_points(move):
+    #Frier en plads så en konge kan rykke der hen (Dårligt da denne kun bliver ramt hvis der allerede er en tom plads)
+    if move.fromCardIndex == 0 and move.fromCard.number != 13 and len(move.toStack) > 0:
+        return 2
+    return 0
+    
 def _1_points(move):
     #Absolut ubrugelig. Ryk konge fra tomt felt til anden tomt felt
     if move.fromCardIndex == 0 and move.fromCard.number == 13 and len(move.toStack) == 0: 
@@ -206,7 +218,14 @@ def simulate_newStacks(move):
     global cardpile, stacks, fountains
     cardMoved = None
 
+    # if(move.description == "Fra stack(1) suit.SPADE(13) til stack(4)"):
+    #     print("kat")
+    #     print(move.description)
+    #     print(str(move.fromCard.number) + str(move.fromCard.suit))
+
     newStacks = [None, None]
+
+    fromIndex = -1
 
     if move.fromStack == cardpile:
         cardMoved = cardpile[move.fromCardIndex:]
@@ -218,18 +237,23 @@ def simulate_newStacks(move):
                 cardMoved = stack[move.fromCardIndex:]
                 stacks[index] = stack[:move.fromCardIndex]
                 newStacks[0] = stacks[index]
+                fromIndex = index
         for index, fountain in enumerate(fountains):
             if(fountain == move.fromStack):
                 cardMoved = fountain[move.fromCardIndex:]
                 fountains[index] = fountain[:move.fromCardIndex]
                 newStacks[0] = fountains[index]
+                fromIndex = index
+
+    if fromIndex == -1 :
+        print("FEJL. Ingen index at rykke kort til??")
 
     for index, stack in enumerate(stacks):
-        if(stack == move.toStack and cardMoved != None):
+        if(stack == move.toStack and cardMoved != None and index != fromIndex):
             stacks[index] = move.toStack + cardMoved
             newStacks[1] = stacks[index]
     for index, fountain in enumerate(fountains):
-        if(fountain == move.toStack):
+        if(fountain == move.toStack and index != fromIndex):
             fountains[index].count = fountains[index].count + 1
             newStacks[1] = fountains[index]
 
@@ -250,6 +274,7 @@ def get_moves_ordered(moves):
         point = _45_points(move) if point == 0 else point
         point = _25_points(move) if point == 0 else point
         point = _10_points(move) if point == 0 else point
+        point = _2_points(move) if point == 0 else point
         point = _1_points(move) if point == 0 else point
 
         if point > 0:
@@ -285,6 +310,7 @@ def set_best_move():
         print("FEJL! Ingen move kunne beregnes")
         return None
 
+
     return bestMove
 
 originalFountains = copy.copy(fountains)
@@ -299,4 +325,5 @@ print("Bedste træk:")
 
 bestMove = set_best_move()
 if bestMove != None:
+    print(bestMove["point"])
     print(bestMove["move"].description)
