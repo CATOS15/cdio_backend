@@ -168,60 +168,9 @@ def _1_points(move):
         return 1
     return 0
 
-
-# bestMove = None
-# bestPoint = 0
-# def set_best_move(moves, currentPoint, doRecursive):
-#     global fountains, stacks, cardpile
-#     global bestMove, bestPoint
-
-#     localBestPoint = 0
-
-#     for move in moves:
-#         if(move.description == 'Fra cardpile suit.CLUBS(9) til stack(1)'):
-#             print("ky")
-
-#         point = _100_points(move)
-#         point = _95_points(move) if point == 0 else point
-#         point = _90_points(move) if point == 0 else point
-#         point = _75_points(move) if point == 0 else point
-#         point = _50_points(move) if point == 0 else point
-#         point = _45_points(move) if point == 0 else point
-#         point = _25_points(move) if point == 0 else point
-#         point = _10_points(move) if point == 0 else point
-#         point = _1_points(move) if point == 0 else point
-
-#         if point + currentPoint > localBestPoint:
-#             localBestPoint = point + currentPoint
-#             bestMove = move
-#             bestPoint = localBestPoint
-        
-#         if doRecursive:
-#             newStacks = simulate_newStacks(move)
-#             tempBestPoint = set_best_move(get_moves(newStacks[0], newStacks[1]), point + currentPoint, False)
-#             localBestPoint = tempBestPoint if tempBestPoint != 0 else localBestPoint
-
-#             fountains = copy.copy(originalFountains)
-#             stacks = copy.copy(originalStacks)
-#             cardpile = copy.copy(originalCardpile)
-
-#         #     if localBestPoint > bestPoint:
-#         #         bestMove = move
-#         #         bestPoint = localBestPoint
-
-#         if(point == 0): 
-#             print("Mangler: " + move.description)
-
-#     return localBestPoint
-
 def simulate_newStacks(move):
     global cardpile, stacks, fountains
     cardMoved = None
-
-    # if(move.description == "Fra stack(1) suit.SPADE(13) til stack(4)"):
-    #     print("kat")
-    #     print(move.description)
-    #     print(str(move.fromCard.number) + str(move.fromCard.suit))
 
     newStacks = [None, None]
 
@@ -258,9 +207,6 @@ def simulate_newStacks(move):
             newStacks[1] = fountains[index]
 
     return newStacks
-
-
-
 
 def get_moves_ordered(moves):
     moves_ordered = []
