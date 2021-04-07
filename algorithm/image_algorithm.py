@@ -1,6 +1,6 @@
 from enum import Enum
 import copy
-
+from operator import itemgetter
 class suit(Enum):
     DIAMOND = 1
     HEART = 2
@@ -157,49 +157,50 @@ def _1_points(move):
     return 0
 
 
-bestMove = None
-bestPoint = 0
-def set_best_move(moves, currentPoint, doRecursive):
-    global fountains, stacks, cardpile
-    global bestMove, bestPoint
+# bestMove = None
+# bestPoint = 0
+# def set_best_move(moves, currentPoint, doRecursive):
+#     global fountains, stacks, cardpile
+#     global bestMove, bestPoint
 
-    localBestPoint = 0
+#     localBestPoint = 0
 
-    for move in moves:
-        if(move.description == 'Fra cardpile suit.CLUBS(9) til stack(1)'):
-            print("ky")
+#     for move in moves:
+#         if(move.description == 'Fra cardpile suit.CLUBS(9) til stack(1)'):
+#             print("ky")
 
-        point = _100_points(move)
-        point = _95_points(move) if point == 0 else point
-        point = _90_points(move) if point == 0 else point
-        point = _75_points(move) if point == 0 else point
-        point = _50_points(move) if point == 0 else point
-        point = _45_points(move) if point == 0 else point
-        point = _25_points(move) if point == 0 else point
-        point = _10_points(move) if point == 0 else point
-        point = _1_points(move) if point == 0 else point
+#         point = _100_points(move)
+#         point = _95_points(move) if point == 0 else point
+#         point = _90_points(move) if point == 0 else point
+#         point = _75_points(move) if point == 0 else point
+#         point = _50_points(move) if point == 0 else point
+#         point = _45_points(move) if point == 0 else point
+#         point = _25_points(move) if point == 0 else point
+#         point = _10_points(move) if point == 0 else point
+#         point = _1_points(move) if point == 0 else point
 
-        if point + currentPoint > localBestPoint:
-            localBestPoint = point + currentPoint
+#         if point + currentPoint > localBestPoint:
+#             localBestPoint = point + currentPoint
+#             bestMove = move
+#             bestPoint = localBestPoint
         
-        if doRecursive:
-            newStacks = simulate_newStacks(move)
-            tempBestPoint = set_best_move(get_moves(newStacks[0], newStacks[1]), point + currentPoint, False)
-            localBestPoint = tempBestPoint if tempBestPoint != 0 else localBestPoint
+#         if doRecursive:
+#             newStacks = simulate_newStacks(move)
+#             tempBestPoint = set_best_move(get_moves(newStacks[0], newStacks[1]), point + currentPoint, False)
+#             localBestPoint = tempBestPoint if tempBestPoint != 0 else localBestPoint
 
+#             fountains = copy.copy(originalFountains)
+#             stacks = copy.copy(originalStacks)
+#             cardpile = copy.copy(originalCardpile)
 
-            fountains = copy.copy(originalFountains)
-            stacks = copy.copy(originalStacks)
-            cardpile = copy.copy(originalCardpile)
+#         #     if localBestPoint > bestPoint:
+#         #         bestMove = move
+#         #         bestPoint = localBestPoint
 
-            if localBestPoint > bestPoint:
-                bestMove = move
-                bestPoint = localBestPoint
+#         if(point == 0): 
+#             print("Mangler: " + move.description)
 
-        if(point == 0): 
-            print("Mangler: " + move.description)
-
-    return localBestPoint
+#     return localBestPoint
 
 def simulate_newStacks(move):
     global cardpile, stacks, fountains
@@ -237,9 +238,54 @@ def simulate_newStacks(move):
 
 
 
+def get_moves_ordered(moves):
+    moves_ordered = []
 
+    for move in moves:
+        point = _100_points(move)
+        point = _95_points(move) if point == 0 else point
+        point = _90_points(move) if point == 0 else point
+        point = _75_points(move) if point == 0 else point
+        point = _50_points(move) if point == 0 else point
+        point = _45_points(move) if point == 0 else point
+        point = _25_points(move) if point == 0 else point
+        point = _10_points(move) if point == 0 else point
+        point = _1_points(move) if point == 0 else point
 
+        if point > 0:
+            moves_ordered.append({"point": point, "move": move})
+        else:
+            print("FEJL! Et træk har 0 point: " + move.description)
+    
+    moves_ordered = sorted(moves_ordered, key=itemgetter('point'), reverse=True) 
+    return moves_ordered
 
+def set_best_move():
+    global cardpile, stacks, fountains
+    bestMove = {"point": 0, "move": None}
+    moves_ordered1 = get_moves_ordered(get_moves())
+
+    for move in moves_ordered1: 
+        newStacks = simulate_newStacks(move["move"])
+        moves_ordered2 = get_moves_ordered(get_moves(newStacks[0], newStacks[1]))
+        if len(moves_ordered2) > 0:
+            if move["point"] + moves_ordered2[0]["point"] > bestMove["point"]:
+                bestMove["point"] = move["point"] + moves_ordered2[0]["point"]
+                bestMove["move"] = move["move"]
+        else:
+            if move["point"] > bestMove["point"]:
+                bestMove["point"] = move["point"]
+                bestMove["move"] = move["move"]
+
+        fountains = copy.copy(originalFountains)
+        stacks = copy.copy(originalStacks)
+        cardpile = copy.copy(originalCardpile)
+
+    if bestMove["move"] == None:
+        print("FEJL! Ingen move kunne beregnes")
+        return None
+
+    return bestMove
 
 originalFountains = copy.copy(fountains)
 originalStacks = copy.copy(stacks)
@@ -250,6 +296,7 @@ for x in get_moves():
 
 print("\n")
 print("Bedste træk:")
-set_best_move(get_moves(), 0, True)
-print(bestPoint)
-print(bestMove.description)
+
+bestMove = set_best_move()
+if bestMove != None:
+    print(bestMove["move"].description)
