@@ -6,6 +6,7 @@
 #
 #
 .image_processing/templates/card/result/*
+image_processing/templates/card/result/*
 # created by https://www.toptal.com/developers/gitignore/api/visualstudiocode
 # # edit at https://www.toptal.com/developers/gitignore?templates=visualstudiocode
 #

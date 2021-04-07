@@ -1,5 +1,6 @@
 import cv2
 from g_shared import *
+from img_contour import *
 
 
 # Algorithm for template matching
@@ -30,3 +31,27 @@ class TemplateInfo:
         return cv2.matchTemplate(washed_img, th, g_match_alg)
 
         # return cv2.matchTemplate(washed_img, self.templ_image, g_match_alg)
+
+
+class Flow:
+    def __init__(self, cb_resolution, cb_distance, cb_wash, cb_compare, cb_contour):
+        self.cb_resolution = cb_resolution
+        self.cb_distance = cb_distance
+        self.cb_wash = cb_wash
+        self.cb_compare = cb_compare
+        self.cb_contour = cb_contour
+    
+    def execute_resolution(self, high_constrast, img_color):
+        return self.cb_resolution(high_constrast, img_color)
+    
+    def execute_distance(self):
+        return self.cb_distance()
+    
+    def execute_wash(self, ready_img, flow_two_contours):
+        return self.cb_wash(ready_img, flow_two_contours)
+
+    def execute_compare(self, img_input, washed_image, suits, numbers):
+        return self.cb_compare(img_input, washed_image, suits, numbers)
+    
+    def execute_contour(self, img_thresh, alg1, alg2):
+        return self.cb_contour(img_thresh, alg1, alg2)
