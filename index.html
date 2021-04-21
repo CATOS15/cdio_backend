@@ -1,0 +1,179 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Test af algoritme</title>
+    <style>
+        html, body{
+            width: 100%;
+        }
+        .header{
+            width:100%;
+        }
+        .stacks{
+            margin-top:30px;
+            width: 100%;
+        }
+        div{
+            margin-right:50px;
+            float:left;
+        }
+        button{
+            margin-top:10px;
+        }
+        .stacks > div{
+            width:110px;
+            height: 400px;
+        }
+        .stacks > div > div{
+            margin:0;
+            clear:left;
+        }
+        .stacks > div > div > div{
+            margin:0;
+            clear:left;
+        }
+    </style>
+</head>
+<body>
+    <div id="solitaire">
+        <div class="header">
+            <div>
+                <div id="cardpile"></div>
+            </div>
+            <div>
+                <div id="fountainDiamond"></div>
+                <div id="fountainHeart"></div>
+                <div id="fountainSpade"></div>
+                <div id="fountainClubs"></div>
+            </div>
+        </div>
+        <div class="stacks">
+            <div><b>Stack 1:</b> <div id="stack1"></div></div>
+            <div><b>Stack 2:</b> <div id="stack2"></div></div>
+            <div><b>Stack 3:</b> <div id="stack3"></div></div>
+            <div><b>Stack 4:</b> <div id="stack4"></div></div>
+            <div><b>Stack 5:</b> <div id="stack5"></div></div>
+            <div><b>Stack 6:</b> <div id="stack6"></div></div>
+            <div><b>Stack 7:</b> <div id="stack7"></div></div>
+        </div>
+        <button id="gogo">GO GO</button>
+    </div>
+    <div id="response">
+    </div>
+
+    <script>
+        const DIAMOND = 1, HEART = 2, SPADE = 3, CLUBS = 4;
+        var solitaire = {
+            fountains: [
+                {number: 0, suit: DIAMOND},
+                {number: 1, suit: HEART},
+                {number: 1, suit: SPADE},
+                {number: 1, suit: CLUBS}
+            ],
+            stacks: [
+                [{number: 3, suit: CLUBS}, {number: 2, suit: DIAMOND}], 
+                [{number: 5, suit: DIAMOND}],
+                [{number: 3, suit: SPADE}],
+                [],
+                [],
+                [],
+                []
+            ],
+            cardpile: [
+                {number: 7, suit: DIAMOND}
+            ]
+        };
+
+        function getSuitFromNumber(number){
+            switch(number){
+                case 1:
+                    return "<span style='color:#FF0000'>DIAMOND</span>"
+                case 2:
+                    return "<span style='color:#FF0000'>HEART</span>"
+                case 3:
+                    return "SPADE"
+                case 4:
+                    return "CLUBS"
+            }
+        }
+
+        function renderSolitaire(){
+            function renderUpdateStack(HTMLStack, index){
+                var stackString = "";
+                solitaire.stacks[index].forEach(stack => {
+                    stackString += "<div>" + stack.number + " " + getSuitFromNumber(stack.suit) + "</div>";
+                });
+                HTMLStack.innerHTML = stackString
+            }
+
+            var HTMLsolitaire = document.getElementById("solitaire");
+            
+            var HTMLcardpile = HTMLsolitaire.querySelector("#cardpile");
+            var cardpileString = "Cardpile: ";
+            solitaire.cardpile.forEach(cardpile => {
+                cardpileString += "" + cardpile.number + " " + getSuitFromNumber(cardpile.suit)
+            });
+            HTMLcardpile.innerHTML = cardpileString;
+
+            var HTMLfountainDiamond = HTMLsolitaire.querySelector("#fountainDiamond");
+            HTMLfountainDiamond.innerHTML = getSuitFromNumber(solitaire.fountains[0].suit) + ": " + solitaire.fountains[0].number;
+
+            var HTMLfountainHeart = HTMLsolitaire.querySelector("#fountainHeart");
+            HTMLfountainHeart.innerHTML = getSuitFromNumber(solitaire.fountains[1].suit) + ": " + solitaire.fountains[1].number;
+
+            var HTMLfountainSpade = HTMLsolitaire.querySelector("#fountainSpade");
+            HTMLfountainSpade.innerHTML = getSuitFromNumber(solitaire.fountains[2].suit) + ": " + solitaire.fountains[2].number;
+
+            var HTMLfountainClubs = HTMLsolitaire.querySelector("#fountainClubs");
+            HTMLfountainClubs.innerHTML = getSuitFromNumber(solitaire.fountains[3].suit) + ": " + solitaire.fountains[3].number;
+
+            renderUpdateStack(HTMLsolitaire.querySelector("#stack1"), 0);
+            renderUpdateStack(HTMLsolitaire.querySelector("#stack2"), 1);
+            renderUpdateStack(HTMLsolitaire.querySelector("#stack3"), 2);
+            renderUpdateStack(HTMLsolitaire.querySelector("#stack4"), 3);
+            renderUpdateStack(HTMLsolitaire.querySelector("#stack5"), 4);
+            renderUpdateStack(HTMLsolitaire.querySelector("#stack6"), 5);
+            renderUpdateStack(HTMLsolitaire.querySelector("#stack7"), 6);
+        }
+
+        function init(){
+            renderSolitaire();
+
+            var gogo = document.getElementById("gogo");
+            gogo.onclick = (() => {
+                algtest();
+            });
+        }
+
+        async function algtest() {
+            fetch("http://localhost:5005/algtest", {
+                cache: "no-cache",
+                method: 'POST',
+                headers: new Headers({
+                    "content-type": "application/json"
+                }),
+                body: JSON.stringify(solitaire)
+            })
+            .then((response) => {
+                if (response.status !== 200) {
+                    console.log(`Looks like there was a problem. Status code: ${response.status}`);
+                    return;
+                }
+                response.json().then((data) => {
+                    document.getElementById("response").innerHTML = data.message;
+                });
+            })
+            .catch((error) => {
+                console.log("Fetch error: " + error);
+            });
+        };
+
+        document.addEventListener("DOMContentLoaded", () => {
+            init();
+        });
+    </script>
+</body>
+</html>

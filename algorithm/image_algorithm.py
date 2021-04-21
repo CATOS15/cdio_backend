@@ -1,5 +1,6 @@
 from enum import Enum
 import copy
+import json
 from operator import itemgetter
 class suit(Enum):
     DIAMOND = 1
@@ -11,11 +12,15 @@ class Card:
     def __init__(self, number, suit):
         self.number = number
         self.suit = suit
+    def toJSON (self):
+        return json.dumps(self.__dict__)
 
 class Fountain:
     def __init__(self, count, suit):
         self.count = count
         self.suit = suit
+    def toJSON (self):
+        return json.dumps(self.__dict__)
 
 class Move:
     def __init__(self, fromCard, fromCardIndex, fromStack, toStack, description):
@@ -24,27 +29,48 @@ class Move:
         self.fromStack = fromStack
         self.toStack = toStack
         self.description = description
+    def toJSON (self):
+        return json.dumps(self.__dict__)
 
 #Ledig plads for en konge bliver Card(14, None)
 
-fountains = [
-    Fountain(1, suit.DIAMOND),
-    Fountain(1, suit.HEART),
-    Fountain(2, suit.SPADE),
-    Fountain(0, suit.CLUBS)
-] 
+# fountains = [
+#     Fountain(1, suit.DIAMOND),
+#     Fountain(1, suit.HEART),
+#     Fountain(2, suit.SPADE),
+#     Fountain(0, suit.CLUBS)
+# ] 
 
-stacks = [
-    [Card(13, suit.SPADE), Card(12, suit.DIAMOND), Card(11, suit.CLUBS), Card(10, suit.DIAMOND), Card(9, suit.CLUBS)],
-    [Card(13, suit.CLUBS)],
-    [Card(11, suit.HEART)],
-    [],
-    [Card(6, suit.HEART), Card(5, suit.CLUBS), Card(4, suit.HEART), Card(3, suit.SPADE)],
-    [None, Card(8, suit.DIAMOND), Card(7, suit.SPADE)],
-    [None, None, Card(10, suit.SPADE), Card(9, suit.HEART), Card(8, suit.CLUBS), Card(7, suit.HEART)]
+fountains = [
+    Fountain(0, suit.DIAMOND),
+    Fountain(0, suit.HEART),
+    Fountain(0, suit.SPADE),
+    Fountain(0, suit.CLUBS)
 ]
 
-cardpile = [Card(7, suit.DIAMOND)]
+# stacks = [
+#     [Card(13, suit.SPADE), Card(12, suit.DIAMOND), Card(11, suit.CLUBS), Card(10, suit.DIAMOND), Card(9, suit.CLUBS)],
+#     [Card(13, suit.CLUBS)],
+#     [Card(11, suit.HEART)],
+#     [],
+#     [Card(6, suit.HEART), Card(5, suit.CLUBS), Card(4, suit.HEART), Card(3, suit.SPADE)],
+#     [None, Card(8, suit.DIAMOND), Card(7, suit.SPADE)],
+#     [None, None, Card(10, suit.SPADE), Card(9, suit.HEART), Card(8, suit.CLUBS), Card(7, suit.HEART)]
+# ]
+
+stacks = [
+    [],
+    [],
+    [],
+    [],
+    [],
+    [],
+    []
+]
+
+#cardpile = [Card(7, suit.DIAMOND)]
+
+cardpile = []
 
 def rule_move_to_stack(fromCard, toStack):
     if len(toStack) == 0:
@@ -253,23 +279,46 @@ def set_best_move():
         cardpile = copy.copy(originalCardpile)
 
     if bestMove["move"] == None:
-        print("FEJL! Ingen move kunne beregnes")
         return None
 
 
     return bestMove
 
-originalFountains = copy.copy(fountains)
-originalStacks = copy.copy(stacks)
-originalCardpile = copy.copy(cardpile)
 
-for x in get_moves():
-    print(x.description)
+def run_algorithm(data_solitaire):
+    global originalFountains, originalStacks, originalCardpile, stacks, fountains, cardpile
 
-print("\n")
-print("Bedste træk:")
+    index = 0
+    for data_cards in data_solitaire['stacks']:
+        for data_card in data_cards:
+            stacks[index].append(Card(data_card['number'], suit(data_card['suit'])))
+        index += 1
 
-bestMove = set_best_move()
-if bestMove != None:
-    print(bestMove["point"])
-    print(bestMove["move"].description)
+    index = 0
+    for data_fountain in data_solitaire['fountains']:
+        fountains[index] = Fountain(data_fountain['number'], suit(data_fountain['suit']))
+        index += 1
+
+    index = 0
+    for data_cardpile in data_solitaire['cardpile']:
+        cardpile.append(Card(data_cardpile['number'], suit(data_cardpile['suit'])))
+        index += 1
+
+    originalFountains = copy.copy(fountains)
+    originalStacks = copy.copy(stacks)
+    originalCardpile = copy.copy(cardpile)
+    bestMove = set_best_move()
+
+    # for x in get_moves():
+    #     print(x.description)
+
+    #print("\n")
+    #print("Bedste træk:")
+    # if bestMove != None:
+    #     print(bestMove["point"])
+    #     print(bestMove["move"].description)
+
+    if(bestMove != None):
+        return bestMove["move"].description
+    else:
+        return "Intet at gøre!"
