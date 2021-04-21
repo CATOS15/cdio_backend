@@ -41,13 +41,6 @@ class Move:
 #     Fountain(0, suit.CLUBS)
 # ] 
 
-fountains = [
-    Fountain(0, suit.DIAMOND),
-    Fountain(0, suit.HEART),
-    Fountain(0, suit.SPADE),
-    Fountain(0, suit.CLUBS)
-]
-
 # stacks = [
 #     [Card(13, suit.SPADE), Card(12, suit.DIAMOND), Card(11, suit.CLUBS), Card(10, suit.DIAMOND), Card(9, suit.CLUBS)],
 #     [Card(13, suit.CLUBS)],
@@ -58,6 +51,14 @@ fountains = [
 #     [None, None, Card(10, suit.SPADE), Card(9, suit.HEART), Card(8, suit.CLUBS), Card(7, suit.HEART)]
 # ]
 
+#cardpile = [Card(7, suit.DIAMOND)]
+
+fountains = [
+    Fountain(0, suit.DIAMOND),
+    Fountain(0, suit.HEART),
+    Fountain(0, suit.SPADE),
+    Fountain(0, suit.CLUBS)
+]
 stacks = [
     [],
     [],
@@ -67,10 +68,9 @@ stacks = [
     [],
     []
 ]
-
-#cardpile = [Card(7, suit.DIAMOND)]
-
 cardpile = []
+
+
 
 def rule_move_to_stack(fromCard, toStack):
     if len(toStack) == 0:
@@ -182,17 +182,17 @@ def _10_points(move):
         return 10
     return 0
 
-def _2_points(move):
-    #Frier en plads så en konge kan rykke der hen (Dårligt da denne kun bliver ramt hvis der allerede er en tom plads)
-    if move.fromCardIndex == 0 and move.fromCard.number != 13 and len(move.toStack) > 0:
-        return 2
-    return 0
+# def _2_points(move):
+#     #Frier en plads så en konge kan rykke der hen (Dårligt da denne kun bliver ramt hvis der allerede er en tom plads)
+#     if move.fromCardIndex == 0 and move.fromCard.number != 13 and len(move.toStack) > 0:
+#         return 2
+#     return 0
     
-def _1_points(move):
-    #Absolut ubrugelig. Ryk konge fra tomt felt til anden tomt felt
-    if move.fromCardIndex == 0 and move.fromCard.number == 13 and len(move.toStack) == 0: 
-        return 1
-    return 0
+# def _1_points(move):
+#     #Absolut ubrugelig. Ryk konge fra tomt felt til anden tomt felt
+#     if move.fromCardIndex == 0 and move.fromCard.number == 13 and len(move.toStack) == 0: 
+#         return 1
+#     return 0
 
 def simulate_newStacks(move):
     global cardpile, stacks, fountains
@@ -206,6 +206,7 @@ def simulate_newStacks(move):
         cardMoved = cardpile[move.fromCardIndex:]
         cardpile = cardpile[:move.fromCardIndex]
         newStacks[0] = cardpile
+        fromIndex = 999
     else:
         for index, stack in enumerate(stacks):
             if(stack == move.fromStack):
@@ -220,7 +221,7 @@ def simulate_newStacks(move):
                 newStacks[0] = fountains[index]
                 fromIndex = index
 
-    if fromIndex == -1 :
+    if fromIndex == -1:
         print("FEJL. Ingen index at rykke kort til??")
 
     for index, stack in enumerate(stacks):
@@ -246,20 +247,20 @@ def get_moves_ordered(moves):
         point = _45_points(move) if point == 0 else point
         point = _25_points(move) if point == 0 else point
         point = _10_points(move) if point == 0 else point
-        point = _2_points(move) if point == 0 else point
-        point = _1_points(move) if point == 0 else point
+        # point = _2_points(move) if point == 0 else point
+        # point = _1_points(move) if point == 0 else point
 
         if point > 0:
             moves_ordered.append({"point": point, "move": move})
-        else:
-            print("FEJL! Et træk har 0 point: " + move.description)
+        # else:
+        #     print("FEJL! Et træk har 0 point: " + move.description)
     
     moves_ordered = sorted(moves_ordered, key=itemgetter('point'), reverse=True) 
     return moves_ordered
 
 def set_best_move():
     global cardpile, stacks, fountains
-    bestMove = {"point": 0, "move": None}
+    bestMove = {"point": 0, "move": None, "numberOfMoves": 0}
     moves_ordered1 = get_moves_ordered(get_moves())
 
     for move in moves_ordered1: 
@@ -269,10 +270,12 @@ def set_best_move():
             if move["point"] + moves_ordered2[0]["point"] > bestMove["point"]:
                 bestMove["point"] = move["point"] + moves_ordered2[0]["point"]
                 bestMove["move"] = move["move"]
+                bestMove["numberOfMoves"] = 2
         else:
             if move["point"] > bestMove["point"]:
                 bestMove["point"] = move["point"]
                 bestMove["move"] = move["move"]
+                bestMove["numberOfMoves"] = 1
 
         fountains = copy.copy(originalFountains)
         stacks = copy.copy(originalStacks)
@@ -288,10 +291,30 @@ def set_best_move():
 def run_algorithm(data_solitaire):
     global originalFountains, originalStacks, originalCardpile, stacks, fountains, cardpile
 
+    fountains = [
+        Fountain(0, suit.DIAMOND),
+        Fountain(0, suit.HEART),
+        Fountain(0, suit.SPADE),
+        Fountain(0, suit.CLUBS)
+    ]
+    stacks = [
+        [],
+        [],
+        [],
+        [],
+        [],
+        [],
+        []
+    ]
+    cardpile = []
+
     index = 0
     for data_cards in data_solitaire['stacks']:
         for data_card in data_cards:
-            stacks[index].append(Card(data_card['number'], suit(data_card['suit'])))
+            if data_card is None:
+                stacks[index].append(None)
+            else:
+                stacks[index].append(Card(data_card['number'], suit(data_card['suit'])))
         index += 1
 
     index = 0
@@ -307,18 +330,22 @@ def run_algorithm(data_solitaire):
     originalFountains = copy.copy(fountains)
     originalStacks = copy.copy(stacks)
     originalCardpile = copy.copy(cardpile)
+
     bestMove = set_best_move()
 
-    # for x in get_moves():
-    #     print(x.description)
+    for x in get_moves():
+        print(x.description)
 
-    #print("\n")
-    #print("Bedste træk:")
-    # if bestMove != None:
-    #     print(bestMove["point"])
-    #     print(bestMove["move"].description)
+    print("\n")
+    print("Bedste træk:")
+    if bestMove != None:
+        print("Antal træk " + str(bestMove["numberOfMoves"]) + " giver " + str(bestMove["point"]) + " point")
+        print(bestMove["move"].description)
 
     if(bestMove != None):
-        return bestMove["move"].description
+        if (bestMove["point"] < 20 and bestMove["numberOfMoves"] == 1) or (bestMove["point"] < 40 and bestMove["numberOfMoves"] == 2) or len(originalCardpile) == 0:
+            return "Flip bunken! Hvis ikke muligt udfør -> " + bestMove["move"].description
+        else:
+            return bestMove["move"].description
     else:
-        return "Intet at gøre!"
+        return "Flip bunken! Hvis ikke muligt så er der intet at gøre!"
