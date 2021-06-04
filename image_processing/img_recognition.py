@@ -3,8 +3,16 @@ from img_wash import *
 from img_compare import *
 from img_resolution import *
 
-#input
+# Paths
+path_card_columns = './image_processing/templates/test/collumns_full_solitare.png'
+path_card_foundtain = './image_processing/templates/test/fountain_full_solitare.png'
+path_card_deck = './image_processing/templates/test/deck_full_solitare.png'
 path_card_high_res = './image_processing/templates/test/full_solitare_1_2.png'
+
+# Read cards
+card_columns_color = cv2.imread(path_card_columns)
+card_fountain_color = cv2.imread(path_card_foundtain)
+card_deck_color = cv2.imread(path_card_deck)
 high_res_color = cv2.imread(path_card_high_res)
 
 
