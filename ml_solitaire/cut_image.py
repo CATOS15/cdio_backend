@@ -3,7 +3,7 @@ import numpy as np
 import math
 
 # read image
-path_image = 'cdio_backend\ml_solitaire\solitaire.jpg'
+path_image = 'solitaire.jpg'
 img = cv2.imread(path_image)
 
 #dimensions for image
@@ -24,9 +24,9 @@ def cut_and_save_images():
     piles = img[top_height:height, 0:width]
 
     #save images
-    cv2.imwrite('cdio_backend\ml_solitaire\image_drawpile.jpg', drawpile)
-    cv2.imwrite('cdio_backend\ml_solitaire\image_fountain.jpg', fountain)
-    cv2.imwrite('cdio_backend\ml_solitaire\image_piles.jpg', piles)
+    cv2.imwrite('image_drawpile.jpg', drawpile)
+    cv2.imwrite('image_fountain.jpg', fountain)
+    cv2.imwrite('image_piles.jpg', piles)
 
     """ cv2.imshow("cropped", drawpile)
     cv2.waitKey(0)
@@ -39,9 +39,9 @@ def cut_and_save_images():
     return """
 
 def save_images():
-    cv2.imwrite('cdio_backend\ml_solitaire\image_drawpile.jpg', drawpile)
-    cv2.imwrite('cdio_backend\ml_solitaire\image_fountain.jpg', fountain)
-    cv2.imwrite('cdio_backend\ml_solitaire\image_piles.jpg', piles)
+    cv2.imwrite('image_drawpile.jpg', drawpile)
+    cv2.imwrite('image_fountain.jpg', fountain)
+    cv2.imwrite('image_piles.jpg', piles)
 
 def print_image_info():
     print(img.shape)
@@ -58,9 +58,9 @@ def print_image_info():
     print('Number of Channels : ',channels)
 
 def show_cut_images():
-    drawpile_path = 'cdio_backend\ml_solitaire\solitaire.jpg'
-    fountain_path = 'cdio_backend\ml_solitaire\image_fountain.jpg'
-    piles_path = 'cdio_backend\ml_solitaire\image_piles.jpg'
+    drawpile_path = 'solitaire.jpg'
+    fountain_path = 'image_fountain.jpg'
+    piles_path = 'image_piles.jpg'
 
     image_drawpile = cv2.imread(drawpile_path)
     image_fountain = cv2.imread(fountain_path)
