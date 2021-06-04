@@ -29,9 +29,9 @@ def calculateImage():
     print(imagefile.filename)
 
     dictionary ={   
-        "firstcard": "ad",   
-        "secondcard": "kc",   
-        "movemessage": "move your ad to your kc"
+        "firstcard": "2d",   
+        "secondcard": "3c",   
+        "movemessage": "move your 2d to your 3c"
     }   
 
     json_object = json.dumps(dictionary)
