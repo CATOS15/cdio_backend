@@ -1,6 +1,7 @@
 from enum import Enum
 import copy
-
+import json
+from operator import itemgetter
 class suit(Enum):
     DIAMOND = 1
     HEART = 2
@@ -11,11 +12,15 @@ class Card:
     def __init__(self, number, suit):
         self.number = number
         self.suit = suit
+    def toJSON (self):
+        return json.dumps(self.__dict__)
 
 class Fountain:
     def __init__(self, count, suit):
         self.count = count
         self.suit = suit
+    def toJSON (self):
+        return json.dumps(self.__dict__)
 
 class Move:
     def __init__(self, fromCard, fromCardIndex, fromStack, toStack, description):
@@ -24,27 +29,48 @@ class Move:
         self.fromStack = fromStack
         self.toStack = toStack
         self.description = description
+    def toJSON (self):
+        return json.dumps(self.__dict__)
 
 #Ledig plads for en konge bliver Card(14, None)
 
+# fountains = [
+#     Fountain(1, suit.DIAMOND),
+#     Fountain(1, suit.HEART),
+#     Fountain(2, suit.SPADE),
+#     Fountain(0, suit.CLUBS)
+# ] 
+
+# stacks = [
+#     [Card(13, suit.SPADE), Card(12, suit.DIAMOND), Card(11, suit.CLUBS), Card(10, suit.DIAMOND), Card(9, suit.CLUBS)],
+#     [Card(13, suit.CLUBS)],
+#     [Card(11, suit.HEART)],
+#     [],
+#     [Card(6, suit.HEART), Card(5, suit.CLUBS), Card(4, suit.HEART), Card(3, suit.SPADE)],
+#     [None, Card(8, suit.DIAMOND), Card(7, suit.SPADE)],
+#     [None, None, Card(10, suit.SPADE), Card(9, suit.HEART), Card(8, suit.CLUBS), Card(7, suit.HEART)]
+# ]
+
+#cardpile = [Card(7, suit.DIAMOND)]
+
 fountains = [
-    Fountain(1, suit.DIAMOND),
-    Fountain(1, suit.HEART),
-    Fountain(2, suit.SPADE),
+    Fountain(0, suit.DIAMOND),
+    Fountain(0, suit.HEART),
+    Fountain(0, suit.SPADE),
     Fountain(0, suit.CLUBS)
 ]
-
 stacks = [
-    [Card(13, suit.SPADE), Card(12, suit.DIAMOND), Card(11, suit.CLUBS), Card(10, suit.DIAMOND), Card(9, suit.CLUBS)],
-    [Card(13, suit.CLUBS)],
-    [Card(11, suit.HEART)],
     [],
-    [Card(6, suit.HEART), Card(5, suit.CLUBS), Card(4, suit.HEART), Card(3, suit.SPADE)],
-    [None, Card(8, suit.DIAMOND), Card(7, suit.SPADE)],
-    [None, None, Card(10, suit.SPADE), Card(9, suit.HEART), Card(8, suit.CLUBS), Card(7, suit.HEART)]
+    [],
+    [],
+    [],
+    [],
+    [],
+    []
 ]
+cardpile = []
 
-cardpile = [Card(7, suit.DIAMOND)]
+
 
 def rule_move_to_stack(fromCard, toStack):
     if len(toStack) == 0:
@@ -140,35 +166,79 @@ def _45_points(move):
     return 0
 
 def _25_points(move):
-    #Frier en plads så en konge kan rykke der hen (Det specielle her er at det kun er godt hvis der er en konge der kan rykkes til det tomme felt ellers er det rigtig dårligt)
-    if move.fromCardIndex == 0 and move.fromCard.number != 13 and len(move.toStack) > 0:
+    #Frier en plads så en konge kan rykke der hen
+    alreadyEmtpy = False
+    for stack in stacks:
+        if len(stack) == 0:
+            alreadyEmtpy = True
+            break
+    if move.fromCardIndex == 0 and move.fromCard.number != 13 and len(move.toStack) > 0 and not alreadyEmtpy:
         return 25
     return 0
-
+    
 def _10_points(move):
     #Alle ting der giver 10 point er næsten ubrugelige (Gør ingen forskel) - Undtagelsen er hvis du skal rykke kort til Fountain og nogle kort blokerer
     if move.fromCardIndex > 0 and move.fromStack[move.fromCardIndex - 1] != None and type(move.toStack) is list:
         return 10
     return 0
-def _1_points(move):
-    #Absolut ubrugelig. Ryk konge fra tomt felt til anden tomt felt
-    if move.fromCardIndex == 0 and move.fromCard.number == 13 and len(move.toStack) == 0: 
-        return 1
-    return 0
 
+# def _2_points(move):
+#     #Frier en plads så en konge kan rykke der hen (Dårligt da denne kun bliver ramt hvis der allerede er en tom plads)
+#     if move.fromCardIndex == 0 and move.fromCard.number != 13 and len(move.toStack) > 0:
+#         return 2
+#     return 0
+    
+# def _1_points(move):
+#     #Absolut ubrugelig. Ryk konge fra tomt felt til anden tomt felt
+#     if move.fromCardIndex == 0 and move.fromCard.number == 13 and len(move.toStack) == 0: 
+#         return 1
+#     return 0
 
-bestMove = None
-bestPoint = 0
-def set_best_move(moves, currentPoint, doRecursive):
-    global fountains, stacks, cardpile
-    global bestMove, bestPoint
+def simulate_newStacks(move):
+    global cardpile, stacks, fountains
+    cardMoved = None
 
-    localBestPoint = 0
+    newStacks = [None, None]
+
+    fromIndex = -1
+
+    if move.fromStack == cardpile:
+        cardMoved = cardpile[move.fromCardIndex:]
+        cardpile = cardpile[:move.fromCardIndex]
+        newStacks[0] = cardpile
+        fromIndex = 999
+    else:
+        for index, stack in enumerate(stacks):
+            if(stack == move.fromStack):
+                cardMoved = stack[move.fromCardIndex:]
+                stacks[index] = stack[:move.fromCardIndex]
+                newStacks[0] = stacks[index]
+                fromIndex = index
+        for index, fountain in enumerate(fountains):
+            if(fountain == move.fromStack):
+                cardMoved = fountain[move.fromCardIndex:]
+                fountains[index] = fountain[:move.fromCardIndex]
+                newStacks[0] = fountains[index]
+                fromIndex = index
+
+    if fromIndex == -1:
+        print("FEJL. Ingen index at rykke kort til??")
+
+    for index, stack in enumerate(stacks):
+        if(stack == move.toStack and cardMoved != None and index != fromIndex):
+            stacks[index] = move.toStack + cardMoved
+            newStacks[1] = stacks[index]
+    for index, fountain in enumerate(fountains):
+        if(fountain == move.toStack and index != fromIndex):
+            fountains[index].count = fountains[index].count + 1
+            newStacks[1] = fountains[index]
+
+    return newStacks
+
+def get_moves_ordered(moves):
+    moves_ordered = []
 
     for move in moves:
-        if(move.description == 'Fra cardpile suit.CLUBS(9) til stack(1)'):
-            print("ky")
-
         point = _100_points(move)
         point = _95_points(move) if point == 0 else point
         point = _90_points(move) if point == 0 else point
@@ -177,79 +247,105 @@ def set_best_move(moves, currentPoint, doRecursive):
         point = _45_points(move) if point == 0 else point
         point = _25_points(move) if point == 0 else point
         point = _10_points(move) if point == 0 else point
-        point = _1_points(move) if point == 0 else point
+        # point = _2_points(move) if point == 0 else point
+        # point = _1_points(move) if point == 0 else point
 
-        if point + currentPoint > localBestPoint:
-            localBestPoint = point + currentPoint
-        
-        if doRecursive:
-            newStacks = simulate_newStacks(move)
-            tempBestPoint = set_best_move(get_moves(newStacks[0], newStacks[1]), point + currentPoint, False)
-            localBestPoint = tempBestPoint if tempBestPoint != 0 else localBestPoint
+        if point > 0:
+            moves_ordered.append({"point": point, "move": move})
+        # else:
+        #     print("FEJL! Et træk har 0 point: " + move.description)
+    
+    moves_ordered = sorted(moves_ordered, key=itemgetter('point'), reverse=True) 
+    return moves_ordered
 
-
-            fountains = copy.copy(originalFountains)
-            stacks = copy.copy(originalStacks)
-            cardpile = copy.copy(originalCardpile)
-
-            if localBestPoint > bestPoint:
-                bestMove = move
-                bestPoint = localBestPoint
-
-        if(point == 0): 
-            print("Mangler: " + move.description)
-
-    return localBestPoint
-
-def simulate_newStacks(move):
+def set_best_move():
     global cardpile, stacks, fountains
-    cardMoved = None
+    bestMove = {"point": 0, "move": None, "numberOfMoves": 0}
+    moves_ordered1 = get_moves_ordered(get_moves())
 
-    newStacks = [None, None]
+    for move in moves_ordered1: 
+        newStacks = simulate_newStacks(move["move"])
+        moves_ordered2 = get_moves_ordered(get_moves(newStacks[0], newStacks[1]))
+        if len(moves_ordered2) > 0:
+            if move["point"] + moves_ordered2[0]["point"] > bestMove["point"]:
+                bestMove["point"] = move["point"] + moves_ordered2[0]["point"]
+                bestMove["move"] = move["move"]
+                bestMove["numberOfMoves"] = 2
+        else:
+            if move["point"] > bestMove["point"]:
+                bestMove["point"] = move["point"]
+                bestMove["move"] = move["move"]
+                bestMove["numberOfMoves"] = 1
 
-    if move.fromStack == cardpile:
-        cardMoved = cardpile[move.fromCardIndex:]
-        cardpile = cardpile[:move.fromCardIndex]
-        newStacks[0] = cardpile
+        fountains = copy.copy(originalFountains)
+        stacks = copy.copy(originalStacks)
+        cardpile = copy.copy(originalCardpile)
+
+    if bestMove["move"] == None:
+        return None
+
+
+    return bestMove
+
+
+def run_algorithm(data_solitaire):
+    global originalFountains, originalStacks, originalCardpile, stacks, fountains, cardpile
+
+    fountains = [
+        Fountain(0, suit.DIAMOND),
+        Fountain(0, suit.HEART),
+        Fountain(0, suit.SPADE),
+        Fountain(0, suit.CLUBS)
+    ]
+    stacks = [
+        [],
+        [],
+        [],
+        [],
+        [],
+        [],
+        []
+    ]
+    cardpile = []
+
+    index = 0
+    for data_cards in data_solitaire['stacks']:
+        for data_card in data_cards:
+            if data_card is None:
+                stacks[index].append(None)
+            else:
+                stacks[index].append(Card(data_card['number'], suit(data_card['suit'])))
+        index += 1
+
+    index = 0
+    for data_fountain in data_solitaire['fountains']:
+        fountains[index] = Fountain(data_fountain['number'], suit(data_fountain['suit']))
+        index += 1
+
+    index = 0
+    for data_cardpile in data_solitaire['cardpile']:
+        cardpile.append(Card(data_cardpile['number'], suit(data_cardpile['suit'])))
+        index += 1
+
+    originalFountains = copy.copy(fountains)
+    originalStacks = copy.copy(stacks)
+    originalCardpile = copy.copy(cardpile)
+
+    bestMove = set_best_move()
+
+    for x in get_moves():
+        print(x.description)
+
+    print("\n")
+    print("Bedste træk:")
+    if bestMove != None:
+        print("Antal træk " + str(bestMove["numberOfMoves"]) + " giver " + str(bestMove["point"]) + " point")
+        print(bestMove["move"].description)
+
+    if(bestMove != None):
+        if (bestMove["point"] < 20 and bestMove["numberOfMoves"] == 1) or (bestMove["point"] < 40 and bestMove["numberOfMoves"] == 2) or len(originalCardpile) == 0:
+            return "Flip bunken! Hvis ikke muligt udfør -> " + bestMove["move"].description
+        else:
+            return bestMove["move"].description
     else:
-        for index, stack in enumerate(stacks):
-            if(stack == move.fromStack):
-                cardMoved = stack[move.fromCardIndex:]
-                stacks[index] = stack[:move.fromCardIndex]
-                newStacks[0] = stacks[index]
-        for index, fountain in enumerate(fountains):
-            if(fountain == move.fromStack):
-                cardMoved = fountain[move.fromCardIndex:]
-                fountains[index] = fountain[:move.fromCardIndex]
-                newStacks[0] = fountains[index]
-
-    for index, stack in enumerate(stacks):
-        if(stack == move.toStack and cardMoved != None):
-            stacks[index] = move.toStack + cardMoved
-            newStacks[1] = stacks[index]
-    for index, fountain in enumerate(fountains):
-        if(fountain == move.toStack):
-            fountains[index].count = fountains[index].count + 1
-            newStacks[1] = fountains[index]
-
-    return newStacks
-
-
-
-
-
-
-
-
-originalFountains = copy.copy(fountains)
-originalStacks = copy.copy(stacks)
-originalCardpile = copy.copy(cardpile)
-
-for x in get_moves():
-    print(x.description)
-
-print("\n")
-print("Bedste træk:")
-set_best_move(get_moves(), 0, True)
-print(bestPoint)
-print(bestMove.description)
+        return "Flip bunken! Hvis ikke muligt så er der intet at gøre!"

@@ -2,11 +2,34 @@ from g_img import *
 from img_wash import *
 from img_compare import *
 from img_resolution import *
+import os
+from pathlib import Path
 
-#input
-path_card_high_res = './image_processing/templates/test/full_solitare_1_2.png'
+# Paths
+path_card_tableau = 'image_processing\\templates\\test\\full_deck\\collumns_full_solitare.png'
+path_card_foundation = 'image_processing/templates/test/full_deck/fountain_full_solitare.png'
+
+
+path_card_high_res = 'image_processing/templates/test/full_deck/full_solitare_1_2.png' 
+print(Path(os.getcwd(), path_card_waste))
+
+# Read cards
+card_tableau_color = cv2.imread(path_card_tableau)
+card_foundation_color = cv2.imread(path_card_foundation)
+card_waste_color = cv2.imread(path_card_waste, 0)
 high_res_color = cv2.imread(path_card_high_res)
 
+
+# Waste flow
+#binary
+#threshold
+#contours
+flow_waste = Flow(None, None, blob_wash, None, contours_sample1)
+flow_waste_washed = flow_waste.execute_wash(card_waste_color, cv2.THRESH_BINARY)
+flow_waste_countours = flow_waste.execute_contour(flow_waste_washed, cv2.RETR_TREE, cv2.CHAIN_APPROX_SIMPLE)
+
+for i,cunt in enumerate(flow_waste_countours):
+    cv2.imwrite(result_image_sp4.format("_contour", i), cunt)
 
 #set resolution, split image, wash each, compare images
 # flow_simple = Flow(ratio_img_resolution, None, wash_img, compare)
@@ -35,8 +58,9 @@ high_res_color = cv2.imread(path_card_high_res)
 #flow_three = Flow(..)
 # write_to(result_image_sp3, res_suits, res_numbers)
 
-#TODO
 
+
+#TODO
 #Make Contour work for a single solitaire 
     #Make contour work for a new, different solitaire
 #research

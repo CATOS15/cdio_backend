@@ -9,16 +9,6 @@ def store_images(images, path):
 
 # MORMORS MØRKERUM BITCH'ÈS
 def wash_img(img, cunts_1_sample):
-    # img_grey = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)
-    lower, upper = 170, 255
-
-    # use threshold to identify patterns
-    # ret_sample1, thresh_sample1 = cv2.threshold(img_grey, lower, upper, 0)
-    
-    # seperate all cards
-    # cunts_1_sample = cb_contour(
-    #     thresh_sample1, cv2.RETR_TREE, cv2.CHAIN_APPROX_SIMPLE)
-
     wash_split_img = []
     for img_sample1 in cunts_1_sample:
         wash_split_img.append(img_sample1)
@@ -82,6 +72,22 @@ def __contrast_flip_images(img_cunts, alg1):
         imgs.append(th3)
         # cv2.imwrite(path_contours_sp2.format(str(i)), dst)
     return imgs
+
+
+def blob_wash(image, alg1):
+    gray = cv2.cvtColor(image,cv2.COLOR_BGR2GRAY)
+    blur = cv2.GaussianBlur(gray,(5,5),0)
+    adaptive_threshold = 60
+
+    #find background lighting
+    img_w, img_h = np.shape(image)[:2]
+    bkg_level = gray[int(img_h/100)][int(img_w/2)]
+
+    #adapt to lightning
+    thresh_level = bkg_level + adaptive_threshold
+    _, thresh = cv2.threshold(blur, thresh_level, 255, alg1)
+
+    return thresh
 
 
 
