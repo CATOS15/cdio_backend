@@ -74,4 +74,20 @@ def __contrast_flip_images(img_cunts, alg1):
     return imgs
 
 
+def blob_wash(image, alg1):
+    gray = cv2.cvtColor(image,cv2.COLOR_BGR2GRAY)
+    blur = cv2.GaussianBlur(gray,(5,5),0)
+    adaptive_threshold = 60
+
+    #find background lighting
+    img_w, img_h = np.shape(image)[:2]
+    bkg_level = gray[int(img_h/100)][int(img_w/2)]
+
+    #adapt to lightning
+    thresh_level = bkg_level + adaptive_threshold
+    _, thresh = cv2.threshold(blur, thresh_level, 255, alg1)
+
+    return thresh
+
+
 

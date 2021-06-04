@@ -28,3 +28,5 @@ def __contour_draw(adaptive_th, cunt):
     cv2.drawContours(adaptive_th, [box], 0, (0, 0, 255), 2)
     x, y, w, h = cv2.boundingRect(cunt)
     return adaptive_th[y:y + h, x:x + w]
+
+
