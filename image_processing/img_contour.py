@@ -13,7 +13,7 @@ def contours_sample1(img_thresh, alg1, alg2):
     contours, hierachy = cv2.findContours(
         img_thresh, alg1, alg2)
     img_cunts = [] 
-    cuntour_area_req = 50000
+    cuntour_area_req = 45000
     # contours
     for cunt in contours:
         if cv2.contourArea(cunt) > cuntour_area_req:

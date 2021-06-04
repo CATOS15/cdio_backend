@@ -6,30 +6,36 @@ import os
 from pathlib import Path
 
 # Paths
-path_card_tableau = 'image_processing\\templates\\test\\full_deck\\collumns_full_solitare.png'
-path_card_foundation = 'image_processing/templates/test/full_deck/fountain_full_solitare.png'
+path_card_tableau = 'image_processing/templates/test/full_deck/tableau.png'
+path_card_foundation = 'image_processing/templates/test/full_deck/foundation.png'
+path_card_waste = 'image_processing/templates/test/full_deck/waste.png'
+path_card_high_res = 'image_processing/templates/test/full_deck/full_solitare_1_2.png'  
 
-
-path_card_high_res = 'image_processing/templates/test/full_deck/full_solitare_1_2.png' 
 print(Path(os.getcwd(), path_card_waste))
 
 # Read cards
-card_tableau_color = cv2.imread(path_card_tableau)
-card_foundation_color = cv2.imread(path_card_foundation)
-card_waste_color = cv2.imread(path_card_waste, 0)
-high_res_color = cv2.imread(path_card_high_res)
+card_tableau_color = cv2.imread(path_card_tableau, cv2.IMREAD_COLOR)
+card_foundation_color = cv2.imread(path_card_foundation, cv2.IMREAD_COLOR)
+card_waste_color = cv2.imread(path_card_waste, cv2.IMREAD_COLOR)
+# high_res_color = cv2.imread(path_card_high_res)
 
 
 # Waste flow
 #binary
 #threshold
 #contours
-flow_waste = Flow(None, None, blob_wash, None, contours_sample1)
-flow_waste_washed = flow_waste.execute_wash(card_waste_color, cv2.THRESH_BINARY)
-flow_waste_countours = flow_waste.execute_contour(flow_waste_washed, cv2.RETR_TREE, cv2.CHAIN_APPROX_SIMPLE)
+
+
+flow_waste = Flow(cb_resolution=None, cb_distance=None, cb_wash=adaptive_wash, cb_compare=None, cb_contour=contours_sample1)
+flow_waste_washed = flow_waste.execute_wash(card_waste_color, cv2.THRESH_BINARY_INV)
+
+
+cv2.imshow("flow waste washed", flow_waste_washed)
+cv2.waitKey(0)
+flow_waste_countours = flow_waste.execute_contour(flow_waste_washed, cv2.RETR_EXTERNAL, cv2.CHAIN_APPROX_SIMPLE)
 
 for i,cunt in enumerate(flow_waste_countours):
-    cv2.imwrite(result_image_sp4.format("_contour", i), cunt)
+    cv2.imwrite(path_contours_sp4.format(i), cunt)
 
 #set resolution, split image, wash each, compare images
 # flow_simple = Flow(ratio_img_resolution, None, wash_img, compare)
@@ -61,10 +67,13 @@ for i,cunt in enumerate(flow_waste_countours):
 
 
 #TODO
-#Make Contour work for a single solitaire 
-    #Make contour work for a new, different solitaire
-#research
-    #Feature Detection 
+#GaussianBlur
+ #find video for more details
+#CHAIN_APPROX_SIMPLE
+#consider canny edge detection
 
 
+
+#Notes
+#Lightning must be considered
 

@@ -74,20 +74,29 @@ def __contrast_flip_images(img_cunts, alg1):
     return imgs
 
 
-def blob_wash(image, alg1):
+def adaptive_wash(image, alg1):
     gray = cv2.cvtColor(image,cv2.COLOR_BGR2GRAY)
-    blur = cv2.GaussianBlur(gray,(5,5),0)
-    adaptive_threshold = 60
-
-    #find background lighting
-    img_w, img_h = np.shape(image)[:2]
-    bkg_level = gray[int(img_h/100)][int(img_w/2)]
-
+    gaus_kernel_size = (5,5)
+    blur = cv2.GaussianBlur(gray,gaus_kernel_size,0)
+    # adaptive_threshold = 60
+    block_size = 13 #dependant on resolution
+    C = 3 #dependant on on resolution used together with blocksize
+    white = 255
+    
     #adapt to lightning
-    thresh_level = bkg_level + adaptive_threshold
-    _, thresh = cv2.threshold(blur, thresh_level, 255, alg1)
+    thresh = cv2.adaptiveThreshold(blur, white, cv2.ADAPTIVE_THRESH_GAUSSIAN_C, alg1, block_size, C)
 
     return thresh
+
+def otsu_wash(image, alg1):
+    sigX = 1 #size of width for gaussian kernel
+    sigY = 1 #size of length for gaussian kernel
+    black = 0
+    white = 255
+    gray = cv2.cvtColor(image, cv2.COLOR_BGR2GRAY)
+    blur = cv2.GaussianBlur(gray, (1,1), 0)
+    _, th3 = cv2.threshold(blur, black, white, alg1+cv2.THRESH_OTSU)
+    return th3 
 
 
 

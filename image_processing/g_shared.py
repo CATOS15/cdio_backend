@@ -26,6 +26,3 @@ Suit = Enum('Suits', 'Spade Heart Diamonds Club')
 Cards = Enum(
     'Cards', 'Ace Two Three Four Five Six Seven Eight Nine Ten Eleven Twelf Thirteen')
 
-
-#TRASH
-path_card_waste = 'image_processing/templates/test/waste.png'
