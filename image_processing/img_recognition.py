@@ -35,8 +35,9 @@ high_res_color = cv2.imread(path_card_high_res)
 #flow_three = Flow(..)
 # write_to(result_image_sp3, res_suits, res_numbers)
 
-#TODO
 
+
+#TODO
 #Make Contour work for a single solitaire 
     #Make contour work for a new, different solitaire
 #research

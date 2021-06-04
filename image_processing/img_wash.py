@@ -9,16 +9,6 @@ def store_images(images, path):
 
 # MORMORS MØRKERUM BITCH'ÈS
 def wash_img(img, cunts_1_sample):
-    # img_grey = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)
-    lower, upper = 170, 255
-
-    # use threshold to identify patterns
-    # ret_sample1, thresh_sample1 = cv2.threshold(img_grey, lower, upper, 0)
-    
-    # seperate all cards
-    # cunts_1_sample = cb_contour(
-    #     thresh_sample1, cv2.RETR_TREE, cv2.CHAIN_APPROX_SIMPLE)
-
     wash_split_img = []
     for img_sample1 in cunts_1_sample:
         wash_split_img.append(img_sample1)
