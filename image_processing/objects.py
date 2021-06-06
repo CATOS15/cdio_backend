@@ -1,10 +1,10 @@
 import cv2
 from g_shared import *
 from img_contour import *
-
+# from img_compare import template_match_alg
 
 # Algorithm for template matching
-g_match_alg = cv2.TM_CCOEFF_NORMED
+
 # g_match_alg = cv2.TM_SQDIFF
 
 
@@ -22,23 +22,23 @@ class TemplateInfo:
         self.height = height
         self.drawSquare = drawSquare
 
-    def compare_template(self, washed_img):                        
-        flipped = cv2.bitwise_not(self.templ_image)
-        blur = cv2.GaussianBlur(flipped, (5, 5), 0)
-        ret, th = cv2.threshold(
-            blur, 0, 255, cv2.THRESH_BINARY_INV+cv2.THRESH_OTSU)
-        cv2.imwrite(path_template_sp1.format(0), th)
-        return cv2.matchTemplate(washed_img, th, g_match_alg)
+    # def compare_template(self, washed_img):                        
+    #     flipped = cv2.bitwise_not(self.templ_image)
+    #     blur = cv2.GaussianBlur(flipped, (5, 5), 0)
+    #     ret, th = cv2.threshold(
+    #         blur, 0, 255, cv2.THRESH_BINARY_INV+cv2.THRESH_OTSU)
+    #     cv2.imwrite(path_template_sp1.format(0), th)
+    #     return cv2.matchTemplate(washed_img, th, template_match_alg)
 
         # return cv2.matchTemplate(washed_img, self.templ_image, g_match_alg)
 
 
 class Flow:
-    def __init__(self, cb_wash, cb_contour, cb_cut_suit_rank, cb_resolution, cb_compare_by_template):
+    def __init__(self, cb_wash, cb_contour, cb_cut_suit_rank, cb_compare_by_template):
         self.cb_wash = cb_wash
         self.cb_contour = cb_contour
         self.cb_cut_suit_rank = cb_cut_suit_rank
-        self.cb_resolution = cb_resolution
+        # self.cb_resolution = cb_resolution
         self.cb_compare_by_template = cb_compare_by_template
 
     
@@ -54,8 +54,31 @@ class Flow:
 
     
     #Implement resolution here
-    def execute_resolution(self, )
+    # def execute_resolution(self, )
     
-    def execute_compare_by_template(self, img_input, washed_image, suits, numbers):
-        return self.cb_compare(img_input, washed_image, suits, numbers)
+    def execute_compare_by_template(self, cards, ideal_image):
+        return self.cb_compare_by_template(cards, ideal_image)
 
+#either suit or rank, type: rank/suit, value = actual value
+class TemplateType:
+    def __init__(self, img, type, value, threshold):
+        self.img = img
+        self.type = type
+        self.value = value
+        self.threshold = threshold
+
+
+    def suit_match(self, type):
+        return self.type == type
+    
+    def higher_threshold(self, threshold):
+        return self.type_threshold < threshold
+
+    def add_success(self, contour):
+        self.contour = contour
+
+
+class Foo:
+    def __init__(self, minMaxLoc, suit):
+        self.minMaxLoc = minMaxLoc
+        self.suit = suit

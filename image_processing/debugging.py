@@ -21,3 +21,9 @@ def enlarge_image(img):
 def print_results(images,path):
     for i,img in enumerate(images):
         cv2.imwrite(path.format(i), img)
+
+
+#also can print face_values
+def print_results_suits_numbers(images, path, index):
+    for i,img in enumerate(images):
+        cv2.imwrite(path.format(str(index)+"_"+str(i)), img)

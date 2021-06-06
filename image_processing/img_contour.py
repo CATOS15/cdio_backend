@@ -43,6 +43,7 @@ def contour_approximation(alg1, alg2, img_thresh, img_color=None):
     return cunt_flattened
 
 
+# flattener: www.pyimagesearch.com/2014/08/25/4-point-opencv-getperspective-transform-example/
 # makes a small x*x image for a single contour
 def flat_image(image, pts, w, h):
     temp_rect = np.zeros((4, 2), dtype="float32")
@@ -95,9 +96,6 @@ def flat_image(image, pts, w, h):
     
     # maxWidth = 200
     # maxHeight = 300
-    print(br)
-    print(br[0][0])
-    print(br[0][1])
     width_buttom = (br[0][0] - bl[0][0]) ** 2 + ((br[0][1] - bl[0][1]) ** 2)
     width_top = (tr[0][0] - tl[0][0]) ** 2 + ((tr[0][1] - tl[0][1]) ** 2)
     # widthA = np.sqrt(((br[0] - bl[0]) ** 2) + ((br[1] - bl[1]) ** 2))

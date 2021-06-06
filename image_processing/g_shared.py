@@ -16,7 +16,7 @@ result_image_sp2 = 'image_processing/templates/card/result/sample2/results/res_{
 #Templates for making a template (lmao)
 path_template_number = 'image_processing/templates/number/3_red_diamond_number_template.png'
 path_template_suit_diamonds = 'image_processing/templates/suits/3_diamonds_suit_template.png'
-path_template_suit_hearts = 'image_processing/templates/suits/3_hearts_suit_template.png'
+path_template_suit_heart = 'image_processing/templates/suits/3_hearts_suit_template.png'
 
 
 

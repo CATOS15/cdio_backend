@@ -18,6 +18,7 @@ path_card_waste3 = 'image_processing/templates/test/full_deck/waste3.png'
 path_card_waste4 = 'image_processing/templates/test/full_deck/waste4.png'
 path_card_waste5 = 'image_processing/templates/test/full_deck/waste5.png'
 path_card_high_res = 'image_processing/templates/test/full_deck/full_solitare_1_2.png'  
+path_card_ideal_4_spades = 'image_processing/templates/card/ideal_cards/4_spades.PNG'
 
 # print(Path(os.getcwd(), path_card_waste))
 
@@ -29,6 +30,7 @@ card_waste2_color = cv2.imread(path_card_waste2, cv2.IMREAD_COLOR)
 card_waste3_color = cv2.imread(path_card_waste3, cv2.IMREAD_COLOR) 
 card_waste4_color = cv2.imread(path_card_waste4, cv2.IMREAD_COLOR) 
 card_waste5_color = cv2.imread(path_card_waste5, cv2.IMREAD_COLOR) 
+four_spades = cv2.imread(path_card_ideal_4_spades, cv2.IMREAD_COLOR)
 test = card_waste_color
 # high_res_color = cv2.imread(path_card_high_res)
 
@@ -46,12 +48,14 @@ test = card_waste_color
     # recognize suit
 
 
-flow_waste = Flow(cb_wash=otsu_wash, cb_contour=contour_approximation, cb_cut_suit_rank=find_by_hierachy, , cb_compare_by_template=None)
+flow_waste = Flow(cb_wash=otsu_wash, cb_contour=contour_approximation, cb_cut_suit_rank=find_by_hierachy, cb_compare_by_template=compare_templates)
 #find card outlines
 flow_waste_washed = flow_waste.execute_wash(test, cv2.THRESH_BINARY)
 
 #cut these outlines
 flow_waste_countours = flow_waste.execute_contour(cv2.RETR_EXTERNAL, cv2.CHAIN_APPROX_SIMPLE, img_thresh = flow_waste_washed, img_color = test)
+
+
 
 #cut suit and number
 washed_images = []
@@ -59,20 +63,37 @@ for i, cunt in enumerate(flow_waste_countours):
     washed_images.append(flow_waste.execute_wash(cunt, cv2.THRESH_BINARY))
 
 
+#cut out images
 flow_waste_cut = flow_waste.execute_cut_suit_rank(washed_images, cv2.RETR_TREE, cv2.CHAIN_APPROX_SIMPLE)
 
-found_templates = []
-ratio_template_resolution(flow_waste_cut, avg_columns_width(washed_images), g_suits)
+#template match for suits
+
+for i, tmpl_card in enumerate(g_templates):
+    print(flow_waste.execute_compare_by_template(flow_waste_cut,tmpl_card))
+
+
+
+#template match for numbers
+
+# cnt = 0
+# for card in flow_waste_cut:
+#     print_results_suits_numbers(card['suits_numbers'], path_contours_sp4, cnt)
+#     # print_results_suits_numbers(card['face_cards'], path_contours_sp4, cnt)
+#     cnt += 1
+
+
+
+
+# #resize templates
+# found_templates = []
+
 # for i, cunt in enumerate(flow_waste_cut):
 #     ratio_template_resolution(cunt,)
 # #     foo.append(enlarge_image(cunt))
-print_results(flow_waste_cut, path_contours_sp4)
+# print_results(flow_waste_cut, path_contours_sp4)
 
 # cv2.imshow("flow waste washed", resize_image(flow_waste_washed))
 # cv2.waitKey(0)
-
-
-
 
 
 
@@ -111,14 +132,18 @@ print_results(flow_waste_cut, path_contours_sp4)
 
 
 #TODO
+#WASTE 
 #GaussianBlur
  #find video for more details
 #consider canny edge detection
-# flattener: www.pyimagesearch.com/2014/08/25/4-point-opencv-getperspective-transform-example/
-
+#img_compare
+    #figure out if each point is a sum of euclidian kernel (assumed for now)
+        #otherwise is each point in euclidian gitter a compariason match or something third
+    #make suit, rank etc. a tuplet or smth
 
 #Notes
 #Lightning must be considered
 # Tableau contour approx - Convex Hull https://docs.opencv.org/master/dd/d49/tutorial_py_contour_features.html
 
 
+#Try to "estimate" relationship between cards and set known templates appropriately

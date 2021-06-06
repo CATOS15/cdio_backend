@@ -1,20 +1,36 @@
 import cv2
 
+
+
+
 def ratio_img_resolution(img_from, img_ideal):
+    has_swapped = False
     img_from_res = img_from.shape[0] * img_from.shape[1]
-    img_ideal_res = img_ideal[0] * img_ideal[1]
+    img_ideal_res = img_ideal.shape[0] * img_ideal.shape[1]
 
     # same resolution
     if img_from_res - img_ideal_res == 0:
         return img_from
+    
+    #always downsize instead of upsize
+    if img_from_res - img_ideal_res < 0:
+        tmp = img_from
+        img_from = img_ideal
+        img_ideal = tmp
+        has_swapped = True
+    
     # scale from to match ideal
-    scale_height = img_ideal[0] / img_from.shape[0]
-    scale_width = img_ideal[1] / img_from.shape[1]
+    scale_height = img_ideal.shape[0] / img_from.shape[0]
+    scale_width = img_ideal.shape[1] / img_from.shape[1]
     new_height = int(img_from.shape[0] * scale_height)
     new_width = int(img_from.shape[1] * scale_width)
 
+    #index 0 is always img_from, index 1 is always img_ideal
+    if has_swapped == False:
+        return (img_from, cv2.resize(img_ideal, (new_height, new_width)))
+    else:
+        return (cv2.resize(img_from,(new_width, new_height)), img_ideal)
     
-    return cv2.resize(img_from, (new_width, new_height))
 
 def ratio_template_resolution(img_templates,avg_columns_width,ideal_width,ideal_height):
     new_height = int(ideal_height * avg_columns_width)
