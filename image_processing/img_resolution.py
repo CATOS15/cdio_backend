@@ -35,3 +35,5 @@ def avg_columns_width(washed_images):
         total_width += img.shape[1]
 
     return int(total_width/len(washed_images))
+
+

@@ -1,41 +1,85 @@
+from numpy.core.fromnumeric import resize
 from g_img import *
+from g_shared import *
 from img_wash import *
 from img_compare import *
 from img_resolution import *
-import os
+from debugging import *
+from img_cut_suit_rank import *
+# import os
 from pathlib import Path
 
 # Paths
 path_card_tableau = 'image_processing/templates/test/full_deck/tableau.png'
 path_card_foundation = 'image_processing/templates/test/full_deck/foundation.png'
 path_card_waste = 'image_processing/templates/test/full_deck/waste.png'
+path_card_waste2 = 'image_processing/templates/test/full_deck/waste2.png'
+path_card_waste3 = 'image_processing/templates/test/full_deck/waste3.png'
+path_card_waste4 = 'image_processing/templates/test/full_deck/waste4.png'
+path_card_waste5 = 'image_processing/templates/test/full_deck/waste5.png'
 path_card_high_res = 'image_processing/templates/test/full_deck/full_solitare_1_2.png'  
 
-print(Path(os.getcwd(), path_card_waste))
+# print(Path(os.getcwd(), path_card_waste))
 
 # Read cards
 card_tableau_color = cv2.imread(path_card_tableau, cv2.IMREAD_COLOR)
 card_foundation_color = cv2.imread(path_card_foundation, cv2.IMREAD_COLOR)
-card_waste_color = cv2.imread(path_card_waste, cv2.IMREAD_COLOR)
+card_waste_color = cv2.imread(path_card_waste, cv2.IMREAD_COLOR)        
+card_waste2_color = cv2.imread(path_card_waste2, cv2.IMREAD_COLOR)
+card_waste3_color = cv2.imread(path_card_waste3, cv2.IMREAD_COLOR) 
+card_waste4_color = cv2.imread(path_card_waste4, cv2.IMREAD_COLOR) 
+card_waste5_color = cv2.imread(path_card_waste5, cv2.IMREAD_COLOR) 
+test = card_waste_color
 # high_res_color = cv2.imread(path_card_high_res)
 
 
 # Waste flow
-#binary
-#threshold
-#contours
+    # wash (done)
+    # contour (done)
+    # wash2 (done)
+
+    # cut appropriately suit and number
+        #make template image or use existing ones
+        #enlarge each cuts' resolution to match template
+    # recognize number
+
+    # recognize suit
 
 
-flow_waste = Flow(cb_resolution=None, cb_distance=None, cb_wash=adaptive_wash, cb_compare=None, cb_contour=contours_sample1)
-flow_waste_washed = flow_waste.execute_wash(card_waste_color, cv2.THRESH_BINARY_INV)
+flow_waste = Flow(cb_wash=otsu_wash, cb_contour=contour_approximation, cb_cut_suit_rank=find_by_hierachy, , cb_compare_by_template=None)
+#find card outlines
+flow_waste_washed = flow_waste.execute_wash(test, cv2.THRESH_BINARY)
+
+#cut these outlines
+flow_waste_countours = flow_waste.execute_contour(cv2.RETR_EXTERNAL, cv2.CHAIN_APPROX_SIMPLE, img_thresh = flow_waste_washed, img_color = test)
+
+#cut suit and number
+washed_images = []
+for i, cunt in enumerate(flow_waste_countours):
+    washed_images.append(flow_waste.execute_wash(cunt, cv2.THRESH_BINARY))
 
 
-cv2.imshow("flow waste washed", flow_waste_washed)
-cv2.waitKey(0)
-flow_waste_countours = flow_waste.execute_contour(flow_waste_washed, cv2.RETR_EXTERNAL, cv2.CHAIN_APPROX_SIMPLE)
+flow_waste_cut = flow_waste.execute_cut_suit_rank(washed_images, cv2.RETR_TREE, cv2.CHAIN_APPROX_SIMPLE)
 
-for i,cunt in enumerate(flow_waste_countours):
-    cv2.imwrite(path_contours_sp4.format(i), cunt)
+found_templates = []
+ratio_template_resolution(flow_waste_cut, avg_columns_width(washed_images), g_suits)
+# for i, cunt in enumerate(flow_waste_cut):
+#     ratio_template_resolution(cunt,)
+# #     foo.append(enlarge_image(cunt))
+print_results(flow_waste_cut, path_contours_sp4)
+
+# cv2.imshow("flow waste washed", resize_image(flow_waste_washed))
+# cv2.waitKey(0)
+
+
+
+
+
+
+
+
+
+
 
 #set resolution, split image, wash each, compare images
 # flow_simple = Flow(ratio_img_resolution, None, wash_img, compare)
@@ -69,11 +113,12 @@ for i,cunt in enumerate(flow_waste_countours):
 #TODO
 #GaussianBlur
  #find video for more details
-#CHAIN_APPROX_SIMPLE
 #consider canny edge detection
-
+# flattener: www.pyimagesearch.com/2014/08/25/4-point-opencv-getperspective-transform-example/
 
 
 #Notes
 #Lightning must be considered
+# Tableau contour approx - Convex Hull https://docs.opencv.org/master/dd/d49/tutorial_py_contour_features.html
+
 

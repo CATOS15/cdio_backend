@@ -34,24 +34,28 @@ class TemplateInfo:
 
 
 class Flow:
-    def __init__(self, cb_resolution, cb_distance, cb_wash, cb_compare, cb_contour):
-        self.cb_resolution = cb_resolution
-        self.cb_distance = cb_distance
+    def __init__(self, cb_wash, cb_contour, cb_cut_suit_rank, cb_resolution, cb_compare_by_template):
         self.cb_wash = cb_wash
-        self.cb_compare = cb_compare
         self.cb_contour = cb_contour
-    
-    def execute_resolution(self, high_constrast, img_color):
-        return self.cb_resolution(high_constrast, img_color)
-    
-    def execute_distance(self):
-        return self.cb_distance()
+        self.cb_cut_suit_rank = cb_cut_suit_rank
+        self.cb_resolution = cb_resolution
+        self.cb_compare_by_template = cb_compare_by_template
+
     
     def execute_wash(self, ready_img, flow_two_contours):
         return self.cb_wash(ready_img, flow_two_contours)
 
-    def execute_compare(self, img_input, washed_image, suits, numbers):
-        return self.cb_compare(img_input, washed_image, suits, numbers)
+        
+    def execute_contour(self, alg1, alg2, img_thresh, img_color=None):
+        return self.cb_contour(alg1, alg2, img_thresh,  img_color)
+
+    def execute_cut_suit_rank(self, img_contours, alg1, alg2):
+        return self.cb_cut_suit_rank(img_contours, alg1, alg2)
+
     
-    def execute_contour(self, img_thresh, alg1, alg2):
-        return self.cb_contour(img_thresh, alg1, alg2)
+    #Implement resolution here
+    def execute_resolution(self, )
+    
+    def execute_compare_by_template(self, img_input, washed_image, suits, numbers):
+        return self.cb_compare(img_input, washed_image, suits, numbers)
+

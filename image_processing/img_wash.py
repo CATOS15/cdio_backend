@@ -89,8 +89,6 @@ def adaptive_wash(image, alg1):
     return thresh
 
 def otsu_wash(image, alg1):
-    sigX = 1 #size of width for gaussian kernel
-    sigY = 1 #size of length for gaussian kernel
     black = 0
     white = 255
     gray = cv2.cvtColor(image, cv2.COLOR_BGR2GRAY)
