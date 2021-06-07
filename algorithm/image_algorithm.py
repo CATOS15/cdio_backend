@@ -343,9 +343,16 @@ def run_algorithm(data_solitaire):
         print(bestMove["move"].description)
 
     if(bestMove != None):
-        if (bestMove["point"] < 20 and bestMove["numberOfMoves"] == 1) or (bestMove["point"] < 40 and bestMove["numberOfMoves"] == 2) or len(originalCardpile) == 0:
-            return "Flip bunken! Hvis ikke muligt udfør -> " + bestMove["move"].description
+        if type(bestMove["move"].toStack) is Fountain:
+            bestMove["move"].toCard = Card(bestMove["move"].toStack.count, bestMove["move"].toStack.suit)
         else:
-            return bestMove["move"].description
+            bestMove["move"].toCard = Card(bestMove["move"].toStack[len(bestMove["move"].toStack)-1].number, bestMove["move"].toStack[len(bestMove["move"].toStack)-1].suit)
+
+        if (bestMove["point"] < 20 and bestMove["numberOfMoves"] == 1) or (bestMove["point"] < 40 and bestMove["numberOfMoves"] == 2) or len(originalCardpile) == 0:
+            bestMove["move"].description = "Flip bunken! Hvis ikke muligt udfør -> " + bestMove["move"].description
+            return bestMove["move"]
+        else:
+
+            return bestMove["move"]
     else:
         return "Flip bunken! Hvis ikke muligt så er der intet at gøre!"
