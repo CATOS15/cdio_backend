@@ -10,7 +10,7 @@ from enum import Enum
 # global variables
 g_threshold = 0.70
 g_threshold_rank = 0.50
-g_threshold_suit = 0.80
+g_threshold_suit = 0.70
 
 # contours threshold
 g_lower_threshold = 170

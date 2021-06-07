@@ -26,14 +26,13 @@ path_card_ideal_4_spades = 'image_processing/templates/card/ideal_cards/4_spades
 card_tableau_color = cv2.imread(path_card_tableau, cv2.IMREAD_COLOR)
 card_foundation_color = cv2.imread(path_card_foundation, cv2.IMREAD_COLOR)
 card_waste_color = cv2.imread(path_card_waste, cv2.IMREAD_COLOR)
-card_waste2_color = cv2.imread(path_card_waste2, cv2.IMREAD_COLOR)
-card_waste3_color = cv2.imread(path_card_waste3, cv2.IMREAD_COLOR)
-card_waste4_color = cv2.imread(path_card_waste4, cv2.IMREAD_COLOR)
-card_waste5_color = cv2.imread(path_card_waste5, cv2.IMREAD_COLOR)
-four_spades = cv2.imread(path_card_ideal_4_spades, cv2.IMREAD_COLOR)
-high_res_color = cv2.imread(path_card_high_res)
+card_waste2_color = cv2.imread(
+    path_card_waste2, cv2.IMREAD_COLOR)  # unable to find suit
+card_waste3_color = cv2.imread(path_card_waste3, cv2.IMREAD_COLOR) #error
+card_waste4_color = cv2.imread(path_card_waste4, cv2.IMREAD_COLOR) #wrong rank, no suit
+card_waste5_color = cv2.imread(path_card_waste5, cv2.IMREAD_COLOR) #no rank, no suit
+high_res_color = cv2.imread(path_card_high_res,cv2.IMREAD_COLOR) #error
 test = card_waste_color
-
 
 # Waste flow
 # wash (done)
@@ -43,7 +42,6 @@ test = card_waste_color
 # cut appropriately suit and number
 # recognize number
 # recognize suit
-
 flow_waste = Flow(cb_wash=otsu_wash, cb_contour=contour_approximation,
                   cb_cut_suit_rank=find_by_hierachy, cb_compare_by_template=compare_ranksuit)
 # find card outlines
@@ -67,16 +65,19 @@ print_waste_cuts(flow_waste_cut)
 # set to black/white and invert templates
 bin_invert_templates(g_templates)
 
-
-#compare found contours of each card with all templates and assign the best match to a card, which contains rank and suit
+# uses all cards
+# compares all contours of a card with all templates
+# creates a card from best match & global threshold
 results = []
 for i, card in enumerate(flow_waste_cut):
-    results.append(flow_waste.execute_compare_by_template(card,g_templates))
+    results.append(flow_waste.execute_compare_by_template(card, g_templates))
 
-print(results)
 
+for x in results:
+    print(x)
 
 # template match for numbers
+
 
 # cv2.imshow("flow waste washed", resize_image(flow_waste_washed))
 # cv2.waitKey(0)
@@ -84,10 +85,9 @@ print(results)
 
 # TODO
 # WASTE
-    # Refactor / cleanup
-    # Go through structure for waste
-    # Create templates for all Rank & Suits
-
+    #Create activity diagram for Waste-flow
+    #Create Integration Test for Waste
+        #Create unit test for each algo in Waste
 
 # Notes
     # GaussianBlur

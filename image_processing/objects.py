@@ -96,7 +96,7 @@ class Card:
         if self.rank == None and self.suit == None:
             return 'no card found'
 
-        if self.rank == None:
+        if self.suit == None:
             to_return += 'suit: None' 
         else:
             to_return += 'suit: ' + self.suit.name
