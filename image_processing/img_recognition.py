@@ -9,7 +9,7 @@ from img_cut_suit_rank import *
 # import os
 from pathlib import Path
 
-# Paths
+# Paths for images received
 path_card_tableau = 'image_processing/templates/test/full_deck/tableau.png'
 path_card_foundation = 'image_processing/templates/test/full_deck/foundation.png'
 path_card_waste = 'image_processing/templates/test/full_deck/waste.png'
@@ -31,8 +31,8 @@ card_waste3_color = cv2.imread(path_card_waste3, cv2.IMREAD_COLOR)
 card_waste4_color = cv2.imread(path_card_waste4, cv2.IMREAD_COLOR) 
 card_waste5_color = cv2.imread(path_card_waste5, cv2.IMREAD_COLOR) 
 four_spades = cv2.imread(path_card_ideal_4_spades, cv2.IMREAD_COLOR)
+high_res_color = cv2.imread(path_card_high_res)
 test = card_waste_color
-# high_res_color = cv2.imread(path_card_high_res)
 
 
 # Waste flow
@@ -66,8 +66,8 @@ for i, cunt in enumerate(flow_waste_countours):
 #cut out images
 flow_waste_cut = flow_waste.execute_cut_suit_rank(washed_images, cv2.RETR_TREE, cv2.CHAIN_APPROX_SIMPLE)
 
-#template match for suits
-
+#template match all images contours for rank and suit
+positive_matches = []
 for i, tmpl_card in enumerate(g_templates):
     print(flow_waste.execute_compare_by_template(flow_waste_cut,tmpl_card))
 
@@ -81,69 +81,24 @@ for i, tmpl_card in enumerate(g_templates):
 #     # print_results_suits_numbers(card['face_cards'], path_contours_sp4, cnt)
 #     cnt += 1
 
-
-
-
-# #resize templates
-# found_templates = []
-
-# for i, cunt in enumerate(flow_waste_cut):
-#     ratio_template_resolution(cunt,)
-# #     foo.append(enlarge_image(cunt))
-# print_results(flow_waste_cut, path_contours_sp4)
-
 # cv2.imshow("flow waste washed", resize_image(flow_waste_washed))
 # cv2.waitKey(0)
 
 
-
-
-
-
-
-
-#set resolution, split image, wash each, compare images
-# flow_simple = Flow(ratio_img_resolution, None, wash_img, compare)
-# flow_simple_img = flow_simple.execute_resolution(high_res_color, g_img_color)
-# flow_simple_washed_images = flow_simple.execute_wash(flow_simple_img)
-# flow_simple_res_suits, flow_simple_res_numbers = flow_simple.cb_compare(flow_simple_img, flow_simple_washed_images, g_suits, g_numbers)
-
-# write_to(result_image_sp1, flow_simple_res_suits, flow_simple_res_numbers)
-
-#cmp resized template and image.
-# flow_two = Flow(ratio_img_resolution, None, wash_img, compare, contours_sample1)
-# flow_two_img = flow_two.execute_resolution(high_res_color, g_img_ideal_color)
-# flow_two_threshold = define_threshold(flow_two_img, g_lower_threshold, g_upper_threshold)
-
-# flow_two_contours = flow_two.execute_contour(flow_two_threshold, cv2.RETR_TREE, cv2.CHAIN_APPROX_SIMPLE)
-# flow_two_washed_images = flow_two.execute_wash(flow_two_img, flow_two_contours)
-# avg_columns_width = avg_columns_width(flow_two_washed_images)
-
-# resized_suits = ratio_template_resolution(g_suits, avg_columns_width,g_ideal_card_suit_width,g_ideal_card_suit_height)
-# resized_numbers = ratio_template_resolution(g_numbers, avg_columns_width,g_ideal_card_number_width,g_ideal_card_number_height)
-# res_suits, res_numbers = flow_two.cb_compare(flow_two_img, flow_two_washed_images, resized_suits, resized_numbers)
-
-# write_to(result_image_sp2, res_suits, res_numbers)
-
-#Next time
-#flow_three = Flow(..)
-# write_to(result_image_sp3, res_suits, res_numbers)
-
-
-
 #TODO
 #WASTE 
-#GaussianBlur
- #find video for more details
-#consider canny edge detection
-#img_compare
-    #figure out if each point is a sum of euclidian kernel (assumed for now)
-        #otherwise is each point in euclidian gitter a compariason match or something third
-    #make suit, rank etc. a tuplet or smth
+    #Refactor / cleanup
+    #Go through structure for waste
+    #Create templates for all Rank & Suits
+
 
 #Notes
-#Lightning must be considered
-# Tableau contour approx - Convex Hull https://docs.opencv.org/master/dd/d49/tutorial_py_contour_features.html
+    #GaussianBlur
+        #find video for more details
+    #consider canny edge detection
+    #Tableau 
+        #contour approx - Convex Hull https://docs.opencv.org/master/dd/d49/tutorial_py_contour_features.html
+    #img_compare
+        #figure out if each point is a sum of euclidian kernel (assumed for now)
+            #otherwise is each point in euclidian gitter a compariason match or something third
 
-
-#Try to "estimate" relationship between cards and set known templates appropriately

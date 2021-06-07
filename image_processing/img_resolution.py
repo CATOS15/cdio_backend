@@ -1,8 +1,5 @@
 import cv2
 
-
-
-
 def ratio_img_resolution(img_from, img_ideal):
     has_swapped = False
     img_from_res = img_from.shape[0] * img_from.shape[1]

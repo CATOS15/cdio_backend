@@ -11,9 +11,6 @@ def find_by_hierachy(contours, alg1, alg2):
     noise = 0.0001
     cards = []
 
-    # numbered_cards = ()
-    # numbered_cards_cnt = 0, face_cards_cnt = 0
-
     for card in contours:
         countours, hierachy = cv2.findContours(card, alg1, alg2)
         card_size = card.shape[0] * card.shape[1]
