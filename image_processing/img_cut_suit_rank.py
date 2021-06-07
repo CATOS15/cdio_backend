@@ -20,15 +20,16 @@ def find_by_hierachy(contours, alg1, alg2):
 
 
         for i, cunt in enumerate(countours):
-            # for some unholy reason there is a 3rd diemension, may god save the man who inveted this course I wont
+            # for some unholy reason there is a 3rd dimension, may god save the man who inveted this course I wont
             if hierachy[0][i][3] == 0:
-                # don't take face card or any template to small to recognize
+                # don't take face card middle images or any template to small to recognize
                 if cv2.contourArea(cunt) < face_card*card_size and cv2.contourArea(cunt) > noise*card_size:
                     _suits_numbers.append(np.array(__contour_draw(card, cunt)))
                 
+                #find face cards
                 elif cv2.contourArea(cunt) > face_card*card_size and cv2.contourArea(cunt) > noise*card_size:
                     _face_cards.append(np.array(__contour_draw(card, cunt)))
-        
+                
         cards.append(card_cunts)
     return cards
 

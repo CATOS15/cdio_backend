@@ -50,3 +50,10 @@ def avg_columns_width(washed_images):
     return int(total_width/len(washed_images))
 
 
+def bin_invert_templates(g_templates):
+    for tmpl in g_templates:
+        grey_img = cv2.cvtColor(tmpl.img, cv2.COLOR_BGR2GRAY)
+        flipped = cv2.bitwise_not(grey_img)
+        blur = cv2.GaussianBlur(flipped, (5, 5), 0)
+        _, th = cv2.threshold(blur, 0, 255, cv2.THRESH_BINARY_INV+cv2.THRESH_OTSU)
+        tmpl.img = th
