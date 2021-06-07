@@ -2,7 +2,7 @@ import cv2
 import numpy as np
 from img_cut_suit_rank import suits_numbers
 from img_resolution import ratio_img_resolution
-from g_img import * 
+from g_img import *
 from g_img import CardType
 
 
@@ -11,39 +11,43 @@ template_match_alg = cv2.TM_CCOEFF_NORMED
 
 def compare_templates(cards, template):
     # template_match_results = [] #results for one template / one column / one card
-
-    suit = None
-    rank = None
-    suit_threshold = 0
-    rank_threshold = 0
-
+    card_matches = []
 
     for card in cards:
+        suit = None
+        rank = None
+        suit_threshold = 0
+        rank_threshold = 0
+        
         for _, cunt in enumerate(card[suits_numbers]):
-            rzimage, rztemplate = ratio_img_resolution(cunt, template.img) #match each contour to the size of a template
+            # match each contour to the size of a template
+            
+            rzimage, rztemplate = ratio_img_resolution(cunt, template.img)
             match = cv2.matchTemplate(rzimage, rztemplate, template_match_alg)
             # loc = np.where(match >= template.threshold)
             min_val, max_val, min_loc, max_loc = cv2.minMaxLoc(match)
-            
-            #assumes max val is a sum of all points of the euclidian gitter
+
+            # assumes max val is a sum of all points of the euclidian gitter
             f = template.type
-            if f == CardType.SUIT:
-                if suit == None or max_val > suit_threshold:
-                    suit = template.value
-                    suit_threshold = max_val
-                # if suit == None or min_val < suit_threshold:
-                #     suit = template.value
-                #     suit_threshold = min_val
+            if g_threshold < max_val:
+                if f == CardType.SUIT:
+                    if suit == None or max_val > suit_threshold:
+                        suit = template.value
+                        suit_threshold = max_val
+                    # if suit == None or min_val < suit_threshold:
+                    #     suit = template.value
+                    #     suit_threshold = min_val
 
-            if template.type == CardType.RANK:
-                if rank == None or max_val > rank_threshold:
-                    rank = template.value
-                    rank_threshold = max_val
-            #     if rank == None or min_val < rank_threshold:
-            #         rank = template.value
-            #         rank_threshold = min_val
-
-    return (suit, rank, suit_threshold, rank_threshold)
+                if template.type == CardType.RANK:
+                    if rank == None or max_val > rank_threshold:
+                        rank = template.value
+                        rank_threshold = max_val
+                #     if rank == None or min_val < rank_threshold:
+                #         rank = template.value
+                #         rank_threshold = min_val
+        card_matches.append((suit, rank, suit_threshold, rank_threshold))
+            
+    return card_matches
 
 
 # suits must be templateInfo
@@ -72,8 +76,8 @@ def locate_figure(img_color, washed_image, templ):
 
 
 def write_to(dst, res_suits, res_numbers):
-    for i,res in enumerate(res_suits):
-        cv2.imwrite(dst.format("suit_",i), res)
+    for i, res in enumerate(res_suits):
+        cv2.imwrite(dst.format("suit_", i), res)
 
-    for i,res in enumerate(res_numbers):
-        cv2.imwrite(dst.format("numbers_",i), res)
+    for i, res in enumerate(res_numbers):
+        cv2.imwrite(dst.format("numbers_", i), res)
