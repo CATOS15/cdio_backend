@@ -45,7 +45,7 @@ test = card_waste_color
 # recognize suit
 
 flow_waste = Flow(cb_wash=otsu_wash, cb_contour=contour_approximation,
-                  cb_cut_suit_rank=find_by_hierachy, cb_compare_by_template=compare_templates)
+                  cb_cut_suit_rank=find_by_hierachy, cb_compare_by_template=compare_ranksuit)
 # find card outlines
 flow_waste_washed = flow_waste.execute_wash(test, cv2.THRESH_BINARY)
 
@@ -62,36 +62,21 @@ for i, cunt in enumerate(flow_waste_countours):
 flow_waste_cut = flow_waste.execute_cut_suit_rank(
     washed_images, cv2.RETR_TREE, cv2.CHAIN_APPROX_SIMPLE)
 
-# bin invert templates
+print_waste_cuts(flow_waste_cut)
+
+# set to black/white and invert templates
 bin_invert_templates(g_templates)
 
 
-# foo = g_templates[0]
-# print(foo.club)
-# template match all images contours for rank and suit
-positive_matches = []
-for i, tmpl_card in enumerate(g_templates):
-    cv2.imwrite(path_contours_sp4.format(i), tmpl_card.img)
-    # print_results(tmpl_card.img, path_contours_sp4)
-    for x in flow_waste.execute_compare_by_template(flow_waste_cut, tmpl_card):
-        for j in x:
-            if j != None and j != 0:
-                print(x)
-        # print("----------------")
-    # flow_waste.execute_compare_by_template(flow_waste_cut,tmpl_card)
+#compare found contours of each card with all templates and assign the best match to a card, which contains rank and suit
+results = []
+for i, card in enumerate(flow_waste_cut):
+    results.append(flow_waste.execute_compare_by_template(card,g_templates))
 
-    # tmpl_bin_inv(tmpl_card.img, "_INV_" + str(tmpl_card.value))
-    # if tmpl_card.img is None:
-    #     print("FUCK: " + str(tmpl_card.type) + ":" + str(tmpl_card.value))
+print(results)
 
 
 # template match for numbers
-
-# cnt = 0
-# for card in flow_waste_cut:
-#     print_results_suits_numbers(card['suits_numbers'], path_contours_sp4, cnt)
-#     # print_results_suits_numbers(card['face_cards'], path_contours_sp4, cnt)
-#     cnt += 1
 
 # cv2.imshow("flow waste washed", resize_image(flow_waste_washed))
 # cv2.waitKey(0)
@@ -113,3 +98,9 @@ for i, tmpl_card in enumerate(g_templates):
     # img_compare
     # Figure out if each point is a sum of euclidian kernel (assumed for now)
     # otherwise is each point in euclidian gitter a compariason match or something third
+
+
+# TODO Rapport
+# Testing
+    # Test different algorithms, and compare them together
+    #
