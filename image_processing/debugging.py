@@ -1,5 +1,6 @@
 import cv2
 from g_shared import path_tmpl_birck_rank_bin_inv
+from g_shared import path_contours_sp3
 
 
 def resize_image(img):
@@ -40,6 +41,14 @@ def tmpl_bin_inv(color_img, path, card_name):
     blur = cv2.GaussianBlur(flipped, (5, 5), 0)
     _, th = cv2.threshold(blur, 0, 255, cv2.THRESH_BINARY_INV+cv2.THRESH_OTSU)
     cv2.imwrite(path.format(card_name), th)
+
+
+def print_waste_cuts(flow_waste_cuts):
+    cnt = 0
+    for card in flow_waste_cuts:
+        for cuts in card["suits_numbers"]:
+            cv2.imwrite(path_contours_sp3.format(cnt), cuts)
+            cnt += 1
 
 # Example
     # if tmpl_card.type == CardType.SUIT:

@@ -1,3 +1,4 @@
+import enum
 import cv2
 import numpy as np
 from img_cut_suit_rank import suits_numbers
@@ -6,48 +7,62 @@ from g_img import *
 from g_img import CardType
 
 
-template_match_alg = cv2.TM_CCOEFF_NORMED
+# Ways to compute euclidian kernel w. Original Image
+# cv2.TM_CCOEFF
+# cv2.TM_CCOEFF_NORMED  # this works best so far
+# cv2.TM_SQDIFF
+# cv2.TM_SQDIFF_NORMED
+# cv2.TM_CCORR
+# cv2.TM_CCORR_NORMED
+
+template = cv2.TM_CCOEFF_NORMED
 
 
-def compare_templates(cards, template):
-    # template_match_results = [] #results for one template / one column / one card
-    card_matches = []
+def compare_ranksuit(card, g_templates):
+    finished_card = Card(None, None, None, None)
 
-    for card in cards:
-        suit = None
-        rank = None
-        suit_threshold = 0
-        rank_threshold = 0
-        
+    for tmpl in g_templates:
         for _, cunt in enumerate(card[suits_numbers]):
-            # match each contour to the size of a template
-            
-            rzimage, rztemplate = ratio_img_resolution(cunt, template.img)
-            match = cv2.matchTemplate(rzimage, rztemplate, template_match_alg)
-            # loc = np.where(match >= template.threshold)
+            rzimage, rztemplate = ratio_img_resolution(cunt, tmpl.img)
+            match = cv2.matchTemplate(
+                rzimage, rztemplate, template)
             min_val, max_val, min_loc, max_loc = cv2.minMaxLoc(match)
 
-            # assumes max val is a sum of all points of the euclidian gitter
-            f = template.type
-            if g_threshold < max_val:
-                if f == CardType.SUIT:
-                    if suit == None or max_val > suit_threshold:
-                        suit = template.value
-                        suit_threshold = max_val
-                    # if suit == None or min_val < suit_threshold:
-                    #     suit = template.value
-                    #     suit_threshold = min_val
+            if template is not(cv2.TM_SQDIFF or cv2.TM_SQDIFF_NORMED):
+                _compare_suit_rank_max(
+                    finished_card, tmpl, max_val)
+            else:
+                _compare_suit_rank_min(
+                    finished_card, tmpl, min_val)
 
-                if template.type == CardType.RANK:
-                    if rank == None or max_val > rank_threshold:
-                        rank = template.value
-                        rank_threshold = max_val
-                #     if rank == None or min_val < rank_threshold:
-                #         rank = template.value
-                #         rank_threshold = min_val
-        card_matches.append((suit, rank, suit_threshold, rank_threshold))
-            
-    return card_matches
+    return finished_card
+
+# use for coeff/coeff_normed, corr/corr_normed
+
+
+def _compare_suit_rank_max(card, template, max_val):
+    if template.type == CardType.SUIT:
+        if (card.suit == None or max_val > card.suit_threshold) and max_val > g_threshold_suit:
+            card.suit = template.value
+            card.suit_threshold = max_val
+
+    if template.type == CardType.RANK:
+        if (card.rank == None or max_val > card.rank_threshold) and max_val > g_threshold_rank:
+            card.rank = template.value
+            card.rank_threshold = max_val
+
+
+# use for sqdiff/sqdiff_normed
+def _compare_suit_rank_min(card, template, min_val):
+    if template.type == CardType.SUIT:
+        if (card.suit == None or min_val < card.suit_threshold) and min_val < g_threshold_suit:
+            card.suit = template.value
+            card.suit_threshold = min_val
+
+    if template.type == CardType.RANK:
+        if (card.rank == None and min_val < card.rank_threshold) and min_val < g_threshold_rank:
+            card.rank = template.value
+            card.rank_threshold = min_val
 
 
 # suits must be templateInfo

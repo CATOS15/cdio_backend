@@ -82,3 +82,46 @@ class Foo:
     def __init__(self, minMaxLoc, suit):
         self.minMaxLoc = minMaxLoc
         self.suit = suit
+
+
+class Card:
+    def __init__(self, suit, rank, suit_threshold, rank_threshold):
+        self.suit = suit
+        self.rank = rank
+        self.suit_threshold = suit_threshold
+        self.rank_threshold = rank_threshold
+
+    def __str__(self):
+        to_return = ""
+        if self.rank == None and self.suit == None:
+            return 'no card found'
+
+        if self.suit == None:
+            to_return += 'suit: None' 
+        else:
+            to_return += 'suit: ' + self.suit.name
+        
+        if self.rank == None:
+            to_return += '\trank: None'
+        else:
+            to_return += '\trank ' + self.rank.name
+        
+        if self.rank_threshold == None:
+            to_return += '\trank_threshold: None'
+        else:
+            to_return += '\trank_threshold: ' + str(round(self.rank_threshold,4))
+        
+        if self.suit_threshold == None:
+            to_return += '\tsuit_threshold: None'
+        else:
+            to_return += '\tsuit_threshold: ' + str(round(self.suit_threshold, 4))
+
+        return to_return
+
+
+        # if self.rank != None and self.suit != None:
+        #     return 'suit:' + self.suit.name + "\trank:" + self.rank.name + "\trank_threshold:" + str(round(self.rank_threshold,4)) + "\tsuit_threshold:" + str(round(self.suit_threshold, 4))
+        # else:
+        #     return 'No Card Found'
+
+    

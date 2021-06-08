@@ -26,14 +26,13 @@ path_card_ideal_4_spades = 'image_processing/templates/card/ideal_cards/4_spades
 card_tableau_color = cv2.imread(path_card_tableau, cv2.IMREAD_COLOR)
 card_foundation_color = cv2.imread(path_card_foundation, cv2.IMREAD_COLOR)
 card_waste_color = cv2.imread(path_card_waste, cv2.IMREAD_COLOR)
-card_waste2_color = cv2.imread(path_card_waste2, cv2.IMREAD_COLOR)
-card_waste3_color = cv2.imread(path_card_waste3, cv2.IMREAD_COLOR)
-card_waste4_color = cv2.imread(path_card_waste4, cv2.IMREAD_COLOR)
-card_waste5_color = cv2.imread(path_card_waste5, cv2.IMREAD_COLOR)
-four_spades = cv2.imread(path_card_ideal_4_spades, cv2.IMREAD_COLOR)
-high_res_color = cv2.imread(path_card_high_res)
+card_waste2_color = cv2.imread(
+    path_card_waste2, cv2.IMREAD_COLOR)  # unable to find suit
+card_waste3_color = cv2.imread(path_card_waste3, cv2.IMREAD_COLOR) #error
+card_waste4_color = cv2.imread(path_card_waste4, cv2.IMREAD_COLOR) #wrong rank, no suit
+card_waste5_color = cv2.imread(path_card_waste5, cv2.IMREAD_COLOR) #no rank, no suit
+high_res_color = cv2.imread(path_card_high_res,cv2.IMREAD_COLOR) #error
 test = card_waste_color
-
 
 # Waste flow
 # wash (done)
@@ -43,9 +42,8 @@ test = card_waste_color
 # cut appropriately suit and number
 # recognize number
 # recognize suit
-
 flow_waste = Flow(cb_wash=otsu_wash, cb_contour=contour_approximation,
-                  cb_cut_suit_rank=find_by_hierachy, cb_compare_by_template=compare_templates)
+                  cb_cut_suit_rank=find_by_hierachy, cb_compare_by_template=compare_ranksuit)
 # find card outlines
 flow_waste_washed = flow_waste.execute_wash(test, cv2.THRESH_BINARY)
 
@@ -62,36 +60,24 @@ for i, cunt in enumerate(flow_waste_countours):
 flow_waste_cut = flow_waste.execute_cut_suit_rank(
     washed_images, cv2.RETR_TREE, cv2.CHAIN_APPROX_SIMPLE)
 
-# bin invert templates
+print_waste_cuts(flow_waste_cut)
+
+# set to black/white and invert templates
 bin_invert_templates(g_templates)
 
+# uses all cards
+# compares all contours of a card with all templates
+# creates a card from best match & global threshold
+results = []
+for i, card in enumerate(flow_waste_cut):
+    results.append(flow_waste.execute_compare_by_template(card, g_templates))
 
-# foo = g_templates[0]
-# print(foo.club)
-# template match all images contours for rank and suit
-positive_matches = []
-for i, tmpl_card in enumerate(g_templates):
-    cv2.imwrite(path_contours_sp4.format(i), tmpl_card.img)
-    # print_results(tmpl_card.img, path_contours_sp4)
-    for x in flow_waste.execute_compare_by_template(flow_waste_cut, tmpl_card):
-        for j in x:
-            if j != None and j != 0:
-                print(x)
-        # print("----------------")
-    # flow_waste.execute_compare_by_template(flow_waste_cut,tmpl_card)
 
-    # tmpl_bin_inv(tmpl_card.img, "_INV_" + str(tmpl_card.value))
-    # if tmpl_card.img is None:
-    #     print("FUCK: " + str(tmpl_card.type) + ":" + str(tmpl_card.value))
-
+for x in results:
+    print(x)
 
 # template match for numbers
 
-# cnt = 0
-# for card in flow_waste_cut:
-#     print_results_suits_numbers(card['suits_numbers'], path_contours_sp4, cnt)
-#     # print_results_suits_numbers(card['face_cards'], path_contours_sp4, cnt)
-#     cnt += 1
 
 # cv2.imshow("flow waste washed", resize_image(flow_waste_washed))
 # cv2.waitKey(0)
@@ -99,10 +85,9 @@ for i, tmpl_card in enumerate(g_templates):
 
 # TODO
 # WASTE
-    # Refactor / cleanup
-    # Go through structure for waste
-    # Create templates for all Rank & Suits
-
+    #Create activity diagram for Waste-flow
+    #Create Integration Test for Waste
+        #Create unit test for each algo in Waste
 
 # Notes
     # GaussianBlur
@@ -113,3 +98,9 @@ for i, tmpl_card in enumerate(g_templates):
     # img_compare
     # Figure out if each point is a sum of euclidian kernel (assumed for now)
     # otherwise is each point in euclidian gitter a compariason match or something third
+
+
+# TODO Rapport
+# Testing
+    # Test different algorithms, and compare them together
+    #
