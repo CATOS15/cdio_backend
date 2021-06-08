@@ -350,9 +350,7 @@ def run_algorithm(data_solitaire):
 
         if (bestMove["point"] < 20 and bestMove["numberOfMoves"] == 1) or (bestMove["point"] < 40 and bestMove["numberOfMoves"] == 2) or len(originalCardpile) == 0:
             bestMove["move"].description = "Flip bunken! Hvis ikke muligt udfør -> " + bestMove["move"].description
-            return bestMove["move"]
-        else:
-
-            return bestMove["move"]
     else:
-        return "Flip bunken! Hvis ikke muligt så er der intet at gøre!"
+        bestMove["move"].description = "Flip bunken! Hvis ikke muligt så er der intet at gøre!"
+        
+    return bestMove

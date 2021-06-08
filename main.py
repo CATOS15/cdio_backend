@@ -35,25 +35,25 @@ def getAlgData():
     data_solitaire = {
         'stacks': [
             [
-                {'number': 4, 'suit': 3}
+                {'number': 8, 'suit': 3}
             ],
             [
-                {'number': 3, 'suit': 2}
+                {'number': 12, 'suit': 2}
             ],
             [
-                {'number': 2, 'suit': 3}
+                {'number': 11, 'suit': 3}
             ],
             [
-                {'number': 3, 'suit': 4}
+                {'number': 11, 'suit': 4}
             ],
             [
-                {'number': 3, 'suit': 1}
+                {'number': 12, 'suit': 1}
             ],
             [
-                {'number': 4, 'suit': 1}
+                {'number': 6, 'suit': 1}
             ],
             [
-                {'number': 5, 'suit': 1}
+                {'number': 7, 'suit': 1}
             ],
         ],
         'fountains': [
@@ -67,24 +67,29 @@ def getAlgData():
         ],
     }
 
-    move = run_algorithm(data_solitaire)
-    
-    if type(move) == str:
-        dictionary ={   
-            "firstcard": "",
-            "secondcard": "",   
-            "movemessage": str(move)
-        }
-    else:
+    bestMove = run_algorithm(data_solitaire)
+    move = bestMove["move"]
+
+    firstcard = ""
+    secondcard = ""
+    movemessage = ""
+
+    if type(move) != str:
         firstcard = str(getCardCharFromNumber(move.fromCard.number)) + str(getColourCharFromNumber(move.fromCard.suit))
         secondcard = str(getCardCharFromNumber(move.toCard.number)) + str(getColourCharFromNumber(move.toCard.suit))
-        dictionary ={   
-            "firstcard": firstcard,   
-            "secondcard": secondcard,   
-            "movemessage": str(move.description)
-        }
+        movemessage = str(move.description)
 
-    return dictionary
+        if (bestMove["point"] < 20 and bestMove["numberOfMoves"] == 1) or (bestMove["point"] < 40 and bestMove["numberOfMoves"] == 2) or len(originalCardpile) == 0:
+            firstcard = "flip"
+            secondcard = "random"
+    else:
+        movemessage = str(move)
+
+    return {   
+        "firstcard": firstcard,   
+        "secondcard": secondcard,   
+        "movemessage": movemessage
+    }
 
 def getCardCharFromNumber(number):
     if number == 1:
