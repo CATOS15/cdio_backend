@@ -39,3 +39,6 @@ def find_columns_bin(img):
     # return washed_images
 
 a = find_columns_color(g_shared.test)
+
+
+#see set python path: https://towardsdatascience.com/how-to-fix-modulenotfounderror-and-importerror-248ce5b69b1c
