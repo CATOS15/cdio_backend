@@ -2,11 +2,9 @@ import cv2
 from numpy.core.fromnumeric import resize
 import image_processing.g_img as g_img
 import image_processing.g_shared as g_shared
-import image_processing.objects as objects
 import image_processing.img_resolution as resolution
 import image_processing.debugging as debugging
 import image_processing.flows as flows
-# print(Path(os.getcwd(), path_card_waste))
 
 # Waste flow
     # wash 
@@ -50,11 +48,7 @@ for i, card in enumerate(flow_waste_cut):
 for x in results:
     print(x)
 
-# template match for numbers
 
-
-# cv2.imshow("flow waste washed", resize_image(flow_waste_washed))
-# cv2.waitKey(0)
 
 
 # TODO
@@ -77,3 +71,10 @@ for x in results:
 # Testing
     # Test different algorithms, and compare them together
     #
+
+
+#notes - code
+# cv2.imshow("flow waste washed", resize_image(flow_waste_washed))
+# cv2.waitKey(0)
+# print(Path(os.getcwd(), path_card_waste))
+

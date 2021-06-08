@@ -6,11 +6,10 @@ import image_processing.flows as flows
 import image_processing.g_shared as g_shared
 import pathlib
 
-# path_img_ml_col = os.getcwd() + '\\\\img_ml_data\\\\columns'
 path_waste1 = "../" + g_shared.path_card_waste #refacotr this
 
-img_color = cv2.imread(path_waste1, cv2.IMREAD_COLOR)
-
+img_output = str(pathlib.Path(os.getcwd(), "img_ml_data/columns/color/color_img_{}.png"))
+ 
 def find_columns_color(img):
     # find card outlines
     flow_waste_washed = flows.flow_waste.execute_wash(img, cv2.THRESH_BINARY)
@@ -19,8 +18,7 @@ def find_columns_color(img):
     flow_waste_countours = flows.flow_waste.execute_contour(
         cv2.RETR_EXTERNAL, cv2.CHAIN_APPROX_SIMPLE, img_thresh=flow_waste_washed, img_color=img)
 
-    f = str(pathlib.Path(os.getcwd(), "img_ml_data/columns/color/color_img_{}.png"))
-    debugging.print_results(flow_waste_countours, f)
+    debugging.print_results(flow_waste_countours, img_output)
     return flow_waste_countours
 
 
@@ -41,4 +39,3 @@ def find_columns_bin(img):
     # return washed_images
 
 a = find_columns_color(g_shared.test)
-# print(a)
