@@ -94,7 +94,7 @@ class Card:
     def __str__(self):
         to_return = ""
         if self.rank == None and self.suit == None:
-            return 'no card found'
+            return 'no appropriate matches for card found'
 
         if self.suit == None:
             to_return += 'suit: None' 
