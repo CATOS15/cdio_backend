@@ -35,10 +35,9 @@ high_res_color = cv2.imread(path_card_high_res,cv2.IMREAD_COLOR) #error
 test = card_waste_color
 
 # Waste flow
-# wash (done)
-# contour (done)
-# wash2 (done)
-
+# wash 
+# contour 
+# wash2 
 # cut appropriately suit and number
 # recognize number
 # recognize suit
@@ -55,6 +54,8 @@ flow_waste_countours = flow_waste.execute_contour(
 washed_images = []
 for i, cunt in enumerate(flow_waste_countours):
     washed_images.append(flow_waste.execute_wash(cunt, cv2.THRESH_BINARY))
+
+print_results(washed_images, path_contours_sp2)
 
 # cut out images
 flow_waste_cut = flow_waste.execute_cut_suit_rank(
@@ -85,10 +86,9 @@ for x in results:
 
 # TODO
 # WASTE
-    #Create activity diagram for Waste-flow
     #Create Integration Test for Waste
         #Create unit test for each algo in Waste
-
+    #consider folder structure
 # Notes
     # GaussianBlur
     # find video for more details
