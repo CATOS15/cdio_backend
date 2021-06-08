@@ -1,11 +1,10 @@
 import enum
 import cv2
 import numpy as np
-from img_cut_suit_rank import suits_numbers
-from img_resolution import ratio_img_resolution
-from g_img import *
-from g_img import CardType
-
+import image_processing.img_cut_suit_rank as cut_suit_rank
+import image_processing.g_img as g_img
+import image_processing.img_resolution as resolution
+import image_processing.objects as objects
 
 # Ways to compute euclidian kernel w. Original Image
 # cv2.TM_CCOEFF
@@ -19,11 +18,11 @@ template = cv2.TM_CCOEFF_NORMED
 
 
 def compare_ranksuit(card, g_templates):
-    finished_card = Card(None, None, None, None)
+    finished_card = objects.Card(None, None, None, None)
 
     for tmpl in g_templates:
-        for _, cunt in enumerate(card[suits_numbers]):
-            rzimage, rztemplate = ratio_img_resolution(cunt, tmpl.img)
+        for _, cunt in enumerate(card[cut_suit_rank.suits_numbers]):
+            rzimage, rztemplate = resolution.ratio_img_resolution(cunt, tmpl.img)
             match = cv2.matchTemplate(
                 rzimage, rztemplate, template)
             min_val, max_val, min_loc, max_loc = cv2.minMaxLoc(match)
@@ -41,26 +40,26 @@ def compare_ranksuit(card, g_templates):
 
 
 def _compare_suit_rank_max(card, template, max_val):
-    if template.type == CardType.SUIT:
-        if (card.suit == None or max_val > card.suit_threshold) and max_val > g_threshold_suit:
+    if template.type == g_img.CardType.SUIT:
+        if (card.suit == None or max_val > card.suit_threshold) and max_val > g_img.g_threshold_suit:
             card.suit = template.value
             card.suit_threshold = max_val
 
-    if template.type == CardType.RANK:
-        if (card.rank == None or max_val > card.rank_threshold) and max_val > g_threshold_rank:
+    if template.type == g_img.CardType.RANK:
+        if (card.rank == None or max_val > card.rank_threshold) and max_val > g_img.g_threshold_rank:
             card.rank = template.value
             card.rank_threshold = max_val
 
 
 # use for sqdiff/sqdiff_normed
 def _compare_suit_rank_min(card, template, min_val):
-    if template.type == CardType.SUIT:
-        if (card.suit == None or min_val < card.suit_threshold) and min_val < g_threshold_suit:
+    if template.type == g_img.CardType.SUIT:
+        if (card.suit == None or min_val < card.suit_threshold) and min_val < g_img.g_threshold_suit:
             card.suit = template.value
             card.suit_threshold = min_val
 
-    if template.type == CardType.RANK:
-        if (card.rank == None and min_val < card.rank_threshold) and min_val < g_threshold_rank:
+    if template.type == g_img.CardType.RANK:
+        if (card.rank == None and min_val < card.rank_threshold) and min_val < g_img.g_threshold_rank:
             card.rank = template.value
             card.rank_threshold = min_val
 

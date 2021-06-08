@@ -1,7 +1,10 @@
 import cv2
 import numpy as np
-from g_img import *
-from img_contour import *
+import image_processing.g_img as g_img
+# import image_processing.img_contour as contour
+
+# from g_img import *
+# from img_contour import *
 
 def store_images(images, path):
     for i, img in enumerate(images):
@@ -16,7 +19,7 @@ def wash_img(img, cunts_1_sample):
     # use OSTU to clear up noice from cards
     img_1_clear = __contrast_flip_images(
         wash_split_img, cv2.THRESH_BINARY+cv2.THRESH_OTSU)
-    store_images(img_1_clear, path_contours_sp2)
+    store_images(img_1_clear, g_img.path_contours_sp2)
 
     return img_1_clear
 

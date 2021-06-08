@@ -1,13 +1,3 @@
-import cv2
-from g_shared import *
-from img_contour import *
-# from img_compare import template_match_alg
-
-# Algorithm for template matching
-
-# g_match_alg = cv2.TM_SQDIFF
-
-
 class DrawSquare:
     def __init__(self, color, thicc):
         self.color = color
@@ -117,11 +107,4 @@ class Card:
             to_return += '\tsuit_threshold: ' + str(round(self.suit_threshold, 4))
 
         return to_return
-
-
-        # if self.rank != None and self.suit != None:
-        #     return 'suit:' + self.suit.name + "\trank:" + self.rank.name + "\trank_threshold:" + str(round(self.rank_threshold,4)) + "\tsuit_threshold:" + str(round(self.suit_threshold, 4))
-        # else:
-        #     return 'No Card Found'
-
     
