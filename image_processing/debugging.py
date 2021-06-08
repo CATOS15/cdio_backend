@@ -1,6 +1,7 @@
 import cv2
-from g_shared import path_tmpl_birck_rank_bin_inv
-from g_shared import path_contours_sp3
+import image_processing.g_shared as g_shared
+# from g_shared import path_tmpl_birck_rank_bin_inv
+# from g_shared import path_contours_sp3
 
 
 def resize_image(img):
@@ -47,7 +48,7 @@ def print_waste_cuts(flow_waste_cuts):
     cnt = 0
     for card in flow_waste_cuts:
         for cuts in card["suits_numbers"]:
-            cv2.imwrite(path_contours_sp3.format(cnt), cuts)
+            cv2.imwrite(g_shared.path_contours_sp3.format(cnt), cuts)
             cnt += 1
 
 # Example

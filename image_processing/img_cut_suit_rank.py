@@ -1,6 +1,7 @@
 import cv2
 import numpy as np
-from img_contour import __contour_draw
+import image_processing.img_contour as contour
+# from img_contour import __contour_draw
 
 suits_numbers = "suits_numbers"
 face_cards = "face_cards"
@@ -24,11 +25,11 @@ def find_by_hierachy(contours, alg1, alg2):
             if hierachy[0][i][3] == 0:
                 # don't take face card middle images or any template to small to recognize
                 if cv2.contourArea(cunt) < face_card*card_size and cv2.contourArea(cunt) > noise*card_size:
-                    _suits_numbers.append(np.array(__contour_draw(card, cunt)))
+                    _suits_numbers.append(np.array(contour.__contour_draw(card, cunt)))
                 
                 #find face cards
                 elif cv2.contourArea(cunt) > face_card*card_size and cv2.contourArea(cunt) > noise*card_size:
-                    _face_cards.append(np.array(__contour_draw(card, cunt)))
+                    _face_cards.append(np.array(contour.__contour_draw(card, cunt)))
                 
         cards.append(card_cunts)
     return cards

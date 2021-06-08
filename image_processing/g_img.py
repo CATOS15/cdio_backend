@@ -1,8 +1,9 @@
-from cv2 import cv2
-import numpy as np
 import os
-import image_processing.objects as objects
+import cv2
+import numpy as np
 from enum import Enum
+import image_processing.objects as objects
+import image_processing.g_shared as g_shared
 # if you don't start the directory at cdio_backend, check win/linux/etc. and set base_path appropriately
 # base_path = os.getcwd()
 
@@ -49,26 +50,26 @@ class Ranks(Enum):
 
 
 # Ranks by color
-__tmpl_rank_2 = cv2.imread(objects.path_template_rank_2, cv2.IMREAD_COLOR)
-__tmpl_rank_3 = cv2.imread(objects.path_template_rank_3, cv2.IMREAD_COLOR)
-__tmpl_rank_4 = cv2.imread(objects.path_template_rank_4, cv2.IMREAD_COLOR)
-__tmpl_rank_5 = cv2.imread(objects.path_template_rank_5, cv2.IMREAD_COLOR)
-__tmpl_rank_6 = cv2.imread(objects.path_template_rank_6, cv2.IMREAD_COLOR)
-__tmpl_rank_7 = cv2.imread(objects.path_template_rank_7, cv2.IMREAD_COLOR)
-__tmpl_rank_8 = cv2.imread(objects.path_template_rank_8, cv2.IMREAD_COLOR)
-__tmpl_rank_9 = cv2.imread(objects.path_template_rank_9, cv2.IMREAD_COLOR)
-__tmpl_rank_10 = cv2.imread(objects.path_template_rank_10, cv2.IMREAD_COLOR)
-__tmpl_rank_jack = cv2.imread(objects.path_template_rank_jack, cv2.IMREAD_COLOR)
-__tmpl_rank_queen = cv2.imread(objects.path_template_rank_queen, cv2.IMREAD_COLOR)
-__tmpl_rank_king = cv2.imread(objects.path_template_rank_king, cv2.IMREAD_COLOR)
-__tmpl_rank_ace = cv2.imread(objects.path_template_rank_ace, cv2.IMREAD_COLOR)
+__tmpl_rank_2 = cv2.imread(g_shared.path_template_rank_2, cv2.IMREAD_COLOR)
+__tmpl_rank_3 = cv2.imread(g_shared.path_template_rank_3, cv2.IMREAD_COLOR)
+__tmpl_rank_4 = cv2.imread(g_shared.path_template_rank_4, cv2.IMREAD_COLOR)
+__tmpl_rank_5 = cv2.imread(g_shared.path_template_rank_5, cv2.IMREAD_COLOR)
+__tmpl_rank_6 = cv2.imread(g_shared.path_template_rank_6, cv2.IMREAD_COLOR)
+__tmpl_rank_7 = cv2.imread(g_shared.path_template_rank_7, cv2.IMREAD_COLOR)
+__tmpl_rank_8 = cv2.imread(g_shared.path_template_rank_8, cv2.IMREAD_COLOR)
+__tmpl_rank_9 = cv2.imread(g_shared.path_template_rank_9, cv2.IMREAD_COLOR)
+__tmpl_rank_10 = cv2.imread(g_shared.path_template_rank_10, cv2.IMREAD_COLOR)
+__tmpl_rank_jack = cv2.imread(g_shared.path_template_rank_jack, cv2.IMREAD_COLOR)
+__tmpl_rank_queen = cv2.imread(g_shared.path_template_rank_queen, cv2.IMREAD_COLOR)
+__tmpl_rank_king = cv2.imread(g_shared.path_template_rank_king, cv2.IMREAD_COLOR)
+__tmpl_rank_ace = cv2.imread(g_shared.path_template_rank_ace, cv2.IMREAD_COLOR)
 
 
 # Suits
-__tmpl_suit_club = cv2.imread(objects.path_template_suit_club, cv2.IMREAD_COLOR)
-__tmpl_suit_diamond = cv2.imread(objects.path_template_suit_diamond, cv2.IMREAD_COLOR)
-__tmpl_suit_heart = cv2.imread(objects.path_template_suit_heart, cv2.IMREAD_COLOR)
-__tmpl_suit_spade = cv2.imread(objects.path_template_suit_spade, cv2.IMREAD_COLOR)
+__tmpl_suit_club = cv2.imread(g_shared.path_template_suit_club, cv2.IMREAD_COLOR)
+__tmpl_suit_diamond = cv2.imread(g_shared.path_template_suit_diamond, cv2.IMREAD_COLOR)
+__tmpl_suit_heart = cv2.imread(g_shared.path_template_suit_heart, cv2.IMREAD_COLOR)
+__tmpl_suit_spade = cv2.imread(g_shared.path_template_suit_spade, cv2.IMREAD_COLOR)
 
 club = objects.TemplateType(__tmpl_suit_club, CardType.SUIT, Suits.CLUB, g_threshold)
 
