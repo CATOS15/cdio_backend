@@ -3,7 +3,7 @@ from image_processing.img_recognition import *
 
 def find_columns_color(img):
     # find card outlines
-    flow_waste_washed = flow_waste.execute_wash(test, cv2.THRESH_BINARY)
+    flow_waste_washed = flow_waste.execute_wash(img, cv2.THRESH_BINARY)
 
     # cut these outlines
     flow_waste_countours = flow_waste.execute_contour(
@@ -14,7 +14,7 @@ def find_columns_color(img):
 
 def find_columns_bin(img):
     # find card outlines
-    flow_waste_washed = flow_waste.execute_wash(test, cv2.THRESH_BINARY)
+    flow_waste_washed = flow_waste.execute_wash(img, cv2.THRESH_BINARY)
 
     # cut these outlines
     flow_waste_countours = flow_waste.execute_contour(
