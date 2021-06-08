@@ -333,24 +333,28 @@ def run_algorithm(data_solitaire):
 
     bestMove = set_best_move()
 
-    for x in get_moves():
-        print(x.description)
+    #for x in get_moves():
+        #print(x.description)
 
-    print("\n")
-    print("Bedste træk:")
-    if bestMove != None:
-        print("Antal træk " + str(bestMove["numberOfMoves"]) + " giver " + str(bestMove["point"]) + " point")
-        print(bestMove["move"].description)
+    #print("\n")
+    #print("Bedste træk:")
+    #if bestMove != None:
+        #print("Antal træk " + str(bestMove["numberOfMoves"]) + " giver " + str(bestMove["point"]) + " point")
+        #print(bestMove["move"].description)
 
     if(bestMove != None):
+        bestMove["move"].drawCard = False
         if type(bestMove["move"].toStack) is Fountain:
             bestMove["move"].toCard = Card(bestMove["move"].toStack.count, bestMove["move"].toStack.suit)
         else:
             bestMove["move"].toCard = Card(bestMove["move"].toStack[len(bestMove["move"].toStack)-1].number, bestMove["move"].toStack[len(bestMove["move"].toStack)-1].suit)
 
         if (bestMove["point"] < 20 and bestMove["numberOfMoves"] == 1) or (bestMove["point"] < 40 and bestMove["numberOfMoves"] == 2) or len(originalCardpile) == 0:
-            bestMove["move"].description = "Flip bunken! Hvis ikke muligt udfør -> " + bestMove["move"].description
+            bestMove["move"].description = "Træk kort! Hvis ikke muligt udfør -> " + bestMove["move"].description
+            bestMove["move"].drawCard = True
     else:
-        bestMove["move"].description = "Flip bunken! Hvis ikke muligt så er der intet at gøre!"
+        bestMove = {"move": Move(None,None,None,None,"")}
+        bestMove["move"].description = "Træk kort"
+        bestMove["move"].drawCard = True
         
     return bestMove
