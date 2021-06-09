@@ -79,31 +79,38 @@ class TestWash(unittest.TestCase):
         return results
 
     def test_wash_otsu_simple(self):
-        # pearson_results = []
+        pearson_results = []
         tanimoto_results = []
         wash_results = self._wash_array(self.otsu_simple.cb_wash)
 
         for i, threshold_img in enumerate(wash_results):
-            # pearson_results.append(pearson(threshold_img, TestWash.mask_imgs[i]))
-            tanimoto_results.append(jacard(threshold_img, TestWash.mask_imgs[i]))
+            pearson_results.append(pearson(threshold_img, TestWash.mask_imgs[i]))
+            tanimoto_results.append(accuracy(threshold_img, TestWash.mask_imgs[i]))
 
+        print(pearson_results)
         print(tanimoto_results)
 
 #not working yet
-# def pearson(img_test, ground_truth_mask):
-#     pearson_corrs = []
+def pearson(img_test, ground_truth_mask):
+    img_test_average = np.mean(img_test)
+    ground_truth_mask_average = np.mean(ground_truth_mask)
+    numerator = np.sum((img_test - img_test_average) * (ground_truth_mask - ground_truth_mask_average)) 
+    denomitor_img = np.sqrt(np.sum((img_test - img_test_average)**2))
+    denomitor_ground_truth = np.sqrt(np.sum((ground_truth_mask - ground_truth_mask_average)**2))
 
-#     for i, row in enumerate(img_test):
+    return numerator / (denomitor_img * denomitor_ground_truth) 
+
+    # for i, row in enumerate(img_test):
+        
 #         pea_corr, p_value = stats.pearsonr(img_test[i], ground_truth_mask[i])
 #         pearson_corrs.append(pea_corr)
 
 #     return np.mean(pearson_corrs)
 
-    # return np.corrcoef(img_test, ground_truth_mask)
+#     return np.corrcoef(img_test, ground_truth_mask)
 
 
-def jacard(img_test, ground_truth_mask):
-    # tanimoto_cors = []
+def accuracy(img_test, ground_truth_mask):
     m_00 = 0
     m_10 = 0
     m_01 = 0
@@ -122,7 +129,7 @@ def jacard(img_test, ground_truth_mask):
             elif pixel == white and ground_truth_mask[i][j] == white:
                 m_11 += 1
         
-    #jacard similarity coefficient
+    #accuracy of images, inspired by the jacard coefficient 
     return (m_11 + m_00) / (m_10 + m_01 + m_11 + m_00)
 
     # for i, row in enumerate(img_test):
