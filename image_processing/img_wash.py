@@ -83,7 +83,7 @@ def adaptive_wash(image, alg1):
     blur = cv2.GaussianBlur(gray,gaus_kernel_size,0)
     # adaptive_threshold = 60
     block_size = 13 #dependant on resolution
-    C = 3 #dependant on on resolution used together with blocksize
+    C = 3 #deendant on on resolution used together with blocksize
     white = 255
     
     #adapt to lightning

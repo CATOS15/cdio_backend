@@ -71,7 +71,6 @@ class TestWash(unittest.TestCase):
             self.assertEqual(True, test_resolution[1], "dimensions error {}: {} & mask ".format(swidth, str(color_img)))
             self.assertEqual(True, test_wash_resolution[0], "dimensions error {}: {} & mask ".format(sheight, str(color_img)))
             self.assertEqual(True, test_wash_resolution[1], "dimensions error {}: {} & mask ".format(swidth, str(color_img)))
-            
 
     def _wash_array(self, cb_wash):
         results = []
@@ -79,39 +78,61 @@ class TestWash(unittest.TestCase):
             results.append(cb_wash(x, TestWash.wash_strategy))
         return results
 
-    # def test_wash_otsu_simple(self):
-    #     pearson_results = []
-    #     tanimoto_results = []
-    #     wash_results = self._wash_array(self.otsu_simple.cb_wash)
+    def test_wash_otsu_simple(self):
+        # pearson_results = []
+        tanimoto_results = []
+        wash_results = self._wash_array(self.otsu_simple.cb_wash)
 
-    #     for i, threshold_img in enumerate(wash_results):
-    #         pearson_results.append(pearson(threshold_img, TestWash.mask_imgs[i]))
-    #         # tanimoto_results.append(tanimoto(threshold_img, TestWash.optimal_results[i]))
+        for i, threshold_img in enumerate(wash_results):
+            # pearson_results.append(pearson(threshold_img, TestWash.mask_imgs[i]))
+            tanimoto_results.append(jacard(threshold_img, TestWash.mask_imgs[i]))
 
-    #     print(pearson_results)
+        print(tanimoto_results)
 
+#not working yet
+# def pearson(img_test, ground_truth_mask):
+#     pearson_corrs = []
 
+#     for i, row in enumerate(img_test):
+#         pea_corr, p_value = stats.pearsonr(img_test[i], ground_truth_mask[i])
+#         pearson_corrs.append(pea_corr)
 
-def pearson(img_test, ground_truth_mask):
-    pearson_corr = []
-
-    for i,row in enumerate(img_test):
-        pea_corr, p_value = stats.pearsonr(img_test[i], ground_truth_mask[i])
-        pearson_corr.append(pea_corr)
-
-    return np.mean(pearson_corr)
-
+#     return np.mean(pearson_corrs)
 
     # return np.corrcoef(img_test, ground_truth_mask)
 
 
-def tanimoto(img_test, ground_truth_mask):
-    inter = img_test.intersection(ground_truth_mask)
-    union = img_test.union(ground_truth_mask)
+def jacard(img_test, ground_truth_mask):
+    # tanimoto_cors = []
+    m_00 = 0
+    m_10 = 0
+    m_01 = 0
+    m_11 = 0
+    
+    white = 255
+    black = 0 
+    for i, row in enumerate(img_test):
+        for j, pixel in enumerate(row):
+            if pixel == black and ground_truth_mask[i][j] == black:
+                m_00 += 1
+            elif pixel == white and ground_truth_mask[i][j] == white:
+                m_10 += 1
+            elif pixel == black and ground_truth_mask[i][j] == white:
+                m_01 += 1
+            elif pixel == white and ground_truth_mask[i][j] == white:
+                m_11 += 1
+        
+    #jacard similarity coefficient
+    return (m_11 + m_00) / (m_10 + m_01 + m_11 + m_00)
 
-    sum_inter = sum(inter)
-    sum_union = sum(union)
-    return sum_inter/sum_union
+    # for i, row in enumerate(img_test):
+    #     inter = img_test.intersection(ground_truth_mask)
+    #     union = img_test.union(ground_truth_mask)
+    #     sum_inter = sum(inter)
+    #     sum_union = sum(union)
+    #     tanimoto_cors.append(sum_inter/sum_union)
+
+    # return np.mean(tanimoto_cors)
 
 
 if __name__ == '__main__':
@@ -132,6 +153,11 @@ if __name__ == '__main__':
     # Choose an image
     # Find global threshold with greyscale using pinetools
 
+# SCIPY
+    # pearson: https://docs.scipy.org/doc/scipy/reference/generated/scipy.stats.pearsonr.html
+
 
 # TODO
+# understand jacard correleation coefficient in comparison to image processing 
 # refactor Dict(colored_img_1:mask_img_1 ... )
+# https://en.wikipedia.org/wiki/Jaccard_index
