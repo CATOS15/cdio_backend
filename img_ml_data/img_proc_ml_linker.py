@@ -42,3 +42,5 @@ a = find_columns_color(g_shared.test)
 
 
 #see set python path: https://towardsdatascience.com/how-to-fix-modulenotfounderror-and-importerror-248ce5b69b1c
+cv2.imread("3.jpg", 0)
+a = find_columns_color(g_shared.test)
