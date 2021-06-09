@@ -255,7 +255,8 @@ def get_moves_ordered(moves):
         # else:
         #     print("FEJL! Et træk har 0 point: " + move.description)
     
-    moves_ordered = sorted(moves_ordered, key=itemgetter('point'), reverse=True) 
+    moves_ordered = sorted(moves_ordered, key=itemgetter('point'), reverse=True)
+    print(moves_ordered)
     return moves_ordered
 
 def set_best_move():
@@ -269,7 +270,7 @@ def set_best_move():
         if len(moves_ordered2) > 0:
             if move["point"] + moves_ordered2[0]["point"] > bestMove["point"]:
                 bestMove["point"] = move["point"] + moves_ordered2[0]["point"]
-                bestMove["move"] = move["move"]
+                bestMove["move"] = moves_ordered2[0]["move"] ##TODO tjek point
                 bestMove["numberOfMoves"] = 2
         else:
             if move["point"] > bestMove["point"]:
@@ -347,11 +348,18 @@ def run_algorithm(data_solitaire):
         if type(bestMove["move"].toStack) is Fountain:
             bestMove["move"].toCard = Card(bestMove["move"].toStack.count, bestMove["move"].toStack.suit)
         else:
-            bestMove["move"].toCard = Card(bestMove["move"].toStack[len(bestMove["move"].toStack)-1].number, bestMove["move"].toStack[len(bestMove["move"].toStack)-1].suit)
+            if len(bestMove["move"].toStack) > 0:
+                toCard = bestMove["move"].toStack[len(bestMove["move"].toStack)-1]
+                if toCard is None:
+                    print("Fejl da kortet er None")
+                bestMove["move"].toCard = Card(toCard.number, toCard.suit)
+            else:
+                bestMove["move"].toCard = None
 
-        if (bestMove["point"] < 20 and bestMove["numberOfMoves"] == 1) or (bestMove["point"] < 40 and bestMove["numberOfMoves"] == 2) or len(originalCardpile) == 0:
+        if (bestMove["point"] < 20 and bestMove["numberOfMoves"] == 1) or (bestMove["point"] < 40 and bestMove["numberOfMoves"] == 2):
             bestMove["move"].description = "Træk kort! Hvis ikke muligt udfør -> " + bestMove["move"].description
             bestMove["move"].drawCard = True
+
     else:
         bestMove = {"move": Move(None,None,None,None,"")}
         bestMove["move"].description = "Træk kort"
