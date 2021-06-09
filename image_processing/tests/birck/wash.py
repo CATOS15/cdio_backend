@@ -42,8 +42,10 @@ class TestWash(unittest.TestCase):
     otsu_simple = objects.Flow(cb_wash=wash.otsu_wash, cb_contour=None,
                                cb_cut_suit_rank=None, cb_compare_by_template=None)
 
+    # colored and mask must have identitical lengths
     colored_imgs = [eight_diamond_131, eight_diamond_132, eight_heart_160, king_diamond_128,
                     queen_club_180, two_diamond_190]
+
     mask_imgs = [mask_eight_diamond_131, mask_eight_diamond_132, mask_eight_heart_160,
                  mask_king_diamond_128, mask_queen_club_180, mask_two_diamond_190]
 
@@ -54,39 +56,50 @@ class TestWash(unittest.TestCase):
         width = 1
         return (img1.shape[height] == img2.shape[height], img1.shape[width] == img2.shape[width])
 
-    #Ensure that bin images and colored images has the same resolution
-    def test_resolution_foo(self):
+    # Ensure that bin images and colored images has the same resolution
+    def test_resolution_mask_color(self):
         sheight = "height"
         swidth = "width"
-        for i, x in enumerate(TestWash.colored_imgs):
-            test_resolution = self.same_resolution(x, TestWash.mask_imgs[i])
-            self.assertEqual(True, test_resolution[0], "dimensions error {}: {} & mask ".format(sheight, str(x)))
-            self.assertEqual(True, test_resolution[1], "dimensions error {}: {} & mask ".format(swidth, str(x)))
+        for i, color_img in enumerate(TestWash.colored_imgs):
+            test_resolution = self.same_resolution(color_img, TestWash.mask_imgs[i])
+            self.assertEqual(True, test_resolution[0], "dimensions error {}: {} & mask ".format(sheight, str(color_img)))
+            self.assertEqual(True, test_resolution[1], "dimensions error {}: {} & mask ".format(swidth, str(color_img)))
+
+    def test_resolution_color_wash(self):
+        sheight = "height"
+        swidth = "width"
+        for i,color_img in enumerate(self.colored_imgs):
+            test_wash = self.otsu_simple.cb_wash(color_img, TestWash.wash_strategy)
+            test_resolution = self.same_resolution(test_wash, TestWash.mask_imgs[i])
+            self.assertEqual(True, test_resolution[0], "dimensions error {}: {} & mask ".format(sheight, str(color_img)))
+            self.assertEqual(True, test_resolution[1], "dimensions error {}: {} & mask ".format(swidth, str(color_img)))
 
 
     def test_quick(self):
         self.assertEqual(sum([2, 3]), 5, "6 is nice")
 
-    def test_wash_otsu_simple(self):
-        wash_results = []
-        wash_results.append(self.otsu_simple.execute_wash(eight_diamond_131, TestWash.wash_strategy))
-        # wash_results.append(self.otsu_simple.execute_wash(eight_diamond_132, TestWash.wash_strategy))
-        # wash_results.append(self.otsu_simple.execute_wash(eight_heart_160, TestWash.wash_strategy))
-        # wash_results.append(self.otsu_simple.execute_wash(king_diamond_128, TestWash.wash_strategy))
-        # wash_results.append(self.otsu_simple.execute_wash(queen_club_180, TestWash.wash_strategy))
-        # wash_results.append(self.otsu_simple.execute_wash(two_diamond_190, TestWash.wash_strategy))
+    
 
-        pearson_results = []
-        tanimoto_results = []
+    # def test_wash_otsu_simple(self):
+    #     # wash_results = []
+    #     # wash_results.append(self.otsu_simple.execute_wash(eight_diamond_131, TestWash.wash_strategy))
+    #     # wash_results.append(self.otsu_simple.execute_wash(eight_diamond_132, TestWash.wash_strategy))
+    #     # wash_results.append(self.otsu_simple.execute_wash(eight_heart_160, TestWash.wash_strategy))
+    #     # wash_results.append(self.otsu_simple.execute_wash(king_diamond_128, TestWash.wash_strategy))
+    #     # wash_results.append(self.otsu_simple.execute_wash(queen_club_180, TestWash.wash_strategy))
+    #     # wash_results.append(self.otsu_simple.execute_wash(two_diamond_190, TestWash.wash_strategy))
 
-        for i, threshold_img in enumerate(wash_results):
-            pearson_results.append(pearson(threshold_img, TestWash.mask_imgs[i]))
-            # tanimoto_results.append(tanimoto(threshold_img, TestWash.optimal_results[i]))
+    #     pearson_results = []
+    #     tanimoto_results = []
 
-        print(pearson_results)
+    #     for i, threshold_img in enumerate(wash_results):
+    #         pearson_results.append(pearson(threshold_img, TestWash.mask_imgs[i]))
+    #         # tanimoto_results.append(tanimoto(threshold_img, TestWash.optimal_results[i]))
 
-        self.assertEqual(True, True, "well thats good")
-        # Test this smh
+    #     print(pearson_results)
+
+    #     self.assertEqual(True, True, "well thats good")
+    #     # Test this smh
 
 
 def pearson(img_test, ground_truth_mask):
@@ -100,9 +113,6 @@ def tanimoto(img_test, ground_truth_mask):
     sum_inter = sum(inter)
     sum_union = sum(union)
     return sum_inter/sum_union
-
-
-# class TestDimensions(unittest.TestCase):
 
 
 if __name__ == '__main__':
@@ -122,3 +132,7 @@ if __name__ == '__main__':
 # ground_truth_mask
     # Choose an image
     # Find global threshold with greyscale using pinetools
+
+
+# TODO
+# refactor Dict(colored_img_1:mask_img_1 ... )
