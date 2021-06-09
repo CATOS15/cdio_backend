@@ -8,7 +8,10 @@ class Card:
         self.number = number
         self.suit = suit
 
-stacksNumber = [
+RunList = []
+
+for i in range(0,5):
+    stacksNumber = [
     [],
     [],
     [],
@@ -16,49 +19,55 @@ stacksNumber = [
     [],
     [],
     []
-]
-fountainNumber = [
-    [],
-    [],
-    [],
-    [],
-]
-cardPileNumber = []
+    ]
+    fountainNumber = [
+        [],
+        [],
+        [],
+        [],
+    ]
+    cardPileNumber = []
 
-allNumbers = []
+    allNumbers = []
+    for x in range(1,5):
+        for y in range(1,14):
+            allNumbers.append(Card(y,x))
+    for x in range(0,len(stacksNumber)):
+        exist = True
 
-for x in range(1,5):
-    for y in range(1,14):
-        allNumbers.append(Card(y,x))
-for x in range(0,len(stacksNumber)):
-    exist = True
-
-    while exist == True:
-        numb = random.randrange(1,13)
-        value = random.randrange(1,4)
-        currentCard = Card(numb,value)
+        while exist == True:
+            numb = random.randrange(1,13)
+            value = random.randrange(1,4)
+            currentCard = Card(numb,value)
+            for y in allNumbers:
+                if currentCard.number == y.number and currentCard.suit== y.suit:
+                    allNumbers.remove(y)
+                    stacksNumber[x].append(y)
+                    exist = False
+    numb = random.randrange(1,13)
+    value = random.randrange(1,4)
+    currentCard = Card(numb,value)
+    for x in range(0,1):
         for y in allNumbers:
             if currentCard.number == y.number and currentCard.suit== y.suit:
                 allNumbers.remove(y)
-                stacksNumber[x].append(y)
-                exist = False
-numb = random.randrange(1,13)
-value = random.randrange(1,4)
-currentCard = Card(numb,value)
-for y in allNumbers:
-    if currentCard.number == y.number and currentCard.suit== y.suit:
-        allNumbers.remove(y)
-        cardPileNumber.append(y)
-        exist = False                 
+                cardPileNumber.append(y)  
+                exist = False    
 
-                    
 
-# print(stacksNumber)
+    # print(stacksNumber)
+    for h in stacksNumber:
+        print("Stack - Number: " + str(h[0].number) + " Suit: " +  str(h[0].suit))
+        # print(h)
+    if len(cardPileNumber) > 0:
+        print("CardPile - number: " + str(cardPileNumber[0].number) + " suit: " + str(cardPileNumber[0].suit))
+    RunList.append(stacksNumber)
 
-for h in stacksNumber:
-    print("Stack - Number: " + str(h[0].number) + " Suit: " +  str(h[0].suit))
-    # print(h)
-print("CardPile - number: " + str(cardPileNumber[0].number) + " suit: " + str(cardPileNumber[0].suit))
+
+
+
+print(len(RunList))
+
 
 data_solitaire = {
         'stacks': [
