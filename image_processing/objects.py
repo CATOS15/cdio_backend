@@ -32,8 +32,8 @@ class Flow:
         self.cb_compare_by_template = cb_compare_by_template
 
     
-    def execute_wash(self, ready_img, flow_two_contours):
-        return self.cb_wash(ready_img, flow_two_contours)
+    def execute_wash(self, ready_img, alg1):
+        return self.cb_wash(ready_img, alg1)
 
         
     def execute_contour(self, alg1, alg2, img_thresh, img_color=None):
