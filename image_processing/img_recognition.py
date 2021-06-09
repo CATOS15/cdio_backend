@@ -55,7 +55,9 @@ for x in results:
 # WASTE
     #Create Integration Test for Waste
         #Create unit test for each algo in Waste
-    #consider folder structure
+        #Create Images for each unit test in waste (to compare)
+        
+
 # Notes
     # GaussianBlur
     # find video for more details
