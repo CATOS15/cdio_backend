@@ -4,6 +4,8 @@ import numpy as np
 import cv2
 import image_processing.objects as objects
 import image_processing.img_wash as wash
+from scipy import stats
+
 
 # Birck Wash Tests
 # ideal threhsold is suffix on each path
@@ -61,36 +63,26 @@ class TestWash(unittest.TestCase):
         sheight = "height"
         swidth = "width"
         for i, color_img in enumerate(TestWash.colored_imgs):
-            test_resolution = self.same_resolution(color_img, TestWash.mask_imgs[i])
-            self.assertEqual(True, test_resolution[0], "dimensions error {}: {} & mask ".format(sheight, str(color_img)))
-            self.assertEqual(True, test_resolution[1], "dimensions error {}: {} & mask ".format(swidth, str(color_img)))
-
-    def test_resolution_color_wash(self):
-        sheight = "height"
-        swidth = "width"
-        for i,color_img in enumerate(self.colored_imgs):
             test_wash = self.otsu_simple.cb_wash(color_img, TestWash.wash_strategy)
-            test_resolution = self.same_resolution(test_wash, TestWash.mask_imgs[i])
+            test_wash_resolution = self.same_resolution(color_img, test_wash)
+            test_resolution = self.same_resolution(color_img, TestWash.mask_imgs[i])
+
             self.assertEqual(True, test_resolution[0], "dimensions error {}: {} & mask ".format(sheight, str(color_img)))
             self.assertEqual(True, test_resolution[1], "dimensions error {}: {} & mask ".format(swidth, str(color_img)))
+            self.assertEqual(True, test_wash_resolution[0], "dimensions error {}: {} & mask ".format(sheight, str(color_img)))
+            self.assertEqual(True, test_wash_resolution[1], "dimensions error {}: {} & mask ".format(swidth, str(color_img)))
+            
 
-
-    def test_quick(self):
-        self.assertEqual(sum([2, 3]), 5, "6 is nice")
-
-    
+    def _wash_array(self, cb_wash):
+        results = []
+        for x in self.colored_imgs:
+            results.append(cb_wash(x, TestWash.wash_strategy))
+        return results
 
     # def test_wash_otsu_simple(self):
-    #     # wash_results = []
-    #     # wash_results.append(self.otsu_simple.execute_wash(eight_diamond_131, TestWash.wash_strategy))
-    #     # wash_results.append(self.otsu_simple.execute_wash(eight_diamond_132, TestWash.wash_strategy))
-    #     # wash_results.append(self.otsu_simple.execute_wash(eight_heart_160, TestWash.wash_strategy))
-    #     # wash_results.append(self.otsu_simple.execute_wash(king_diamond_128, TestWash.wash_strategy))
-    #     # wash_results.append(self.otsu_simple.execute_wash(queen_club_180, TestWash.wash_strategy))
-    #     # wash_results.append(self.otsu_simple.execute_wash(two_diamond_190, TestWash.wash_strategy))
-
     #     pearson_results = []
     #     tanimoto_results = []
+    #     wash_results = self._wash_array(self.otsu_simple.cb_wash)
 
     #     for i, threshold_img in enumerate(wash_results):
     #         pearson_results.append(pearson(threshold_img, TestWash.mask_imgs[i]))
@@ -98,12 +90,19 @@ class TestWash(unittest.TestCase):
 
     #     print(pearson_results)
 
-    #     self.assertEqual(True, True, "well thats good")
-    #     # Test this smh
 
 
 def pearson(img_test, ground_truth_mask):
-    return np.corrcoef(img_test, ground_truth_mask)
+    pearson_corr = []
+
+    for i,row in enumerate(img_test):
+        pea_corr, p_value = stats.pearsonr(img_test[i], ground_truth_mask[i])
+        pearson_corr.append(pea_corr)
+
+    return np.mean(pearson_corr)
+
+
+    # return np.corrcoef(img_test, ground_truth_mask)
 
 
 def tanimoto(img_test, ground_truth_mask):
