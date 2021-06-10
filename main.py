@@ -36,7 +36,7 @@ def calculateImage():
     
     dict_images = {
         {"waste" : three_image_tuple[0], "ImageCardType" : ImageCardType.Waste},
-        {"foundation" : three_image_tuple[1], "ImageCardType" : ImageCardType.Fountain},
+        {"foundation" : three_image_tuple[1], "ImageCardType" : ImageCardType.Foundation},
         {"tableau" : three_image_tuple[2], "ImageCardType" : ImageCardType.Tableau},
     }
   
