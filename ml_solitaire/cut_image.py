@@ -6,7 +6,7 @@ import math
 # path_image = 'ml_solitaire\solitaire_ex1.jpg' #hav projektet åbent i CDIO_BACKEND som hoved folder
 # img = cv2.imread(path_image)
 
-def cut_image_in_three(img):
+def cut_img_cut_three(img):
 
     #dimensions for image
     height = img.shape[0]

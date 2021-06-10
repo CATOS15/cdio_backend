@@ -30,7 +30,7 @@ def calculateImage():
     imagefile.save("image.jpg")
 
     image = cv2.imread(imagefile)
-    three_image_tuple = ml_solitaire.cut_image.cut_image_in_three(image)
+    three_image_tuple = ml_solitaire.cut_image.cut_img_cut_three(image)
 
     #return (drawpile, fountain, piles)
     

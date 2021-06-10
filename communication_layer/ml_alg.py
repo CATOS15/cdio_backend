@@ -69,6 +69,4 @@ def opencv_ml_tableau_columns_color(img_tableau, has_background=False):
     return columns_color
 
 
-# path_to_test = "image_processing/templates/test/full_deck/tableau.png"
-# img_tableau = cv2.imread(path_to_test, cv2.IMREAD_COLOR)
-# opencv_ml_tableau_columns_color(img_tableau)
+

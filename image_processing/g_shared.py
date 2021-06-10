@@ -59,6 +59,8 @@ path_card_waste4 = 'image_processing/templates/test/full_deck/waste4.png'
 path_card_waste5 = 'image_processing/templates/test/full_deck/waste5.png'
 path_card_high_res = 'image_processing/templates/test/full_deck/full_solitare.png'
 path_card_ideal_4_spades = 'image_processing/templates/card/ideal_cards/4_spades.PNG'
+path_card_full_solitaire_red_background = 'images/slim_fit/full_solitaire_red_background.png'
+path_card_full_solitaire_red_background_distinct = 'images/slim_fit/full_solitaire_red_background_distinct.png'
 
 
 

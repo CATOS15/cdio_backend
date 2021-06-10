@@ -49,6 +49,24 @@ class Flow:
     def execute_compare_by_template(self, cards, ideal_image):
         return self.cb_compare_by_template(cards, ideal_image)
 
+
+
+class Flow_ml:
+    def __init__(self, cb_img_cut, cb_cut_columns, cb_ml_execute):
+        self.cb_ml_execute = cb_ml_execute
+        self.cb_img_cut = cb_img_cut
+        self.cb_cut_columns = cb_cut_columns
+
+    def execute_ml_single_img(self, img):
+        return self.cb_ml_execute(img)
+
+    def execute_img_cut(self, api_img):
+        return self.cb_cut_columns(api_img)
+    
+    def execute_img_columns(self, img_tableau):
+        return self.cb_cut_columns(img_tableau)
+
+
 #either suit or rank, type: rank/suit, value = actual value
 class TemplateType:
     def __init__(self, img, type, value, threshold):
