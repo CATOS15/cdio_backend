@@ -44,8 +44,13 @@ def ml_map_alg(dict_images):
         ],
     }
 
-    for path_to_img, img_type in dict_images:
-        result_set = ml_solitaire.yolov5v2.result.getCardsFromImage(path_to_img)
+    #run yolo recognition thingy here
+
+    
+    for img_type, img in dict_images.items():
+        result_set = ml_solitaire.yolov5v2.result.getCardsFromImage(img)
+
+
         if img_type == ImageCardType.Tableau:
             ml_solitaire.yolov5v2.result.addStackToTableau(result_set, data_solitaire)
         elif img_type == ImageCardType.Foundation:
