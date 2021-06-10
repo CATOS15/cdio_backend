@@ -26,14 +26,11 @@ def calculateImage():
     json_object = json.dumps(getAlgData())
     return json_object
 
-<<<<<<< HEAD
-=======
 @app.route("/algtest", methods = ['POST'])
 def algtestpost():
     bestMove = run_algorithm(request.get_json())
     res = make_response(jsonify({'message': bestMove["move"].description}), 200)
     return res
->>>>>>> 3b66c057f632d5cd93401eea2f663e5176ccdb98
 
 @app.route("/algtest")
 def algtestget():
