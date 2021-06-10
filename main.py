@@ -4,7 +4,10 @@ from flask.json import jsonify
 from algorithm.image_algorithm import Fountain, run_algorithm
 from flask import Flask, request
 from flask_cors import CORS
+
 import ml_solitaire.cut_image
+import communication_layer.ml_alg
+
 import cv2
 import json
 import random
@@ -31,20 +34,15 @@ def calculateImage():
 
     #return (drawpile, fountain, piles)
     
-
     dict_images = {
         {"waste" : three_image_tuple[0], "ImageCardType" : ImageCardType.Waste},
         {"foundation" : three_image_tuple[1], "ImageCardType" : ImageCardType.Fountain},
         {"tableau" : three_image_tuple[2], "ImageCardType" : ImageCardType.Tableau},
     }
+  
+    data_solitaire = communication_layer.ml_alg.ml_map_alg(dict_images)
 
-    # dict_images_withpath = {
-    #         {"path" : "/her", "ImageCardType" : 1},
-    #         {"path" : "/her", "ImageCardType" : 1},
-    #     }
-
-    #examples(dict_images: [path : ImageCardType])
-
+    #indsæt data_soliatire i algoritmen
     json_object = json.dumps(getAlgData())
     return json_object
 
