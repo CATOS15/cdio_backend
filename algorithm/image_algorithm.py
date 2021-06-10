@@ -147,7 +147,7 @@ def _90_points(move):
         return 90
     return 0
 
-def _75_points(move):
+def _70_points(move):
     #Ryk konge fra cardpile til tom position
     if len(cardpile) > 0 and cardpile[len(cardpile)-1] == move.fromCard and move.fromCard.number == 13 and len(move.toStack) == 0:
         return 75
@@ -242,7 +242,7 @@ def get_moves_ordered(moves):
         point = _100_points(move)
         point = _95_points(move) if point == 0 else point
         point = _90_points(move) if point == 0 else point
-        point = _75_points(move) if point == 0 else point
+        point = _70_points(move) if point == 0 else point
         point = _50_points(move) if point == 0 else point
         point = _45_points(move) if point == 0 else point
         point = _25_points(move) if point == 0 else point
@@ -256,7 +256,7 @@ def get_moves_ordered(moves):
         #     print("FEJL! Et træk har 0 point: " + move.description)
     
     moves_ordered = sorted(moves_ordered, key=itemgetter('point'), reverse=True)
-    print(moves_ordered)
+    #print(moves_ordered)
     return moves_ordered
 
 def set_best_move():
@@ -267,10 +267,15 @@ def set_best_move():
     for move in moves_ordered1: 
         newStacks = simulate_newStacks(move["move"])
         moves_ordered2 = get_moves_ordered(get_moves(newStacks[0], newStacks[1]))
+
+        combinedpoint = move["point"]
         if len(moves_ordered2) > 0:
-            if move["point"] + moves_ordered2[0]["point"] > bestMove["point"]:
-                bestMove["point"] = move["point"] + moves_ordered2[0]["point"]
-                bestMove["move"] = moves_ordered2[0]["move"] ##TODO tjek point
+            combinedpoint = move["point"] + moves_ordered2[0]["point"]
+        
+        if len(moves_ordered2) > 0 and combinedpoint != 55 and combinedpoint != 100:
+            if combinedpoint > bestMove["point"]:
+                bestMove["point"] = combinedpoint
+                bestMove["move"] = move["move"]
                 bestMove["numberOfMoves"] = 2
         else:
             if move["point"] > bestMove["point"]:
