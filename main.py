@@ -401,6 +401,10 @@ def getAlgData():
         ],
     }
 
+    ml_result = 2
+    opencv_result = 3
+    compare_
+
     bestMove = run_algorithm(data_solitaire)
     move = bestMove["move"]
 

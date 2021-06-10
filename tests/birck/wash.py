@@ -10,19 +10,19 @@ from scipy import stats
 # Birck Wash Tests
 # ideal threhsold is suffix on each path
 
-path_eight_diamond_131 = "image_processing/tests/birck/full_deck_ground_truth/waste_eight_diamond_131.png"
-path_eight_diamond_132 = "image_processing/tests/birck/full_deck_ground_truth/waste_eight_diamond_132.png"
-path_eight_heart_160 = "image_processing/tests/birck/full_deck_ground_truth/waste_eight_heart_160.png"
-path_king_diamond_128 = "image_processing/tests/birck/full_deck_ground_truth/waste_king_diamond_128.png"
-path_queen_club_180 = "image_processing/tests/birck/full_deck_ground_truth/waste_queen_club_180.png"
-path_two_diamond_190 = "image_processing/tests/birck/full_deck_ground_truth/waste_two_diamond_190.png"
+path_eight_diamond_131 = "tests/birck/full_deck_ground_truth/waste_eight_diamond_131.png"
+path_eight_diamond_132 = "tests/birck/full_deck_ground_truth/waste_eight_diamond_132.png"
+path_eight_heart_160 = "tests/birck/full_deck_ground_truth/waste_eight_heart_160.png"
+path_king_diamond_128 = "tests/birck/full_deck_ground_truth/waste_king_diamond_128.png"
+path_queen_club_180 = "tests/birck/full_deck_ground_truth/waste_queen_club_180.png"
+path_two_diamond_190 = "tests/birck/full_deck_ground_truth/waste_two_diamond_190.png"
 
-path_mask_eight_diamond_131 = "image_processing/tests/birck/masked_ground_truth/eight_diamond_131.png"
-path_mask_eight_diamond_132 = "image_processing/tests/birck/masked_ground_truth/eight_diamond_132.png"
-path_mask_eight_heart_160 = "image_processing/tests/birck/masked_ground_truth/eight_heart_160.png"
-path_mask_king_diamond_128 = "image_processing/tests/birck/masked_ground_truth/king_diamond_128.png"
-path_mask_queen_club_180 = "image_processing/tests/birck/masked_ground_truth/queen_club_180_unsure.png"
-path_mask_two_diamond_190 = "image_processing/tests/birck/masked_ground_truth/two_diamond_190.png"
+path_mask_eight_diamond_131 = "tests/birck/masked_ground_truth/eight_diamond_131.png"
+path_mask_eight_diamond_132 = "tests/birck/masked_ground_truth/eight_diamond_132.png"
+path_mask_eight_heart_160 = "tests/birck/masked_ground_truth/eight_heart_160.png"
+path_mask_king_diamond_128 = "tests/birck/masked_ground_truth/king_diamond_128.png"
+path_mask_queen_club_180 = "tests/birck/masked_ground_truth/queen_club_180_unsure.png"
+path_mask_two_diamond_190 = "tests/birck/masked_ground_truth/two_diamond_190.png"
 
 
 eight_diamond_131 = cv2.imread(path_eight_diamond_131, cv2.IMREAD_COLOR)
@@ -89,7 +89,6 @@ class TestWash(unittest.TestCase):
             accuracy_results.append(accuracy(threshold_img, TestWash.mask_imgs[i]))
             tanimoto_results.append(tanimoto_corr_coeff(threshold_img, TestWash.mask_imgs[i]))
         print(pearson_results)
-        print(tanimoto_results)
         print(tanimoto_results)
 
 #not working yet
