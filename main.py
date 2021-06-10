@@ -1,8 +1,11 @@
+from communication_layer.ml_alg import ImageCardType
 from flask.helpers import make_response
 from flask.json import jsonify
 from algorithm.image_algorithm import Fountain, run_algorithm
 from flask import Flask, request
 from flask_cors import CORS
+import ml_solitaire.cut_image
+import cv2
 import json
 import random
 
@@ -22,6 +25,25 @@ def hello():
 def calculateImage():
     imagefile = request.files.get('file')
     imagefile.save("image.jpg")
+
+    image = cv2.imread(imagefile)
+    three_image_tuple = ml_solitaire.cut_image.cut_image_in_three(image)
+
+    #return (drawpile, fountain, piles)
+    
+
+    dict_images = {
+        {"waste" : three_image_tuple[0], "ImageCardType" : ImageCardType.Waste},
+        {"foundation" : three_image_tuple[1], "ImageCardType" : ImageCardType.Fountain},
+        {"tableau" : three_image_tuple[2], "ImageCardType" : ImageCardType.Tableau},
+    }
+
+    # dict_images_withpath = {
+    #         {"path" : "/her", "ImageCardType" : 1},
+    #         {"path" : "/her", "ImageCardType" : 1},
+    #     }
+
+    #examples(dict_images: [path : ImageCardType])
 
     json_object = json.dumps(getAlgData())
     return json_object
@@ -400,10 +422,6 @@ def getAlgData():
             {'number': 8, 'suit': 2}
         ],
     }
-
-    ml_result = 2
-    opencv_result = 3
-    compare_
 
     bestMove = run_algorithm(data_solitaire)
     move = bestMove["move"]

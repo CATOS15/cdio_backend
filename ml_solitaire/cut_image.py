@@ -3,16 +3,16 @@ import numpy as np
 import math
 
 # read image
-path_image = 'ml_solitaire\solitaire_ex1.jpg' #hav projektet åbent i CDIO_BACKEND som hoved folder
-img = cv2.imread(path_image)
+# path_image = 'ml_solitaire\solitaire_ex1.jpg' #hav projektet åbent i CDIO_BACKEND som hoved folder
+# img = cv2.imread(path_image)
 
-#dimensions for image
-dimensions = img.shape
-height = img.shape[0]
-width = img.shape[1]
-heightratio = 1/3 #hvor meget plads der er i toppen af linjegrided
+def cut_image_in_three(img):
 
-def cut_and_save_images():
+    #dimensions for image
+    height = img.shape[0]
+    width = img.shape[1]
+    heightratio = 1/3 #hvor meget plads der er i toppen af linjegrided
+
     #cropped image *zones
     left_width = math.floor(width*2/5)
     top_height = math.floor(height*heightratio)
@@ -23,9 +23,11 @@ def cut_and_save_images():
     piles = img[top_height:height, 0:width]
 
     #save images
-    cv2.imwrite('ml_solitaire\image_drawpile.jpg', drawpile)
-    cv2.imwrite('ml_solitaire\image_fountain.jpg', fountain)
-    cv2.imwrite('ml_solitaire\image_piles.jpg', piles)
+    # cv2.imwrite('ml_solitaire\image_drawpile.jpg', drawpile)
+    # cv2.imwrite('ml_solitaire\image_fountain.jpg', fountain)
+    # cv2.imwrite('ml_solitaire\image_piles.jpg', piles)
+
+    return (drawpile, fountain, piles)
 
     """ cv2.imshow("cropped", drawpile)
     cv2.waitKey(0)
@@ -42,7 +44,7 @@ def cut_and_save_images():
     cv2.imwrite('image_fountain.jpg', fountain)
     cv2.imwrite('image_piles.jpg', piles) """
 
-def print_image_info():
+def print_image_info(img):
     print(img.shape)
     # get dimensions of image
     dimensions = img.shape
@@ -56,7 +58,7 @@ def print_image_info():
     print('Image Width        : ',width)
     print('Number of Channels : ',channels)
 
-def cut_7_images():
+def cut_7_images(img):
     #cropped image *zones
     top_height = math.floor(height*1/3)
 
@@ -78,7 +80,7 @@ def cut_7_images():
     cv2.imwrite('ml_solitaire\image_column6.jpg', column6)
     cv2.imwrite('ml_solitaire\image_column7.jpg', column7)
 
-def show_cut_images():
+def show_cut_images(img):
     drawpile_path = 'ml_solitaire\image_drawpile.jpg'
     fountain_path = 'ml_solitaire\image_fountain.jpg'
     piles_path = 'ml_solitaire\image_piles.jpg'
@@ -96,6 +98,4 @@ def show_cut_images():
     cv2.imshow("cropped", image_piles)
     cv2.waitKey(0)
 
-cut_and_save_images()
-cut_7_images()
-show_cut_images()
+#cut_image_in_three()

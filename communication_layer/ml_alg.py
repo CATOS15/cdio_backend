@@ -1,23 +1,34 @@
 import ml_solitaire.yolov5v2.result
 from enum import Enum
-import image_processing.flows
 import image_processing.img_contour
 import image_processing.img_wash
 import cv2
 import image_processing.g_shared
 # import image_processing.templates.test.full_deck
-
+import cv2
 class ImageCardType(Enum):
     Waste = 1
     Foundation = 2
     Tableau = 3
+    Column = 4 
 
 # from ml to alg
 
-
-
-
 #examples(dict_images: [path/image object : ImageCardType])
+opencvbilledobjekt = cv2.imread("image.jpg")
+
+dict_images = {
+        {"img_obj" : opencvbilledobjekt, "ImageCardType" : 1},
+        {"img_obj" : opencvbilledobjekt, "ImageCardType" : 1},
+        {"img_obj" : opencvbilledobjekt, "ImageCardType" : 1},
+    }
+
+# dict_images_withpath = {
+#         {"path" : "/her", "ImageCardType" : 1},
+#         {"path" : "/her", "ImageCardType" : 1},
+#     }
+
+#examples(dict_images: [path : ImageCardType])
 def ml_map_alg(dict_images):
     data_solitaire = {
         'stacks': [
