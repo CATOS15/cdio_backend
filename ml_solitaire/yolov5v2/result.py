@@ -65,26 +65,26 @@ def get_card_value(s):
     return -1
 
 
-def addToWaste(cards):
+def addToWaste(cards, solitaire):
     if len(cards) > 1:
         print("Error: Too many cards in waste, 1 < waste")
         return
 
     for card in cards:
         cardObj = get_card_value(card)
-        data_solitaire['cardpile'].append(cardObj)
+        solitaire['cardpile'].append(cardObj)
 
 
-def addStackToTableau(cards):
+def addStackToTableau(cards, solitaire):
     columnArr = []
     for card in cards:
         cardObj = get_card_value(card)
         columnArr.append(cardObj)
     sortedCol = sorted(columnArr, key=lambda k: k['number'], reverse=True)
-    data_solitaire['stacks'].append(sortedCol)
+    solitaire['stacks'].append(sortedCol)
 
 
-def addToFountain(cards):
+def addToFountain(cards, solitaire):
     fountainArr = []
 
     for card in cards:
@@ -94,7 +94,7 @@ def addToFountain(cards):
     if len(fountainArr) > 4:
         print("Error: Too many cards in fountain, 4 < fountain")
         for x in range(0, 4):
-            data_solitaire['fountains'].append({'number': 0, 'suit': x+1})
+            solitaire['fountains'].append({'number': 0, 'suit': x+1})
         return
 
     sortedFountain = sorted(fountainArr, key=lambda k: k['suit'])
@@ -114,9 +114,9 @@ def addToFountain(cards):
 s = getCardsFromImage("ml_solitaire/yolov5v2/tableau.jpg")
 s2 = getCardsFromImage("ml_solitaire/yolov5v2/fountain2.jpg")
 s3 = getCardsFromImage("ml_solitaire/yolov5v2/waste.jpg")
-addStackToTableau(s)
-addStackToTableau(s)
-addToWaste(s3)
-addToFountain(s2)
+addStackToTableau(s, data_solitaire)
+addStackToTableau(s, data_solitaire)
+addToWaste(s3, data_solitaire)
+addToFountain(s2, data_solitaire)
 
 print(data_solitaire)
