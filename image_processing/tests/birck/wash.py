@@ -80,18 +80,20 @@ class TestWash(unittest.TestCase):
 
     def test_wash_otsu_simple(self):
         pearson_results = []
+        accuracy_results = []
         tanimoto_results = []
         wash_results = self._wash_array(self.otsu_simple.cb_wash)
 
         for i, threshold_img in enumerate(wash_results):
-            pearson_results.append(pearson(threshold_img, TestWash.mask_imgs[i]))
-            tanimoto_results.append(accuracy(threshold_img, TestWash.mask_imgs[i]))
-
+            pearson_results.append(pearson_corr_coeff(threshold_img, TestWash.mask_imgs[i]))
+            accuracy_results.append(accuracy(threshold_img, TestWash.mask_imgs[i]))
+            tanimoto_results.append(tanimoto_corr_coeff(threshold_img, TestWash.mask_imgs[i]))
         print(pearson_results)
+        print(tanimoto_results)
         print(tanimoto_results)
 
 #not working yet
-def pearson(img_test, ground_truth_mask):
+def pearson_corr_coeff(img_test, ground_truth_mask):
     img_test_average = np.mean(img_test)
     ground_truth_mask_average = np.mean(ground_truth_mask)
     numerator = np.sum((img_test - img_test_average) * (ground_truth_mask - ground_truth_mask_average)) 
@@ -100,15 +102,13 @@ def pearson(img_test, ground_truth_mask):
 
     return numerator / (denomitor_img * denomitor_ground_truth) 
 
-    # for i, row in enumerate(img_test):
-        
-#         pea_corr, p_value = stats.pearsonr(img_test[i], ground_truth_mask[i])
-#         pearson_corrs.append(pea_corr)
 
-#     return np.mean(pearson_corrs)
 
-#     return np.corrcoef(img_test, ground_truth_mask)
+def tanimoto_corr_coeff(img, ground_truth_mask):
+    numerator = np.sum(np.bitwise_and(img, ground_truth_mask))
+    denomiter = np.sum(np.bitwise_or(img, ground_truth_mask))
 
+    return numerator / denomiter
 
 def accuracy(img_test, ground_truth_mask):
     m_00 = 0
@@ -129,18 +129,8 @@ def accuracy(img_test, ground_truth_mask):
             elif pixel == white and ground_truth_mask[i][j] == white:
                 m_11 += 1
         
-    #accuracy of images, inspired by the jacard coefficient 
+    #binary accuracy: https://en.wikipedia.org/wiki/Evaluation_of_binary_classifiers (see accuracy)
     return (m_11 + m_00) / (m_10 + m_01 + m_11 + m_00)
-
-    # for i, row in enumerate(img_test):
-    #     inter = img_test.intersection(ground_truth_mask)
-    #     union = img_test.union(ground_truth_mask)
-    #     sum_inter = sum(inter)
-    #     sum_union = sum(union)
-    #     tanimoto_cors.append(sum_inter/sum_union)
-
-    # return np.mean(tanimoto_cors)
-
 
 if __name__ == '__main__':
     unittest.main()
@@ -149,6 +139,7 @@ if __name__ == '__main__':
 # Otzu / washing testing
 # https://link.springer.com/chapter/10.1007/978-3-319-39393-3_4
 # Pearson correlation
+    # https://en.wikipedia.org/wiki/Pearson_correlation_coefficient#Sample_size
     # coefficient https://stackabuse.com/calculating-pearson-correlation-coefficient-in-python-with-numpy
 # Tanimotos
     # https://en.wikipedia.org/wiki/Jaccard_index#:~:text=Tanimoto%20goes%20on%20to%20define,be%20similar%20to%20a%20third.
@@ -165,6 +156,6 @@ if __name__ == '__main__':
 
 
 # TODO
-# understand jacard correleation coefficient in comparison to image processing 
 # refactor Dict(colored_img_1:mask_img_1 ... )
+# refactor accuracy to use numpy
 # https://en.wikipedia.org/wiki/Jaccard_index
