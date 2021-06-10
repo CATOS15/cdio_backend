@@ -8,7 +8,9 @@ class ImageCardType(Enum):
     Tableau = 3
 
 # from ml to alg
-def ml_map_alg(path_to_img, ict):
+
+#examples(dict_images: [path : ImageCardType])
+def ml_map_alg(dict_images):
     data_solitaire = {
         'stacks': [
         ],
@@ -17,21 +19,21 @@ def ml_map_alg(path_to_img, ict):
         'cardpile': [
         ],
     }
-    result_set = ml_solitaire.yolov5v2.result.getCardsFromImage(path_to_img)
-    if ict == ImageCardType.Tableau:
-        ml_solitaire.yolov5v2.result.addStackToTableau(result_set, data_solitaire)
-    elif ict == ImageCardType.Fountain:
-        ml_solitaire.yolov5v2.result.addToFountain(result_set, data_solitaire)
-    elif ict == ImageCardType.Waste:
-        ml_solitaire.yolov5v2.result.addToWaste(result_set, data_solitaire)
+
+    for path_to_img, img_type in dict_images:
+        result_set = ml_solitaire.yolov5v2.result.getCardsFromImage(path_to_img)
+        if img_type == ImageCardType.Tableau:
+            ml_solitaire.yolov5v2.result.addStackToTableau(result_set, data_solitaire)
+        elif img_type == ImageCardType.Fountain:
+            ml_solitaire.yolov5v2.result.addToFountain(result_set, data_solitaire)
+        elif img_type == ImageCardType.Waste:
+            ml_solitaire.yolov5v2.result.addToWaste(result_set, data_solitaire)
 
     return data_solitaire
 
 # from opencv to ml
 
 
-# def opencv_ml():
-#     return None
+def opencv_ml_tableau():
+    return None
 
-
-# ml_map_alg("ml_solitaire/yolov5v2/tableau.jpg", ImageCardType.Tableau)
