@@ -5,7 +5,7 @@ import json
 # TODO, fejlhåndtering af kolonner
 
 # Model
-model = torch.hub.load('ultralytics/yolov5', 'custom', path='thebest.pt')
+model = torch.hub.load('ultralytics/yolov5', 'custom', path='ml_solitaire/yolov5v2/thebest.pt', force_reload=True)
 model.conf = 0.7
 
 data_solitaire = {
@@ -23,6 +23,8 @@ def getCardsFromImage(path):
     results = model(img)
     resultsPanda = results.pandas().xyxy[0].to_json(orient="records")
     resultsJSON = json.loads(resultsPanda)
+
+
     s = set()
     for result in resultsJSON:
         s.add(result["name"])
@@ -109,9 +111,9 @@ def addToFountain(cards):
         counter2 += 1
 
 
-s = getCardsFromImage("tableau.jpg")
-s2 = getCardsFromImage("fountain1.jpg")
-s3 = getCardsFromImage("waste.jpg")
+s = getCardsFromImage("ml_solitaire/yolov5v2/tableau.jpg")
+s2 = getCardsFromImage("ml_solitaire/yolov5v2/fountain2.jpg")
+s3 = getCardsFromImage("ml_solitaire/yolov5v2/waste.jpg")
 addStackToTableau(s)
 addStackToTableau(s)
 addToWaste(s3)
