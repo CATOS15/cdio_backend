@@ -37,15 +37,9 @@ def _test_cut_three(solitaire_split):
 
 def api_endpoint():    
     test_img = cv2.imread(g_shared.path_card_full_solitaire_red_background_distinct, cv2.IMREAD_COLOR)
-    solitaire_split = flows.flow_ml_subdivide_tableau.cb_img_cut(test_img)    
-    #cuts columns
-    tableau = flows.flow_ml_subdivide_tableau.cb_cut_columns(solitaire_split[2])
-
-    # #mapping to algorithm
-    solitaire = {comm.ImageCardType.Waste: solitaire_split[0], comm.ImageCardType.Foundation: solitaire_split[1], comm.ImageCardType.Tableau: tableau}
-    return flows.flow_ml_subdivide_tableau.cb_ml_execute(solitaire)
-    # foo = ml_opencv_cut_columns(test_img)
-    # print(foo)
+   
+    foo = ml_opencv_cut_columns(test_img)
+    print(foo)
     #call algo(foo)
     
 api_endpoint()
