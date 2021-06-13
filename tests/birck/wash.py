@@ -58,6 +58,9 @@ mask_imgs = [mask_eight_diamond_131, mask_eight_diamond_132, mask_eight_heart_16
              mask_king_diamond_128, mask_queen_club_180, mask_two_diamond_190]
 
 
+class TestCutAndPaste(unittest.TestCase):
+    def foo():
+        return None
 
 
 class TestContur(unittest.TestCase):
@@ -69,6 +72,7 @@ class TestContur(unittest.TestCase):
     def test_contour_approximation(self):
         contours_result = []
         contours = self.otsu_capprox.execute_contour(cv2.RETR_EXTERNAL, cv2.CHAIN_APPROX_SIMPLE, mask_eight_diamond_131)
+        
         #put contours in proper folder to view 
         #reconsider shaping comparison etc.
         for c in contours:
