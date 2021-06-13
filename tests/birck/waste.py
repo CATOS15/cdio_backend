@@ -1,3 +1,4 @@
+import enum
 from image_processing.img_contour import contour_approximation
 from typing import Optional
 import unittest
@@ -6,6 +7,7 @@ import cv2
 import image_processing.objects as objects
 import image_processing.img_wash as wash
 from scipy import stats
+import tests.birck.test_objects as tobj
 
 
 # Birck Wash Tests
@@ -25,7 +27,6 @@ path_mask_king_diamond_128 = "tests/birck/masked_ground_truth/king_diamond_128.p
 path_mask_queen_club_180 = "tests/birck/masked_ground_truth/queen_club_180_unsure.png"
 path_mask_two_diamond_190 = "tests/birck/masked_ground_truth/two_diamond_190.png"
 
-
 path_shape_eight_diamond_131 = "tests/birck/contour_ground_truth/shape_waste_eight_diamond_131.png"
 path_shape_eight_diamond_131_cardback = "tests/birck/contour_ground_truth/shape_waste_eight_diamond_131_cardback.png"
 path_shape_eight_heart_160 = "tests/birck/contour_ground_truth/shape_waste_eight_heart_160.png"
@@ -35,13 +36,21 @@ path_shape_king_diamond_128_cardback = "tests/birck/contour_ground_truth/shape_w
 path_shape_two_diamond_190 = "tests/birck/contour_ground_truth/shape_waste_two_diamond_190.png"
 path_shape_two_diamond_190_cardback = "tests/birck/contour_ground_truth/shape_waste_two_diamond_190_cardback.png"
 
-
 eight_diamond_131 = cv2.imread(path_eight_diamond_131, cv2.IMREAD_COLOR)
 eight_diamond_132 = cv2.imread(path_eight_diamond_132, cv2.IMREAD_COLOR)
 eight_heart_160 = cv2.imread(path_eight_heart_160, cv2.IMREAD_COLOR)
 king_diamond_128 = cv2.imread(path_king_diamond_128, cv2.IMREAD_COLOR)
 queen_club_180 = cv2.imread(path_queen_club_180, cv2.IMREAD_COLOR)
 two_diamond_190 = cv2.imread(path_two_diamond_190, cv2.IMREAD_COLOR)
+
+shape_eight_diamond_131 = cv2.imread(path_shape_eight_diamond_131, cv2.IMREAD_GRAYSCALE)
+shape_eight_diamond_131_cardback = cv2.imread(path_shape_eight_diamond_131_cardback, cv2.IMREAD_GRAYSCALE)
+shape_eight_heart_160 = cv2.imread(path_shape_eight_heart_160, cv2.IMREAD_GRAYSCALE)
+shape_eight_heart_160_cardback = cv2.imread(path_shape_eight_heart_160_cardback, cv2.IMREAD_GRAYSCALE)
+shape_king_diamond_128 = cv2.imread(path_shape_king_diamond_128, cv2.IMREAD_GRAYSCALE)
+shape_king_diamond_128_cardback = cv2.imread(path_shape_king_diamond_128_cardback, cv2.IMREAD_GRAYSCALE)
+shape_two_diamond_190 = cv2.imread(path_shape_two_diamond_190, cv2.IMREAD_GRAYSCALE)
+shape_two_diamond_190_cardback = cv2.imread(path_shape_two_diamond_190, cv2.IMREAD_GRAYSCALE)
 
 mask_eight_diamond_131 = cv2.imread(path_mask_eight_diamond_131, cv2.IMREAD_GRAYSCALE)
 mask_eight_diamond_132 = cv2.imread(path_mask_eight_diamond_132, cv2.IMREAD_GRAYSCALE)
@@ -57,29 +66,54 @@ colored_imgs = [eight_diamond_131, eight_diamond_132, eight_heart_160, king_diam
 mask_imgs = [mask_eight_diamond_131, mask_eight_diamond_132, mask_eight_heart_160,
              mask_king_diamond_128, mask_queen_club_180, mask_two_diamond_190]
 
+# Combine contours
+shapes_eight_diamond_131 = [shape_eight_diamond_131_cardback, shape_eight_diamond_131]
+shapes_eight_heart_160 = [shape_eight_heart_160_cardback, shape_eight_heart_160]
+shapes_king_diamond_128 = [shape_king_diamond_128_cardback, shape_king_diamond_128]
+shapes_two_diamond_190 = [shape_two_diamond_190_cardback, shape_two_diamond_190]
 
-class TestCutAndPaste(unittest.TestCase):
+shapes = [shapes_eight_diamond_131, shapes_eight_heart_160, shapes_king_diamond_128, shapes_two_diamond_190]
+contour_images = [mask_eight_diamond_131, mask_eight_heart_160, mask_king_diamond_128, mask_two_diamond_190]
+
+
+class TestSuitAndRank(unittest.TestCase):
+    
     def foo():
         return None
 
 
+# Extra: Right now it evaulates some cards to high even if they are identical
 class TestContur(unittest.TestCase):
     otsu_capprox = objects.Flow(cb_wash=wash.otsu_wash, cb_contour=contour_approximation, cb_cut_suit_rank=None, cb_compare_by_template=None)
 
-    #uses I2
-    #https://docs.opencv.org/3.4/d3/dc0/group__imgproc__shape.html#gaf2b97a230b51856d09a2d934b78c015f
-    #https://learnopencv.com/shape-matching-using-hu-moments-c-python/
+    cmatches = []
+    cmatches.append(tobj.ContourMatch("mask_eight_diamond_131", mask_eight_diamond_131))
+    cmatches.append(tobj.ContourMatch("mask_eight_diamond_132", mask_eight_diamond_132))
+    cmatches.append(tobj.ContourMatch("mask_eight_heart_160", mask_eight_heart_160))
+    cmatches.append(tobj.ContourMatch("mask_king_diamond_128", mask_king_diamond_128))
+    # cmatches.append(tobj.ContourMatch("mask_queen_club_180", mask_queen_club_180))
+    cmatches.append(tobj.ContourMatch("mask_two_diamond", mask_two_diamond_190))
+
+    # uses I2
+    # https://docs.opencv.org/3.4/d3/dc0/group__imgproc__shape.html#gaf2b97a230b51856d09a2d934b78c015f
+    # https://learnopencv.com/shape-matching-using-hu-moments-c-python/
+
+
     def test_contour_approximation(self):
         contours_result = []
-        contours = self.otsu_capprox.execute_contour(cv2.RETR_EXTERNAL, cv2.CHAIN_APPROX_SIMPLE, mask_eight_diamond_131)
-        
-        #put contours in proper folder to view 
-        #reconsider shaping comparison etc.
-        for c in contours:
-            contours_result.append(cv2.matchShapes(mask_eight_diamond_131, c, cv2.CONTOURS_MATCH_I2, None))
-        print(contours_result)
-            
+        for cmatch in self.cmatches:
+            contours = self.otsu_capprox.execute_contour(cv2.RETR_EXTERNAL, cv2.CHAIN_APPROX_SIMPLE, cmatch.ground_truth)
+            boundingBoxes = [cv2.boundingRect(c) for c in contours]
+            (cnts_sorted, boundingBoxes) = zip(*sorted(zip(contours, boundingBoxes), key=lambda b: b[1][0], reverse=False))
+            cnt_deck = cnts_sorted[0]  # deck
+            cnt_card = cnts_sorted[1]  # card
+            cmatch.find_best_result(cv2.matchShapes(cmatch.ground_truth, cnt_deck, cv2.CONTOURS_MATCH_I2, None), True)
+            cmatch.find_best_result(cv2.matchShapes(cmatch.ground_truth, cnt_card, cv2.CONTOURS_MATCH_I2, None), False)
+            contours_result.append(cmatch)
+        for result in contours_result:
+            print(result)
 
+#Tests washing
 # class TestWash(unittest.TestCase):
 #     otsu_simple = objects.Flow(cb_wash=wash.otsu_wash, cb_contour=None,
 #                                cb_cut_suit_rank=None, cb_compare_by_template=None)
@@ -183,6 +217,7 @@ if __name__ == '__main__':
 
 # Contours
     # https://en.wikipedia.org/wiki/Image_moment
+    # Contour sorting: https://www.pyimagesearch.com/2015/04/20/sorting-contours-using-python-and-opencv/
 
 
 # Otzu / washing testing
@@ -203,6 +238,7 @@ if __name__ == '__main__':
     # pearson: https://docs.scipy.org/doc/scipy/reference/generated/scipy.stats.pearsonr.html
 
 # TODO
-# refactor Dict(colored_img_1:mask_img_1 ... )
-# refactor accuracy to use numpy
-# https://en.wikipedia.org/wiki/Jaccard_index
+# Consider refactoring paths, images, masked_images etc. into a class
+# Find a way to test cut_suit_rank 
+# Find a way to test compariosons
+# Reconsider the way we're testing contours
