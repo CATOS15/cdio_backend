@@ -25,6 +25,17 @@ path_mask_king_diamond_128 = "tests/birck/masked_ground_truth/king_diamond_128.p
 path_mask_queen_club_180 = "tests/birck/masked_ground_truth/queen_club_180_unsure.png"
 path_mask_two_diamond_190 = "tests/birck/masked_ground_truth/two_diamond_190.png"
 
+
+path_shape_eight_diamond_131 = "tests/birck/contour_ground_truth/shape_waste_eight_diamond_131.png"
+path_shape_eight_diamond_131_cardback = "tests/birck/contour_ground_truth/shape_waste_eight_diamond_131_cardback.png"
+path_shape_eight_heart_160 = "tests/birck/contour_ground_truth/shape_waste_eight_heart_160.png"
+path_shape_eight_heart_160_cardback = "tests/birck/contour_ground_truth/shape_waste_eight_heart_160_cardback.png"
+path_shape_king_diamond_128 = "tests/birck/contour_ground_truth/shape_waste_king_diamond_128.png"
+path_shape_king_diamond_128_cardback = "tests/birck/contour_ground_truth/shape_waste_king_diamond_128_cardback.png"
+path_shape_two_diamond_190 = "tests/birck/contour_ground_truth/shape_waste_two_diamond_190.png"
+path_shape_two_diamond_190_cardback = "tests/birck/contour_ground_truth/shape_waste_two_diamond_190_cardback.png"
+
+
 eight_diamond_131 = cv2.imread(path_eight_diamond_131, cv2.IMREAD_COLOR)
 eight_diamond_132 = cv2.imread(path_eight_diamond_132, cv2.IMREAD_COLOR)
 eight_heart_160 = cv2.imread(path_eight_heart_160, cv2.IMREAD_COLOR)
