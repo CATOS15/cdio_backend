@@ -1,44 +1,63 @@
+#transform you cool image into an even cooler version in 720x720 with a yellow background
 import cv2
 import numpy as np
 import math
-import imutils
-from PIL import Image
-#transform you cool image into an even cooler version in 720x720
+#import imutils
 
-
-# read image
-# path_image = 'ml_solitaire\solitaire_ex1.jpg' #hav projektet åbent i CDIO_BACKEND som hoved folder
+# path_image = 'ml_solitaire\solitaire_ex1.jpg'
 # img = cv2.imread(path_image)
-
-
-def make_square(im, min_size=256, fill_color=(255, 255, 0, 0)):
-    x, y = im.size
-    size = max(min_size, x, y)
-    new_im = Image.new('RGBA', (size, size), fill_color)
-    new_im.paste(im, (int((size - x) / 2), int((size - y) / 2)))
-    return new_im
 
 def transform_720(img):
     #dimensions for image
     image720 = cv2.imread(img)
+    height = image720.shape[0]
+    width = image720.shape[1]
+
+    #yellow square image
+    yellow_square_path = 'ml_solitaire\yellow_square.png'
+    yellow_square = cv2.imread(yellow_square_path)
+    bg_height, bg_width, channels = yellow_square.shape
+
+    #gør input 720 bredde eller højde
+    #allerede firkantet
+    if(height==width):
+        dimensioner = (720, 720)
+        scaledimg = cv2.resize(image720, dimensioner, interpolation = cv2.INTER_AREA)
+
+    #højt
+    elif(height > width):
+        scale = 720/height
+        dimensioner = (math.floor(width*scale), 720)
+        scaledimg = cv2.resize(image720, dimensioner, interpolation = cv2.INTER_AREA)
+        
+    #bredt
+    elif(height < width):
+        scale = 720/width
+        dimensioner = (720, math.floor(height*scale))
+        scaledimg = cv2.resize(image720, dimensioner, interpolation = cv2.INTER_AREA)
+
+    #giv det en background
+    #ligger det skalerede billede oveni det andet billede med et offset så det er i midten
+
+    img = scaledimg
+    s_height, s_width, lort = scaledimg.shape
+
+    yoff = round((bg_height-s_height)/2)
+    xoff = round((bg_width-s_width)/2)
+
+    result = yellow_square.copy()
+    result[yoff:yoff+s_height, xoff:xoff+s_width] = scaledimg
+
+    # cv2.imwrite('ml_solitaire\pestgul.png', scaledimg)
+    # cv2.imshow("resized", scaledimg)
+    # cv2.waitKey(0)
+
+    # cv2.imshow('CENTERED', result)
+    # cv2.waitKey(0)
     
-    dimensions = image720.shape
-    # height = image720.shape[0]
-    # width = image720.shape[1]
+    return result
 
-    # r = 720.0 / image720.shape[1]
-    # dim = (720, int(image720.shape[0] * r))
-    
-    img = imutils.resize(image720, width=720)    
+transformed = transform_720('ml_solitaire\image_fountain.jpg')
+cv2.imshow("resized", transformed)
+cv2.waitKey(0)
 
-    #resized = cv2.resize(image720, dim, interpolation = cv2.INTER_AREA)
-    cv2.imwrite('ml_solitaire\pestgul.png', img)
-    cv2.imshow("resized", img)
-    cv2.waitKey(0)
-
-#test_image = Image.open('ml_solitaire\image_drawpile.jpg')
-#new_image = make_square(test_image)
-
-#new_image.show()
-
-transform_720('ml_solitaire\image_drawpile.jpg')
