@@ -28,11 +28,9 @@ def compare_ranksuit(card, g_templates):
             min_val, max_val, min_loc, max_loc = cv2.minMaxLoc(match)
 
             if template is not(cv2.TM_SQDIFF or cv2.TM_SQDIFF_NORMED):
-                _compare_suit_rank_max(
-                    finished_card, tmpl, max_val)
+                _compare_suit_rank_max(finished_card, tmpl, max_val)
             else:
-                _compare_suit_rank_min(
-                    finished_card, tmpl, min_val)
+                _compare_suit_rank_min(finished_card, tmpl, min_val)
 
     return finished_card
 

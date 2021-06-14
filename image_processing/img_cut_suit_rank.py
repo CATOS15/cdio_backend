@@ -6,7 +6,6 @@ import image_processing.img_contour as contour
 suits_numbers = "suits_numbers"
 face_cards = "face_cards"
 
-
 def find_by_hierachy(contours, alg1, alg2):
     face_card = 0.50
     noise = 0.0001
