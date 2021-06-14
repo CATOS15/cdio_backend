@@ -26,7 +26,8 @@
 <body>
     
     <div class="container">
-        <button id="gogo">GO GO</button>
+        <button id="gogo">Test</button>
+        <button id="solve">Solve</button>
         <div id="response">
         </div>
 
@@ -1089,6 +1090,8 @@ body {
         // document
         var d = document;
 
+        var lostcounter = 0;
+
         // build deck
         var deck = [];
 
@@ -1616,7 +1619,7 @@ body {
 
 
 
-            async function algtest() {
+            async function algtest(callback) {
                 const DIAMOND = 1, HEART = 2, SPADE = 3, CLUBS = 4;
 
                 function getNumberFromLetter(letter){
@@ -1755,6 +1758,7 @@ body {
                     }
                     response.json().then((data) => {
                         document.getElementById("response").innerHTML = data.message;
+                        if(callback) callback(data)
                     });
                 })
                 .catch((error) => {
@@ -1764,6 +1768,75 @@ body {
             var gogo = document.getElementById("gogo");
             gogo.onclick = (() => {
                 algtest();
+            });
+            
+            var solve = document.getElementById("solve");
+            solve.onclick = (() => {
+                algtest((data) => {
+                    if(data.firstcard === "won"){
+                        document.getElementById("response").innerHTML = "VANDT!";
+                        return;
+                    }
+                    if(data.firstcard === "" || data.firstcard === "flip"){
+                        $("[data-pile='stock']").click();
+                        $("[data-action='reload']").click();
+                        lostcounter++;
+                        if(lostcounter > 30){
+                            document.getElementById("response").innerHTML = "TABT";
+                        }else{
+                            setTimeout(() => {
+                                solve.click()
+                            }, 200);
+                        }
+                        return;
+                    }
+                    lostcounter = 0;
+
+                    console.log(data);
+                    var firstcard_arr = data.firstcard.split(" ");
+                    var firstcard_number = firstcard_arr[0];
+                    var firstcard_type = firstcard_arr[1];
+                    
+                    var ele1 = $("[data-rank='"+firstcard_number+"'][data-suit='"+firstcard_type+"']");
+
+                    var ele2;
+
+                    if(data.location === "fountain"){
+                        ele2 = $("[data-rank='"+firstcard_number+"'][data-suit='"+firstcard_type+"']");
+                    }
+                    else{
+                        ele1.click();
+
+                        if(data.secondcard !== "empty"){
+                            var secondcard_arr = data.secondcard.split(" ");
+                            var secondcard_number = secondcard_arr[0];
+                            var secondcard_type = secondcard_arr[1];
+                            ele2 = $("[data-rank='"+secondcard_number+"'][data-suit='"+secondcard_type+"']");
+                        }
+                        else{
+                            ele2 = $("[data-empty='true']");
+                        }
+                    }
+
+                    setTimeout(() => {
+                        if(data.location === "fountain"){
+                            //ele1.dblclick();
+                            var event = new MouseEvent('dblclick', {
+                                'view': window,
+                                'bubbles': true,
+                                'cancelable': true
+                            });
+                            ele1[0].dispatchEvent(event);
+
+                        }else{
+                            ele2.click();
+                        }
+
+                        setTimeout(() => {
+                            solve.click()
+                        }, 200);
+                    }, 200)
+                });
             });
         }
 
