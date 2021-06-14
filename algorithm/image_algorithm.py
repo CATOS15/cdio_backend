@@ -272,11 +272,16 @@ def set_best_move():
         if len(moves_ordered2) > 0:
             combinedpoint = move["point"] + moves_ordered2[0]["point"]
         
-        if len(moves_ordered2) > 0 and combinedpoint != 55 and combinedpoint != 100:
+        if len(moves_ordered2) > 0: #and combinedpoint != 55 and combinedpoint != 60 and combinedpoint != 100:
             if combinedpoint > bestMove["point"]:
                 bestMove["point"] = combinedpoint
                 bestMove["move"] = move["move"]
                 bestMove["numberOfMoves"] = 2
+            if combinedpoint == bestMove["point"]:
+                if moves_ordered1[0]["point"] > move["point"]:
+                    bestMove["point"] = combinedpoint
+                    bestMove["move"] = moves_ordered1[0]["move"]
+                    bestMove["numberOfMoves"] = 2
         else:
             if move["point"] > bestMove["point"]:
                 bestMove["point"] = move["point"]
@@ -339,6 +344,10 @@ def run_algorithm(data_solitaire):
 
     bestMove = set_best_move()
 
+    if fountains[0].count == 13 and fountains[1].count == 13 and fountains[2].count == 13 and fountains[3].count == 13:
+        bestMove = {"won": True}
+        return bestMove
+
     #for x in get_moves():
         #print(x.description)
 
@@ -369,5 +378,5 @@ def run_algorithm(data_solitaire):
         bestMove = {"move": Move(None,None,None,None,"")}
         bestMove["move"].description = "Træk kort"
         bestMove["move"].drawCard = True
-        
+    print(bestMove)
     return bestMove
