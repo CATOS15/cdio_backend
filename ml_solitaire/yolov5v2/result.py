@@ -111,12 +111,12 @@ def addToFountain(cards, solitaire):
         counter2 += 1
 
 
-s = getCardsFromImage("ml_solitaire/yolov5v2/tableau.jpg")
-s2 = getCardsFromImage("ml_solitaire/yolov5v2/fountain2.jpg")
-s3 = getCardsFromImage("ml_solitaire/yolov5v2/waste.jpg")
-addStackToTableau(s, data_solitaire)
-addStackToTableau(s, data_solitaire)
-addToWaste(s3, data_solitaire)
-addToFountain(s2, data_solitaire)
+# s = getCardsFromImage("ml_solitaire/yolov5v2/tableau.jpg")
+# s2 = getCardsFromImage("ml_solitaire/yolov5v2/fountain2.jpg")
+# s3 = getCardsFromImage("ml_solitaire/yolov5v2/waste.jpg")
+# addStackToTableau(s, data_solitaire)
+# addStackToTableau(s, data_solitaire)
+# addToWaste(s3, data_solitaire)
+# addToFountain(s2, data_solitaire)
 
-print(data_solitaire)
+# print(data_solitaire)

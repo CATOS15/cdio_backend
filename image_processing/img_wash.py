@@ -46,22 +46,22 @@ def templ_threshold(templInfo, lower, upper):
     cv2.threshold(templInfo.templ_image, lower, upper, 0)
 
 
-def __lighting(img, lower, upper):
-    # ret, thresh = cv2.threshold(img_grey, lower, upper, 0)
-    pixel_neighborhood = 11
-    subtract_mean = 2
-    return cv2.adaptiveThreshold(img, upper, cv2.ADAPTIVE_THRESH_GAUSSIAN_C, cv2.THRESH_BINARY, pixel_neighborhood, subtract_mean)
-    # return th
+# def __lighting(img, lower, upper):
+#     # ret, thresh = cv2.threshold(img_grey, lower, upper, 0)
+#     pixel_neighborhood = 11
+#     subtract_mean = 2
+#     return cv2.adaptiveThreshold(img, upper, cv2.ADAPTIVE_THRESH_GAUSSIAN_C, cv2.THRESH_BINARY, pixel_neighborhood, subtract_mean)
+#     # return th
 
-def __clear_image(img, alg1):
-    # define array
-    blur = cv2.GaussianBlur(img, (5, 5), 0)
-    ret3, th3 = cv2.threshold(
-        img, 0, 255, alg1)
+# def __clear_image(img, alg1):
+#     # define array
+#     blur = cv2.GaussianBlur(img, (5, 5), 0)
+#     ret3, th3 = cv2.threshold(
+#         img, 0, 255, alg1)
 
-    dst = cv2.bitwise_not(th3)
-    # cv2.imwrite(store_path, th3)
-    return dst
+#     dst = cv2.bitwise_not(th3)
+#     # cv2.imwrite(store_path, th3)
+#     return dst
 
 
 def __contrast_flip_images(img_cunts, alg1):

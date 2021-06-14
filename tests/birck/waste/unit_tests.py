@@ -1,3 +1,5 @@
+import enum
+from image_processing.img_contour import contour_approximation
 from typing import Optional
 import unittest
 import numpy as np
@@ -5,51 +7,50 @@ import cv2
 import image_processing.objects as objects
 import image_processing.img_wash as wash
 from scipy import stats
-
+import tests.birck.test_objects as tobj
+import image_processing.flows as flows
+import image_processing.debugging as debugging
+import tests.birck.g_tests_shared as shared
 
 # Birck Wash Tests
-# ideal threhsold is suffix on each path
+# ideal threshold is suffix on each path
 
-path_eight_diamond_131 = "image_processing/tests/birck/full_deck_ground_truth/waste_eight_diamond_131.png"
-path_eight_diamond_132 = "image_processing/tests/birck/full_deck_ground_truth/waste_eight_diamond_132.png"
-path_eight_heart_160 = "image_processing/tests/birck/full_deck_ground_truth/waste_eight_heart_160.png"
-path_king_diamond_128 = "image_processing/tests/birck/full_deck_ground_truth/waste_king_diamond_128.png"
-path_queen_club_180 = "image_processing/tests/birck/full_deck_ground_truth/waste_queen_club_180.png"
-path_two_diamond_190 = "image_processing/tests/birck/full_deck_ground_truth/waste_two_diamond_190.png"
+# # Extra: Right now it evaulates some cards to high even if they are identical
+class TestContur(unittest.TestCase):
+    otsu_capprox = objects.Flow(cb_wash=wash.otsu_wash, cb_contour=contour_approximation, cb_cut_suit_rank=None, cb_compare_by_template=None)
 
-path_mask_eight_diamond_131 = "image_processing/tests/birck/masked_ground_truth/eight_diamond_131.png"
-path_mask_eight_diamond_132 = "image_processing/tests/birck/masked_ground_truth/eight_diamond_132.png"
-path_mask_eight_heart_160 = "image_processing/tests/birck/masked_ground_truth/eight_heart_160.png"
-path_mask_king_diamond_128 = "image_processing/tests/birck/masked_ground_truth/king_diamond_128.png"
-path_mask_queen_club_180 = "image_processing/tests/birck/masked_ground_truth/queen_club_180_unsure.png"
-path_mask_two_diamond_190 = "image_processing/tests/birck/masked_ground_truth/two_diamond_190.png"
+    cmatches = []
+    #this should be shared.masks.imgs however mask_queen_club_180 has an error
+    cmatches.append(tobj.ContourMatch("mask_eight_diamond_131", shared.mask_eight_diamond_131))
+    cmatches.append(tobj.ContourMatch("mask_eight_diamond_132", shared.mask_eight_diamond_132))
+    cmatches.append(tobj.ContourMatch("mask_eight_heart_160", shared.mask_eight_heart_160))
+    cmatches.append(tobj.ContourMatch("mask_king_diamond_128", shared.mask_king_diamond_128))
+    # cmatches.append(tobj.ContourMatch("mask_queen_club_180", mask_queen_club_180))
+    cmatches.append(tobj.ContourMatch("mask_two_diamond", shared.mask_two_diamond_190))
 
-
-eight_diamond_131 = cv2.imread(path_eight_diamond_131, cv2.IMREAD_COLOR)
-eight_diamond_132 = cv2.imread(path_eight_diamond_132, cv2.IMREAD_COLOR)
-eight_heart_160 = cv2.imread(path_eight_heart_160, cv2.IMREAD_COLOR)
-king_diamond_128 = cv2.imread(path_king_diamond_128, cv2.IMREAD_COLOR)
-queen_club_180 = cv2.imread(path_queen_club_180, cv2.IMREAD_COLOR)
-two_diamond_190 = cv2.imread(path_two_diamond_190, cv2.IMREAD_COLOR)
-
-mask_eight_diamond_131 = cv2.imread(path_mask_eight_diamond_131, cv2.IMREAD_GRAYSCALE)
-mask_eight_diamond_132 = cv2.imread(path_mask_eight_diamond_132, cv2.IMREAD_GRAYSCALE)
-mask_eight_heart_160 = cv2.imread(path_mask_eight_heart_160, cv2.IMREAD_GRAYSCALE)
-mask_king_diamond_128 = cv2.imread(path_mask_king_diamond_128, cv2.IMREAD_GRAYSCALE)
-mask_queen_club_180 = cv2.imread(path_mask_queen_club_180, cv2.IMREAD_GRAYSCALE)
-mask_two_diamond_190 = cv2.imread(path_mask_two_diamond_190, cv2.IMREAD_GRAYSCALE)
+    # uses I2
+    # https://docs.opencv.org/3.4/d3/dc0/group__imgproc__shape.html#gaf2b97a230b51856d09a2d934b78c015f
+    # https://learnopencv.com/shape-matching-using-hu-moments-c-python/
 
 
+    def test_contour_approximation(self):
+        contours_result = []
+        for cmatch in self.cmatches:
+            contours = self.otsu_capprox.execute_contour(cv2.RETR_EXTERNAL, cv2.CHAIN_APPROX_SIMPLE, cmatch.ground_truth)
+            boundingBoxes = [cv2.boundingRect(c) for c in contours]
+            (cnts_sorted, boundingBoxes) = zip(*sorted(zip(contours, boundingBoxes), key=lambda b: b[1][0], reverse=False))
+            cnt_deck = cnts_sorted[0]  # deck
+            cnt_card = cnts_sorted[1]  # card
+            cmatch.find_best_result(cv2.matchShapes(cmatch.ground_truth, cnt_deck, cv2.CONTOURS_MATCH_I2, None), True)
+            cmatch.find_best_result(cv2.matchShapes(cmatch.ground_truth, cnt_card, cv2.CONTOURS_MATCH_I2, None), False)
+            contours_result.append(cmatch)
+        for result in contours_result:
+            print(result)
+
+# Tests washing
 class TestWash(unittest.TestCase):
     otsu_simple = objects.Flow(cb_wash=wash.otsu_wash, cb_contour=None,
                                cb_cut_suit_rank=None, cb_compare_by_template=None)
-
-    # colored and mask must have identitical lengths
-    colored_imgs = [eight_diamond_131, eight_diamond_132, eight_heart_160, king_diamond_128,
-                    queen_club_180, two_diamond_190]
-
-    mask_imgs = [mask_eight_diamond_131, mask_eight_diamond_132, mask_eight_heart_160,
-                 mask_king_diamond_128, mask_queen_club_180, mask_two_diamond_190]
 
     wash_strategy = cv2.THRESH_BINARY
 
@@ -62,10 +63,10 @@ class TestWash(unittest.TestCase):
     def test_resolution_mask_color(self):
         sheight = "height"
         swidth = "width"
-        for i, color_img in enumerate(TestWash.colored_imgs):
+        for i, color_img in enumerate(shared.colored_imgs):
             test_wash = self.otsu_simple.cb_wash(color_img, TestWash.wash_strategy)
             test_wash_resolution = self.same_resolution(color_img, test_wash)
-            test_resolution = self.same_resolution(color_img, TestWash.mask_imgs[i])
+            test_resolution = self.same_resolution(color_img, shared.mask_imgs[i])
 
             self.assertEqual(True, test_resolution[0], "dimensions error {}: {} & mask ".format(sheight, str(color_img)))
             self.assertEqual(True, test_resolution[1], "dimensions error {}: {} & mask ".format(swidth, str(color_img)))
@@ -74,7 +75,7 @@ class TestWash(unittest.TestCase):
 
     def _wash_array(self, cb_wash):
         results = []
-        for x in self.colored_imgs:
+        for x in shared.colored_imgs:
             results.append(cb_wash(x, TestWash.wash_strategy))
         return results
 
@@ -85,39 +86,44 @@ class TestWash(unittest.TestCase):
         wash_results = self._wash_array(self.otsu_simple.cb_wash)
 
         for i, threshold_img in enumerate(wash_results):
-            pearson_results.append(pearson_corr_coeff(threshold_img, TestWash.mask_imgs[i]))
-            accuracy_results.append(accuracy(threshold_img, TestWash.mask_imgs[i]))
-            tanimoto_results.append(tanimoto_corr_coeff(threshold_img, TestWash.mask_imgs[i]))
+            pearson_results.append(pearson_corr_coeff(threshold_img, shared.mask_imgs[i]))
+            accuracy_results.append(accuracy(threshold_img, shared.mask_imgs[i]))
+            tanimoto_results.append(tanimoto_corr_coeff(threshold_img, shared.mask_imgs[i]))
+
         print(pearson_results)
         print(tanimoto_results)
-        print(tanimoto_results)
+        print(accuracy_results)
 
-#not working yet
+# pearson correlation coefficient
+
+
 def pearson_corr_coeff(img_test, ground_truth_mask):
     img_test_average = np.mean(img_test)
     ground_truth_mask_average = np.mean(ground_truth_mask)
-    numerator = np.sum((img_test - img_test_average) * (ground_truth_mask - ground_truth_mask_average)) 
+    numerator = np.sum((img_test - img_test_average) * (ground_truth_mask - ground_truth_mask_average))
     denomitor_img = np.sqrt(np.sum((img_test - img_test_average)**2))
     denomitor_ground_truth = np.sqrt(np.sum((ground_truth_mask - ground_truth_mask_average)**2))
 
-    return numerator / (denomitor_img * denomitor_ground_truth) 
+    return numerator / (denomitor_img * denomitor_ground_truth)
 
 
-
+# tanimoto's correlation correficient
 def tanimoto_corr_coeff(img, ground_truth_mask):
     numerator = np.sum(np.bitwise_and(img, ground_truth_mask))
     denomiter = np.sum(np.bitwise_or(img, ground_truth_mask))
 
     return numerator / denomiter
 
+
+# binary accuracy: https://en.wikipedia.org/wiki/Evaluation_of_binary_classifiers (see accuracy)
 def accuracy(img_test, ground_truth_mask):
     m_00 = 0
     m_10 = 0
     m_01 = 0
     m_11 = 0
-    
+
     white = 255
-    black = 0 
+    black = 0
     for i, row in enumerate(img_test):
         for j, pixel in enumerate(row):
             if pixel == black and ground_truth_mask[i][j] == black:
@@ -128,34 +134,38 @@ def accuracy(img_test, ground_truth_mask):
                 m_01 += 1
             elif pixel == white and ground_truth_mask[i][j] == white:
                 m_11 += 1
-        
-    #binary accuracy: https://en.wikipedia.org/wiki/Evaluation_of_binary_classifiers (see accuracy)
+
     return (m_11 + m_00) / (m_10 + m_01 + m_11 + m_00)
+
 
 if __name__ == '__main__':
     unittest.main()
 
 
+# Contours
+    # https://en.wikipedia.org/wiki/Image_moment
+    # Contour sorting: https://www.pyimagesearch.com/2015/04/20/sorting-contours-using-python-and-opencv/
+
+
 # Otzu / washing testing
-# https://link.springer.com/chapter/10.1007/978-3-319-39393-3_4
-# Pearson correlation
+    # https://link.springer.com/chapter/10.1007/978-3-319-39393-3_4
+    # Pearson correlation
     # https://en.wikipedia.org/wiki/Pearson_correlation_coefficient#Sample_size
     # coefficient https://stackabuse.com/calculating-pearson-correlation-coefficient-in-python-with-numpy
-# Tanimotos
+    # Tanimotos
     # https://en.wikipedia.org/wiki/Jaccard_index#:~:text=Tanimoto%20goes%20on%20to%20define,be%20similar%20to%20a%20third.
-# threshold
+    # threshold
     # https://pinetools.com/threshold-image
 
-
-# ground_truth_mask
+    # ground_truth_mask
     # Choose an image
     # Find global threshold with greyscale using pinetools
 
-# SCIPY
+    # SCIPY
     # pearson: https://docs.scipy.org/doc/scipy/reference/generated/scipy.stats.pearsonr.html
 
-
 # TODO
-# refactor Dict(colored_img_1:mask_img_1 ... )
-# refactor accuracy to use numpy
-# https://en.wikipedia.org/wiki/Jaccard_index
+# Consider refactoring paths, images, masked_images etc. into a class
+# Find a way to test cut_suit_rank
+# Find a way to test compariosons
+# Reconsider the way we're testing contours

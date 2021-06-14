@@ -10,16 +10,16 @@ def define_threshold(img, lower, upper):
     return thresh_sample1
 
 
-# def contours_sample1(img_thresh, alg1, alg2):
-#     contours, _ = cv2.findContours(
-#         img_thresh, alg1, alg2)
-#     img_cunts = []
-#     cuntour_area_req = 45000
-#     # contours
-#     for cunt in contours:
-#         if cv2.contourArea(cunt) > cuntour_area_req:
-#             img_cunts.append(np.array(__contour_draw(img_thresh, cunt)))
-#     return img_cunts
+def contours_cut_columns(img_thresh, img_color, alg1, alg2):
+    contours, _ = cv2.findContours(
+        img_thresh, alg1, alg2)
+    img_cunts = []
+    cuntour_area_req = 45000
+    # contours
+    for cunt in contours:
+        if cv2.contourArea(cunt) > cuntour_area_req:
+            img_cunts.append(np.array(__contour_draw(img_color, cunt)))
+    return img_cunts
 
 
 def contour_approximation(alg1, alg2, img_thresh, img_color=None):
@@ -38,8 +38,11 @@ def contour_approximation(alg1, alg2, img_thresh, img_color=None):
             _, _, w, h = cv2.boundingRect(approx)
             pts = np.float32(approx)
             # flattening
-            cunt_flattened.append(flat_image(img_color, pts, w, h))
-
+            if img_color != None:
+                cunt_flattened.append(flat_image(img_color, pts, w, h))
+            else:
+                cunt_flattened.append(flat_image(img_thresh, pts, w, h))
+                
     return cunt_flattened
 
 
