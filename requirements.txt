@@ -1,3 +1,12 @@
+#pythonpath
+    #for windows: add til system variables i environment variables
+    #set PYTHONPATH=%PYTHONPATH%;C:\path\to\your\project\
+
+#if problems with PIL
+    # pip uninstall pillow
+    # pip uninstall PIL
+    # pip install image
+
 # pip install -r requirements.txt
 
 # CDIO Packages

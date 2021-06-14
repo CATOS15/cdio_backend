@@ -36,7 +36,7 @@ def _test_cut_three(solitaire_split):
 
 
 def api_endpoint():    
-    test_img = cv2.imread(g_shared.path_card_full_solitaire_red_background_distinct, cv2.IMREAD_COLOR)
+    test_img = cv2.imread(g_shared.path_card_full_solitaire_red_background, cv2.IMREAD_COLOR)
    
     foo = ml_opencv_cut_columns(test_img)
     print(foo)
