@@ -1,20 +1,18 @@
+import cv2
 import enum
-from image_processing.img_contour import contour_approximation
-from typing import Optional
 import unittest
 import numpy as np
-import cv2
-import image_processing.objects as objects
-import image_processing.img_wash as wash
 from scipy import stats
-import tests.birck.test_objects as tobj
+from typing import Optional
 import image_processing.flows as flows
-import image_processing.debugging as debugging
+import tests.birck.test_objects as tobj
+import image_processing.img_wash as wash
+import image_processing.objects as objects
 import tests.birck.g_tests_shared as shared
+import image_processing.debugging as debugging
+from image_processing.img_contour import contour_approximation
 
 # Birck Wash Tests
-# ideal threshold is suffix on each path
-
 # # Extra: Right now it evaulates some cards to high even if they are identical
 class TestContur(unittest.TestCase):
     otsu_capprox = objects.Flow(cb_wash=wash.otsu_wash, cb_contour=contour_approximation, cb_cut_suit_rank=None, cb_compare_by_template=None)

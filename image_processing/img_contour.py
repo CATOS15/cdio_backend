@@ -38,7 +38,7 @@ def contour_approximation(alg1, alg2, img_thresh, img_color=None):
             _, _, w, h = cv2.boundingRect(approx)
             pts = np.float32(approx)
             # flattening
-            if img_color != None:
+            if img_color.any() != None:
                 cunt_flattened.append(flat_image(img_color, pts, w, h))
             else:
                 cunt_flattened.append(flat_image(img_thresh, pts, w, h))
