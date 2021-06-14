@@ -5,7 +5,7 @@ import json
 # TODO, fejlhåndtering af kolonner
 
 # Model
-model = torch.hub.load('ultralytics/yolov5', 'custom', path='ml_solitaire/yolov5v2/thebest.pt', force_reload=True)
+model = torch.hub.load('ultralytics/yolov5', 'custom', path='ml_solitaire/yolov5v2/thebest.pt')
 model.conf = 0.7
 
 data_solitaire = {
