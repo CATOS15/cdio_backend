@@ -86,16 +86,7 @@ class TemplateType:
         self.contour = contour
 
 
-
-
-
-
-# class Foo:
-#     def __init__(self, minMaxLoc, suit):
-#         self.minMaxLoc = minMaxLoc
-#         self.suit = suit
-
-
+#add slot?
 class Card:
     def __init__(self, suit, rank, suit_threshold, rank_threshold):
         self.suit = suit
