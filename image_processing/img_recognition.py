@@ -14,40 +14,41 @@ import image_processing.flows as flows
     # recognize number
     # recognize suit
 
-# find card outlines
-flow_waste_washed = flows.flow_waste.execute_wash(g_shared.test, cv2.THRESH_BINARY)
+def opencv_flow_waste(waste_color_image):
+    # find card outlines
+    flow_waste_washed = flows.flow_waste.execute_wash(waste_color_image, cv2.THRESH_BINARY)
+    # flow_waste_washed = flows.flow_waste.execute_wash(g_shared.test, cv2.THRESH_BINARY) #works
 
-# cut these outlines
-flow_waste_countours = flows.flow_waste.execute_contour(
-    cv2.RETR_EXTERNAL, cv2.CHAIN_APPROX_SIMPLE, img_thresh=flow_waste_washed, img_color=g_shared.test)
+    # cut these outlines
+    flow_waste_countours = flows.flow_waste.execute_contour(
+        cv2.RETR_EXTERNAL, cv2.CHAIN_APPROX_SIMPLE, img_thresh=flow_waste_washed, img_color=waste_color_image)
 
-# cut suit and number
-washed_images = []
-for i, cunt in enumerate(flow_waste_countours):
-    washed_images.append(flows.flow_waste.execute_wash(cunt, cv2.THRESH_BINARY))
+    # cut suit and number
+    washed_images = []
+    for i, cunt in enumerate(flow_waste_countours):
+        washed_images.append(flows.flow_waste.execute_wash(cunt, cv2.THRESH_BINARY))
 
-debugging.print_results(washed_images, g_shared.path_contours_sp2)
+    # debugging.print_results(washed_images, g_shared.path_contours_sp2)
 
-# cut out images
-flow_waste_cut = flows.flow_waste.execute_cut_suit_rank(
-    washed_images, cv2.RETR_TREE, cv2.CHAIN_APPROX_SIMPLE)
+    # cut out images
+    flow_waste_cut = flows.flow_waste.execute_cut_suit_rank(
+        washed_images, cv2.RETR_TREE, cv2.CHAIN_APPROX_SIMPLE)
 
-debugging.print_waste_cuts(flow_waste_cut)
+    # debugging.print_waste_cuts(flow_waste_cut)
 
-# set to black/white and invert templates
-bin_img = resolution.bin_invert_templates(g_img.g_templates)
+    # set to black/white and invert templates
+    tmpl_bin_img = resolution.bin_invert_templates(g_img.g_templates)
 
-# uses all cards
-# compares all contours of a card with all templates
-# creates a card from best match & global threshold
-results = []
-for i, card in enumerate(flow_waste_cut):
-    results.append(flows.flow_waste.execute_compare_by_template(card, bin_img))
-    # results.append(flows.flow_waste.execute_compare_by_template(card, g_img.g_templates))
+    # uses all cards
+    # compares all contours of a card with all templates
+    # creates a card from best match & global threshold
+    results = []
+    for i, card in enumerate(flow_waste_cut):
+        results.append(flows.flow_waste.execute_compare_by_template(card, tmpl_bin_img))
+    return results
 
-
-for x in results:
-    print(x)
+# for x in results:
+#     print(x)
 
 
 
