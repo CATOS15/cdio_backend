@@ -1,11 +1,13 @@
 import ml_solitaire.yolov5v2.result
+import ml_solitaire.transform720
 from enum import Enum
 import image_processing.img_contour
 import image_processing.img_wash
 import cv2
 import image_processing.g_shared
 # import image_processing.templates.test.full_deck
-import cv2
+
+path_img = "communication_layer/img{}.png"
 
 
 class ImageCardType(Enum):
@@ -44,15 +46,34 @@ def ml_map_alg(dict_images):
         ],
     }
 
-    #run yolo recognition thingy here
 
-    
+
+    #print(dict_images)
+
+    #run yolo recognition thingy here
+    counter = 0
     for img_type, img in dict_images.items():
+        if img_type == ImageCardType.Tableau:
+            for im in img:
+                yellowBG = ml_solitaire.transform720.transform_720(im)
+                cv2.imwrite(path_img.format(counter), yellowBG)
+                counter += 1
+                img = yellowBG
+        else:
+            yellowBG = ml_solitaire.transform720.transform_720(img)
+            cv2.imwrite(path_img.format(counter), yellowBG)
+            counter += 1
+            img = yellowBG
+
+
+    for img_type, img in dict_images.items():
+        #print(img)
         result_set = ml_solitaire.yolov5v2.result.getCardsFromImage(img)
 
-
         if img_type == ImageCardType.Tableau:
-            ml_solitaire.yolov5v2.result.addStackToTableau(result_set, data_solitaire)
+            for col in img:    
+                col_set = ml_solitaire.yolov5v2.result.getCardsFromImage(col)
+                ml_solitaire.yolov5v2.result.addStackToTableau(col_set, data_solitaire)
         elif img_type == ImageCardType.Foundation:
             ml_solitaire.yolov5v2.result.addToFountain(result_set, data_solitaire)
         elif img_type == ImageCardType.Waste:

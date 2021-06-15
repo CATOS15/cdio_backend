@@ -33,6 +33,7 @@ def ml_opencv_cut_columns(image_from_api):
 
     for i, img in enumerate(tableau):
         cv2.imwrite(path_cut_tableau.format(str(i)), img)
+    
 
     # #mapping to algorithm
     solitaire = {comm.ImageCardType.Waste: solitaire_split[0], comm.ImageCardType.Foundation: solitaire_split[1], comm.ImageCardType.Tableau: tableau}
@@ -51,6 +52,11 @@ def _test_cut_three(solitaire_split):
 
 def api_endpoint():
     test_img = cv2.imread(g_shared.path_card_full_solitaire_red_background, cv2.IMREAD_COLOR)
+   
+    foo = ml_opencv_cut_columns(test_img)
+
+    print(foo)
+    #call algo(foo)
     # call flow and receive card object (image_processing/objects.py)
     cv_results = opencv_solution(test_img)
 
