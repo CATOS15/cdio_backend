@@ -21,7 +21,10 @@ def transform_720(img):
 
     #gør input 720 bredde eller højde
     #allerede firkantet
-    if(height==width):
+    if((height < 720) and (width < 720)):
+        scaledimg = image720
+    
+    elif(height==width):
         dimensioner = (720, 720)
         scaledimg = cv2.resize(image720, dimensioner, interpolation = cv2.INTER_AREA)
 
