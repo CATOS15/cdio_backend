@@ -9,18 +9,22 @@ import math
 
 def transform_720(img):
     #dimensions for image
-    image720 = cv2.imread(img)
+    image720 = img
     height = image720.shape[0]
     width = image720.shape[1]
 
     #yellow square image
-    yellow_square_path = 'ml_solitaire\yellow_square.png'
+    yellow_square_path = 'ml_solitaire/yellow_square.png'
     yellow_square = cv2.imread(yellow_square_path)
-    bg_height, bg_width, channels = yellow_square.shape
+    bg_height = yellow_square.shape[0]
+    bg_width = yellow_square.shape[1]
 
     #gør input 720 bredde eller højde
     #allerede firkantet
-    if(height==width):
+    if((height < 720) and (width < 720)):
+        scaledimg = image720
+    
+    elif(height==width):
         dimensioner = (720, 720)
         scaledimg = cv2.resize(image720, dimensioner, interpolation = cv2.INTER_AREA)
 
@@ -57,7 +61,7 @@ def transform_720(img):
     
     return result
 
-transformed = transform_720('ml_solitaire\image_fountain.jpg')
+#transformed = transform_720('ml_solitaire\image_fountain.jpg')
 #cv2.imshow("resized", transformed)
 #cv2.waitKey(0)
 
