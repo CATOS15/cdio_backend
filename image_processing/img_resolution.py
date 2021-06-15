@@ -57,3 +57,4 @@ def bin_invert_templates(g_templates):
         blur = cv2.GaussianBlur(flipped, (5, 5), 0)
         _, th = cv2.threshold(blur, 0, 255, cv2.THRESH_BINARY_INV+cv2.THRESH_OTSU)
         tmpl.img = th
+    return g_templates  
