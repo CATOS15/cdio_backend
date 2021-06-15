@@ -10,11 +10,11 @@ def define_threshold(img, lower, upper):
     return thresh_sample1
 
 
-def contours_cut_columns(img_thresh, img_color, alg1, alg2):
+def contours_cut_columns(alg1, alg2, img_thresh, img_color):
     contours, _ = cv2.findContours(
         img_thresh, alg1, alg2)
     img_cunts = []
-    cuntour_area_req = 45000
+    cuntour_area_req = 42500
     # contours
     for cunt in contours:
         if cv2.contourArea(cunt) > cuntour_area_req:
@@ -29,7 +29,7 @@ def contour_approximation(alg1, alg2, img_thresh, img_color=None):
     contours, _ = cv2.findContours(img_thresh, alg1, alg2)
 
     # Find approximations
-    cuntour_area_req = 45000
+    cuntour_area_req = 42500
     for cunt in contours:
         if cv2.contourArea(cunt) > cuntour_area_req:
             # Find approximation
