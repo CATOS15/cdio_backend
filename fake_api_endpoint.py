@@ -63,7 +63,7 @@ def api_endpoint():
     print(foo)
     #call algo(foo)
     # call flow and receive card object (image_processing/objects.py)
-    cv_results = opencv_solution(test_img)
+    #cv_results = opencv_solution(test_img)
 
     # call ml and receive card object (image_processing/objects.py)
     ml_results = ml_solution(test_img)
