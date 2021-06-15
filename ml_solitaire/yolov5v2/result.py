@@ -2,21 +2,43 @@ import torch
 import pandas
 import json
 import cv2
+import image_processing.objects as obj
 
 # TODO, fejlhåndtering af kolonner
 
 # Model
 model = torch.hub.load('ultralytics/yolov5', 'custom', path='ml_solitaire/yolov5v2/thebest.pt', force_reload=True)
 model.conf = 0.7
+foundation = 'fountains'
+tableau = 'tableau'
+waste = 'waste'
 
 data_solitaire = {
-    'stacks': [
+    tableau: [
     ],
-    'fountains': [
+    foundation: [
     ],
-    'cardpile': [
+    waste: [
     ],
 }
+
+
+def map_img_cards(path):
+    results = model(path)
+    resultsPanda = results.pandas().xyxy[0].to_json(orient="records")
+    resultsJSON = json.loads(resultsPanda)
+
+
+    # s = set()
+    pobjs = []
+    for result in resultsJSON:
+        json_card = result["name"]
+        conf = result["confidence"]
+        rank_suit = get_card_value(json_card)
+        card = obj.Card(rank_suit['suit'], rank_suit['number'], conf, conf)
+        pobjs.append(card)
+    return pobjs
+
 
 
 def getCardsFromImage(path):
@@ -63,6 +85,7 @@ def get_card_value(s):
     elif int(card) > 1 and int(card) < 10:
         return {'number': int(card), 'suit': get_suit_value(suit)}
 
+    
     return -1
 
 
@@ -73,7 +96,7 @@ def addToWaste(cards, solitaire):
 
     for card in cards:
         cardObj = get_card_value(card)
-        solitaire['cardpile'].append(cardObj)
+        solitaire[waste].append(cardObj)
 
 
 def addStackToTableau(cards, solitaire):
@@ -112,6 +135,7 @@ def addToFountain(cards, solitaire):
         counter2 += 1
 
 
+map_img_cards('ml_solitaire/yolov5v2/tableau.jpg')
 # s = getCardsFromImage("ml_solitaire/yolov5v2/tableau.jpg")
 # s2 = getCardsFromImage("ml_solitaire/yolov5v2/fountain2.jpg")
 # s3 = getCardsFromImage("ml_solitaire/yolov5v2/waste.jpg")
