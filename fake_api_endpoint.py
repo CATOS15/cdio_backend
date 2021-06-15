@@ -59,11 +59,14 @@ def api_endpoint():
     test_img = cv2.imread(g_shared.path_card_full_solitaire_red_background_distinct, cv2.IMREAD_COLOR)
     # call opencv and receive card object (image_processing/objects.py)
     cv_results = opencv_solution(test_img)
-    print(cv_results)
+    for x in cv_results[2]:
+        print(x)
+
     # call ml and receive card object (image_processing/objects.py)
     # ml_results = ml_solution(test_img)       
-    # foo = ml_solution(test_img)
-    # print(foo)
+    # ml_results = ml_solution(test_img)
+    # for x in ml_results[2]:
+    #     print(x)
 
     # remake object to algorithm objects
     # call algo
