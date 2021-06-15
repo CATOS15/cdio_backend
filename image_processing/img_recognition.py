@@ -35,14 +35,15 @@ flow_waste_cut = flows.flow_waste.execute_cut_suit_rank(
 debugging.print_waste_cuts(flow_waste_cut)
 
 # set to black/white and invert templates
-resolution.bin_invert_templates(g_img.g_templates)
+bin_img = resolution.bin_invert_templates(g_img.g_templates)
 
 # uses all cards
 # compares all contours of a card with all templates
 # creates a card from best match & global threshold
 results = []
 for i, card in enumerate(flow_waste_cut):
-    results.append(flows.flow_waste.execute_compare_by_template(card, g_img.g_templates))
+    results.append(flows.flow_waste.execute_compare_by_template(card, bin_img))
+    # results.append(flows.flow_waste.execute_compare_by_template(card, g_img.g_templates))
 
 
 for x in results:
