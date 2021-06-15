@@ -41,7 +41,7 @@ class Move:
 #     Fountain(0, suit.CLUBS)
 # ] 
 
-# stacks = [
+# tableau = [
 #     [Card(13, suit.SPADE), Card(12, suit.DIAMOND), Card(11, suit.CLUBS), Card(10, suit.DIAMOND), Card(9, suit.CLUBS)],
 #     [Card(13, suit.CLUBS)],
 #     [Card(11, suit.HEART)],
@@ -51,7 +51,7 @@ class Move:
 #     [None, None, Card(10, suit.SPADE), Card(9, suit.HEART), Card(8, suit.CLUBS), Card(7, suit.HEART)]
 # ]
 
-#cardpile = [Card(7, suit.DIAMOND)]
+#waste = [Card(7, suit.DIAMOND)]
 
 fountains = [
     Fountain(0, suit.DIAMOND),
@@ -59,7 +59,7 @@ fountains = [
     Fountain(0, suit.SPADE),
     Fountain(0, suit.CLUBS)
 ]
-stacks = [
+tableau = [
     [],
     [],
     [],
@@ -68,11 +68,11 @@ stacks = [
     [],
     []
 ]
-cardpile = []
+waste = []
 
 
 
-def rule_move_to_stack(fromCard, toStack):
+def rule_move_to_tableau(fromCard, toStack):
     if len(toStack) == 0:
         if fromCard is not None and fromCard.number == 13:
             return True
@@ -91,39 +91,39 @@ def rule_move_to_fountain(fromCard, fountain):
 
 def append_legit_move(stackMandatory1, stackMandatory2, fromStack, fromStackIndex, toStack, toStackIndex, moves, fromCard, fromCardIndex, messageformat):
     if stackMandatory1 == None or stackMandatory2 == None or fromStack == stackMandatory1 or fromStack == stackMandatory2 or toStack == stackMandatory1 or toStack == stackMandatory2:
-        if(messageformat == "stack_fountain"):
-            moves.append(Move(fromCard, fromCardIndex, fromStack, toStack, "Fra stack("+str(fromStackIndex+1)+") " + str(fromCard.suit) + "(" + str(fromCard.number) + ") til fountain " + str(fromCard.suit)))
-        elif(messageformat == "stack_stack"):
-            moves.append(Move(fromCard, fromCardIndex, fromStack, toStack, "Fra stack("+str(fromStackIndex+1)+") " + str(fromCard.suit) + "(" + str(fromCard.number) + ") til stack(" + str(toStackIndex+1) + ")"))
-        elif(messageformat == "cardpile_stack"):
-            moves.append(Move(fromCard, fromCardIndex, fromStack, toStack, "Fra cardpile " + str(fromCard.suit) + "(" + str(fromCard.number) + ") til stack(" + str(toStackIndex+1) + ")"))
-        elif(messageformat == "cardpile_fountain"):
-            moves.append(Move(fromCard, fromCardIndex, fromStack, toStack, "Fra cardpile " + str(fromCard.suit) + "(" + str(fromCard.number) + ") til fountain " + str(fromCard.suit)))
+        if(messageformat == "tableau_fountain"):
+            moves.append(Move(fromCard, fromCardIndex, fromStack, toStack, "Fra tableau("+str(fromStackIndex+1)+") " + str(fromCard.suit) + "(" + str(fromCard.number) + ") til fountain " + str(fromCard.suit)))
+        elif(messageformat == "tableau_tableau"):
+            moves.append(Move(fromCard, fromCardIndex, fromStack, toStack, "Fra tableau("+str(fromStackIndex+1)+") " + str(fromCard.suit) + "(" + str(fromCard.number) + ") til tableau(" + str(toStackIndex+1) + ")"))
+        elif(messageformat == "waste_tableau"):
+            moves.append(Move(fromCard, fromCardIndex, fromStack, toStack, "Fra waste " + str(fromCard.suit) + "(" + str(fromCard.number) + ") til tableau(" + str(toStackIndex+1) + ")"))
+        elif(messageformat == "waste_fountain"):
+            moves.append(Move(fromCard, fromCardIndex, fromStack, toStack, "Fra waste " + str(fromCard.suit) + "(" + str(fromCard.number) + ") til fountain " + str(fromCard.suit)))
 
 # stackMandatory1 og stackMandatory2 er brugt efter man har foretaget sig et 'move'
-# Det er fordi at når man har foretaget sig et 'move' så er de næste 'moves' der skal udregnes kun ud fra de stacks man har benyttet til det første move
+# Det er fordi at når man har foretaget sig et 'move' så er de næste 'moves' der skal udregnes kun ud fra de tableau man har benyttet til det første move
 def get_moves(stackMandatory1 = None, stackMandatory2 = None): 
     moves = []
-    for fromStackIndex, fromStack in enumerate(stacks):
+    for fromStackIndex, fromStack in enumerate(tableau):
         if len(fromStack) == 0:
             continue
-        for toStackIndex, toStack in enumerate(stacks):
+        for toStackIndex, toStack in enumerate(tableau):
             if fromStack != toStack:
                 for fromCardIndex, fromCard in enumerate(fromStack):
-                    if rule_move_to_stack(fromCard, toStack):
-                        append_legit_move(stackMandatory1, stackMandatory2, fromStack, fromStackIndex, toStack, toStackIndex, moves, fromCard, fromCardIndex, "stack_stack")
+                    if rule_move_to_tableau(fromCard, toStack):
+                        append_legit_move(stackMandatory1, stackMandatory2, fromStack, fromStackIndex, toStack, toStackIndex, moves, fromCard, fromCardIndex, "tableau_tableau")
         for fountainIndex, fountain in enumerate(fountains):
             fromCard = fromStack[len(fromStack)-1]
             if rule_move_to_fountain(fromCard, fountain):
-                append_legit_move(stackMandatory1, stackMandatory2, fromStack, fromStackIndex, fountain, fountainIndex, moves, fromCard, fromCardIndex, "stack_fountain")
-    if len(cardpile) > 0:
-        cardpile_topcard = cardpile[len(cardpile)-1]
-        for toStackIndex, toStack in enumerate(stacks):
-            if rule_move_to_stack(cardpile_topcard, toStack):
-                append_legit_move(stackMandatory1, stackMandatory2, cardpile, -1, toStack, toStackIndex, moves, cardpile_topcard, len(cardpile)-1, "cardpile_stack")
+                append_legit_move(stackMandatory1, stackMandatory2, fromStack, fromStackIndex, fountain, fountainIndex, moves, fromCard, fromCardIndex, "tableau_fountain")
+    if len(waste) > 0:
+        waste_topcard = waste[len(waste)-1]
+        for toStackIndex, toStack in enumerate(tableau):
+            if rule_move_to_tableau(waste_topcard, toStack):
+                append_legit_move(stackMandatory1, stackMandatory2, waste, -1, toStack, toStackIndex, moves, waste_topcard, len(waste)-1, "waste_tableau")
         for fountainIndex, fountain in enumerate(fountains):
-            if rule_move_to_fountain(cardpile_topcard, fountain):
-                append_legit_move(stackMandatory1, stackMandatory2, cardpile, -1, fountain, fountainIndex, moves, cardpile_topcard, len(cardpile)-1, "cardpile_fountain")
+            if rule_move_to_fountain(waste_topcard, fountain):
+                append_legit_move(stackMandatory1, stackMandatory2, waste, -1, fountain, fountainIndex, moves, waste_topcard, len(waste)-1, "waste_fountain")
     return moves
 
 def _100_points(move):
@@ -148,8 +148,8 @@ def _90_points(move):
     return 0
 
 def _70_points(move):
-    #Ryk konge fra cardpile til tom position
-    if len(cardpile) > 0 and cardpile[len(cardpile)-1] == move.fromCard and move.fromCard.number == 13 and len(move.toStack) == 0:
+    #Ryk konge fra waste til tom position
+    if len(waste) > 0 and waste[len(waste)-1] == move.fromCard and move.fromCard.number == 13 and len(move.toStack) == 0:
         return 75
     return 0
 
@@ -160,16 +160,16 @@ def _50_points(move):
     return 0
 
 def _45_points(move):
-    #Rykke et kort fra cardpile til en stack på bordet
-    if len(cardpile) > 0 and cardpile[len(cardpile)-1] == move.fromCard and type(move.toStack) is list:
+    #Rykke et kort fra waste til en tableau på bordet
+    if len(waste) > 0 and waste[len(waste)-1] == move.fromCard and type(move.toStack) is list:
         return 45
     return 0
 
 def _25_points(move):
     #Frier en plads så en konge kan rykke der hen
     alreadyEmtpy = False
-    for stack in stacks:
-        if len(stack) == 0:
+    for column in tableau:
+        if len(column) == 0:
             alreadyEmtpy = True
             break
     if move.fromCardIndex == 0 and move.fromCard.number != 13 and len(move.toStack) > 0 and not alreadyEmtpy:
@@ -182,58 +182,46 @@ def _10_points(move):
         return 10
     return 0
 
-# def _2_points(move):
-#     #Frier en plads så en konge kan rykke der hen (Dårligt da denne kun bliver ramt hvis der allerede er en tom plads)
-#     if move.fromCardIndex == 0 and move.fromCard.number != 13 and len(move.toStack) > 0:
-#         return 2
-#     return 0
-    
-# def _1_points(move):
-#     #Absolut ubrugelig. Ryk konge fra tomt felt til anden tomt felt
-#     if move.fromCardIndex == 0 and move.fromCard.number == 13 and len(move.toStack) == 0: 
-#         return 1
-#     return 0
-
-def simulate_newStacks(move):
-    global cardpile, stacks, fountains
+def simulate_newTableau(move):
+    global waste, tableau, fountains
     cardMoved = None
 
-    newStacks = [None, None]
+    newTableau = [None, None]
 
     fromIndex = -1
 
-    if move.fromStack == cardpile:
-        cardMoved = cardpile[move.fromCardIndex:]
-        cardpile = cardpile[:move.fromCardIndex]
-        newStacks[0] = cardpile
+    if move.fromStack == waste:
+        cardMoved = waste[move.fromCardIndex:]
+        waste = waste[:move.fromCardIndex]
+        newTableau[0] = waste
         fromIndex = 999
     else:
-        for index, stack in enumerate(stacks):
-            if(stack == move.fromStack):
-                cardMoved = stack[move.fromCardIndex:]
-                stacks[index] = stack[:move.fromCardIndex]
-                newStacks[0] = stacks[index]
+        for index, column in enumerate(tableau):
+            if(column == move.fromStack):
+                cardMoved = column[move.fromCardIndex:]
+                tableau[index] = column[:move.fromCardIndex]
+                newTableau[0] = tableau[index]
                 fromIndex = index
         for index, fountain in enumerate(fountains):
             if(fountain == move.fromStack):
                 cardMoved = fountain[move.fromCardIndex:]
                 fountains[index] = fountain[:move.fromCardIndex]
-                newStacks[0] = fountains[index]
+                newTableau[0] = fountains[index]
                 fromIndex = index
 
     if fromIndex == -1:
         print("FEJL. Ingen index at rykke kort til??")
 
-    for index, stack in enumerate(stacks):
-        if(stack == move.toStack and cardMoved != None and index != fromIndex):
-            stacks[index] = move.toStack + cardMoved
-            newStacks[1] = stacks[index]
+    for index, column in enumerate(tableau):
+        if(column == move.toStack and cardMoved != None and index != fromIndex):
+            tableau[index] = move.toStack + cardMoved
+            newTableau[1] = tableau[index]
     for index, fountain in enumerate(fountains):
         if(fountain == move.toStack and index != fromIndex):
             fountains[index].count = fountains[index].count + 1
-            newStacks[1] = fountains[index]
+            newTableau[1] = fountains[index]
 
-    return newStacks
+    return newTableau
 
 def get_moves_ordered(moves):
     moves_ordered = []
@@ -260,13 +248,13 @@ def get_moves_ordered(moves):
     return moves_ordered
 
 def set_best_move():
-    global cardpile, stacks, fountains
+    global waste, tableau, fountains
     bestMove = {"point": 0, "move": None, "numberOfMoves": 0}
     moves_ordered1 = get_moves_ordered(get_moves())
 
     for move in moves_ordered1: 
-        newStacks = simulate_newStacks(move["move"])
-        moves_ordered2 = get_moves_ordered(get_moves(newStacks[0], newStacks[1]))
+        newTableau = simulate_newTableau(move["move"])
+        moves_ordered2 = get_moves_ordered(get_moves(newTableau[0], newTableau[1]))
 
         combinedpoint = move["point"]
         if len(moves_ordered2) > 0:
@@ -289,8 +277,8 @@ def set_best_move():
                 bestMove["numberOfMoves"] = 1
 
         fountains = copy.copy(originalFountains)
-        stacks = copy.copy(originalStacks)
-        cardpile = copy.copy(originalCardpile)
+        tableau = copy.copy(originalTableau)
+        waste = copy.copy(originalWaste)
 
     if bestMove["move"] == None:
         return None
@@ -300,7 +288,7 @@ def set_best_move():
 
 
 def run_algorithm(data_solitaire):
-    global originalFountains, originalStacks, originalCardpile, stacks, fountains, cardpile
+    global originalFountains, originalTableau, originalWaste, tableau, fountains, waste
 
     fountains = [
         Fountain(0, suit.DIAMOND),
@@ -308,7 +296,7 @@ def run_algorithm(data_solitaire):
         Fountain(0, suit.SPADE),
         Fountain(0, suit.CLUBS)
     ]
-    stacks = [
+    tableau = [
         [],
         [],
         [],
@@ -317,15 +305,15 @@ def run_algorithm(data_solitaire):
         [],
         []
     ]
-    cardpile = []
+    waste = []
 
     index = 0
-    for data_cards in data_solitaire['stacks']:
+    for data_cards in data_solitaire['tableau']:
         for data_card in data_cards:
             if data_card is None:
-                stacks[index].append(None)
+                tableau[index].append(None)
             else:
-                stacks[index].append(Card(data_card['number'], suit(data_card['suit'])))
+                tableau[index].append(Card(data_card['number'], suit(data_card['suit'])))
         index += 1
 
     index = 0
@@ -334,13 +322,13 @@ def run_algorithm(data_solitaire):
         index += 1
 
     index = 0
-    for data_cardpile in data_solitaire['cardpile']:
-        cardpile.append(Card(data_cardpile['number'], suit(data_cardpile['suit'])))
+    for data_waste in data_solitaire['waste']:
+        waste.append(Card(data_waste['number'], suit(data_waste['suit'])))
         index += 1
 
     originalFountains = copy.copy(fountains)
-    originalStacks = copy.copy(stacks)
-    originalCardpile = copy.copy(cardpile)
+    originalTableau = copy.copy(tableau)
+    originalWaste = copy.copy(waste)
 
     bestMove = set_best_move()
 
