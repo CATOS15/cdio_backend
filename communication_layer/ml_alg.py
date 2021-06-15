@@ -54,24 +54,30 @@ def ml_map_alg(dict_images):
     counter = 0
     for img_type, img in dict_images.items():
         if img_type == ImageCardType.Tableau:
+            changed_img = []
             for im in img:
                 yellowBG = ml_solitaire.transform720.transform_720(im)
-                cv2.imwrite(path_img.format(counter), yellowBG)
-                counter += 1
-                img = yellowBG
+                #cv2.imwrite(path_img.format(counter), yellowBG)
+                #counter += 1
+                changed_img.append(yellowBG)
+                # im = yellowBG
+            dict_images[img_type] = changed_img
         else:
             yellowBG = ml_solitaire.transform720.transform_720(img)
-            cv2.imwrite(path_img.format(counter), yellowBG)
-            counter += 1
-            img = yellowBG
-
+            #cv2.imwrite(path_img.format(counter), yellowBG)
+            #counter += 1
+            dict_images[img_type] = yellowBG
 
     for img_type, img in dict_images.items():
         #print(img)
-        result_set = ml_solitaire.yolov5v2.result.getCardsFromImage(img)
+        counter += 1
+        if img_type is not ImageCardType.Tableau:
+            result_set = ml_solitaire.yolov5v2.result.getCardsFromImage(img)
 
         if img_type == ImageCardType.Tableau:
             for col in img:    
+                #cv2.imwrite(path_img.format(counter), col)
+                counter += 1
                 col_set = ml_solitaire.yolov5v2.result.getCardsFromImage(col)
                 ml_solitaire.yolov5v2.result.addStackToTableau(col_set, data_solitaire)
         elif img_type == ImageCardType.Foundation:

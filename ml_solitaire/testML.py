@@ -6,7 +6,7 @@ import cv2
 # TODO
 
 # Model
-model = torch.hub.load('ultralytics/yolov5', 'custom', path='ml_solitaire/yolov5v2/thebest.pt')
+model = torch.hub.load('ultralytics/yolov5', 'custom', path='ml_solitaire/yolov5v2/thebest.pt', source='local')
 model.conf = 0.7
 
 data_solitaire = {
@@ -110,6 +110,9 @@ def addToFountain(cards, solitaire):
             solitaire['fountains'].append({'number': 0, 'suit': counter2})
         counter2 += 1
 
+img = cv2.imread("oink.png")
+s = getCardsFromImage(img)
+print(s)
 
 # s = getCardsFromImage("ml_solitaire/yolov5v2/tableau.jpg")
 # s2 = getCardsFromImage("ml_solitaire/yolov5v2/fountain2.jpg")
