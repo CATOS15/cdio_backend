@@ -1665,24 +1665,24 @@ body {
                     }
                 }
 
-                function transformToStacks(tabs, sizes){
-                    var stacks = [];
+                function transformToTableau(tabs, sizes){
+                    var tableau = [];
 
                     sizeIndex = 0;
                     tabs.forEach(tab => {
-                        var stack = [];
+                        var column = [];
                         for(var i = tab.length;i > 0;i--){
                             if(i > tab.length - sizes[sizeIndex]){
-                                stack.unshift({number: getNumberFromLetter(tab[i-1][0]), suit: getSuitFromWord(tab[i-1][1])});
+                                column.unshift({number: getNumberFromLetter(tab[i-1][0]), suit: getSuitFromWord(tab[i-1][1])});
                             }
                             else{
-                                stack.unshift(null);
+                                column.unshift(null);
                             }
                         }
-                        stacks.push(stack);
+                        tableau.push(column);
                         sizeIndex++;
                     });
-                    return stacks;
+                    return tableau;
                 }
 
                 //!!!
@@ -1696,7 +1696,7 @@ body {
                 //         {number: 1, suit: SPADE},
                 //         {number: 1, suit: CLUBS}
                 //     ],
-                //     stacks: [
+                //     tableau: [
                 //         [{number: 3, suit: CLUBS}, {number: 2, suit: DIAMOND}], 
                 //         [{number: 5, suit: DIAMOND}],
                 //         [{number: 3, suit: SPADE}],
@@ -1705,14 +1705,14 @@ body {
                 //         [],
                 //         []
                 //     ],
-                //     cardpile: [
+                //     waste: [
                 //         {number: 7, suit: DIAMOND}
                 //     ]
                 // };
                 
-                cardpile = [];
+                waste = [];
                 if(globalTable.waste.length !== 0){
-                    cardpile = [
+                    waste = [
                         {number: getNumberFromLetter(globalTable.waste[globalTable.waste.length-1][0]), suit: getSuitFromWord(globalTable.waste[globalTable.waste.length-1][1])}
                     ]
                 }
@@ -1738,8 +1738,8 @@ body {
                         {number: fountain_spade_number, suit: SPADE},
                         {number: fountain_clubs_number, suit: CLUBS}
                     ],
-                    stacks: transformToStacks(globalTable.tab, sizes),
-                    cardpile: cardpile
+                    tableau: transformToTableau(globalTable.tab, sizes),
+                    waste: waste
                 }
 
 

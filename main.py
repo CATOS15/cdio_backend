@@ -72,7 +72,7 @@ def algtestpost():
     else:
         movemessage = str(move)
 
-    location = "stack"
+    location = "tableau"
     if move and type(move.toStack) is Fountain:
         location = "fountain"
 
@@ -81,7 +81,7 @@ def algtestpost():
 
 def getAlgData():
     data_solitaire = {
-        'stacks': [
+        'tableau': [
             [
                 {'number': 8, 'suit': 3}
             ],
@@ -110,7 +110,7 @@ def getAlgData():
             {'number': 0, 'suit': 3},
             {'number': 1, 'suit': 4}
         ],
-        'cardpile': [
+        'waste': [
             {'number': 8, 'suit': 2}
         ],
     }
