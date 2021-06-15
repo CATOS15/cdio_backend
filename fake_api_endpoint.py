@@ -10,17 +10,15 @@ path_cut_tableau = "images/tmp/cut_tableau/col_{}.png"
 path_cut_three = "images/tmp/cut_in_three/cut_{}.png"
 
 
+# 0 = waste, 1 = foundation, 2 = tableau
 def opencv_solution(image_from_api):
     solitaire_split = flows.flow_ml_subdivide_tableau.cb_img_cut(image_from_api)
     # get each card from tableau (later)
     # get each card from foundation (later)
     # get each card from waste
-    cards_opencv = imp.opencv_flow_waste(solitaire_split[0])
-    return cards_opencv
-   
-    # return best bet as card
-    # return None
-    # 0 = waste, 1 = foundation, 2 = tableau
+    waste_results = imp.opencv_flow_waste(solitaire_split[0])
+    # tableau_results = imp.opencv_flow_tableau(solitaire_split[1])
+    return (waste_results, None, None)
 
 
 def ml_opencv_cut_columns(image_from_api):
