@@ -5,6 +5,11 @@
 #visual studio code
 #
 #
+
+#ignore weight for machine learning
+ml_solitaire/yolov5v2/thebest.pt
+
+
 .image_processing/templates/card/result/*
 image_processing/templates/card/result/*
 # created by https://www.toptal.com/developers/gitignore/api/visualstudiocode
