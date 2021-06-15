@@ -17,9 +17,7 @@ def opencv_solution(image_from_api):
     # get each card from waste
     cards_opencv = imp.opencv_flow_waste(solitaire_split[0])
     return cards_opencv
-    # call flow and receive procentage / card expected
-    # call ml and receive procentage / card expected
-    # compare best result
+   
     # return best bet as card
     # return None
     # 0 = waste, 1 = foundation, 2 = tableau
@@ -53,8 +51,16 @@ def _test_cut_three(solitaire_split):
 
 def api_endpoint():
     test_img = cv2.imread(g_shared.path_card_full_solitaire_red_background, cv2.IMREAD_COLOR)
+    # call flow and receive card object (image_processing/objects.py)
     cv_results = opencv_solution(test_img)
+
+    # call ml and receive card object (image_processing/objects.py)
     # ml_results = ml_solution(test_img)
+    
+    
+    # compare best result
+    
+    
     # foo = ml_opencv_cut_columns(test_img)
     # print(foo)
     # call algo(foo)
