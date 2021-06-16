@@ -9,6 +9,8 @@ import image_processing.flows as flows
 import image_processing.img_recognition as imp
 import image_processing.objects as obj
 import image_processing.debugging as debugging
+import image_processing.img_resolution as resolution
+import image_processing.g_img as g_img
 
 
 path_cut_tableau = "images/tmp/cut_tableau/col_{}.png"
@@ -23,11 +25,13 @@ path_cut_three = "images/tmp/cut_in_three/cut_{}.png"
 def opencv_solution(image_from_api):
     solitaire_split = flows.flow_ml_subdivide_tableau.cb_img_cut(image_from_api)
     # debugging.print_results(solitaire_split, g_shared.path_contours_sp4)
+        # set to black/white and invert templates
+    tmpl_bin_img = resolution.bin_invert_templates(g_img.g_templates)
     # error when making grey-templates for more than 1 tableau
-    # waste_results = imp.opencv_flow_waste(solitaire_split[0]) 
-    # foundation_results = imp.opencv_flow_tableau(solitaire_split[1])
-    tableau_results = imp.opencv_flow_tableau(solitaire_split[2])
-    return (None, None, tableau_results)
+    waste_results = imp.opencv_flow_waste(solitaire_split[0], tmpl_bin_img) 
+    foundation_results = imp.opencv_flow_waste(solitaire_split[1], tmpl_bin_img)
+    tableau_results = imp.opencv_flow_tableau(solitaire_split[2], tmpl_bin_img)
+    return (waste_results, foundation_results, tableau_results)
 
 
 def ml_solution(image_from_api):
