@@ -105,7 +105,7 @@ def api_endpoint():
         print(x)
 
     
-    ml_solution(test_img)
+    # ml_solution(test_img)
     # call ml and receive card object (image_processing/objects.py)
     # ml_results = ml_solution(test_img)
     # for x in ml_results[2]:
