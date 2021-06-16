@@ -55,12 +55,12 @@ def opencv_flow_tableau(tableau_color_img):
 
     debugging.print_results(washed_images, g_shared.path_contours_sp2)
 
-    tmpl_bin_img = resolution.bin_invert_templates(g_img.g_templates)
+    tmpl_bin_img = resolution.bin_invert_templates(g_img.g_templates)  #err here??
 
     flow_tableau_cut = flows.opencv_flow_tableau.execute_cut_suit_rank(
         washed_images, cv2.RETR_TREE, cv2.CHAIN_APPROX_SIMPLE)
 
-    # debugging.print_waste_cuts(flow_tableau_cut)
+    debugging.print_waste_cuts(flow_tableau_cut)
 
     results = []
     for i, card in enumerate(flow_tableau_cut):

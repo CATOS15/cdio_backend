@@ -62,8 +62,7 @@ def cut_7_images(img):
     #dimensions for image
     height = img.shape[0]
     width = img.shape[1]
-    heightratio = 1/3 #hvor meget plads der er i toppen af linjegrided
-
+    heightratio = 7/24 #1/3, 7/24 or 1/4
     #cropped image *zones
     top_height = math.floor(height*1/3)
 
