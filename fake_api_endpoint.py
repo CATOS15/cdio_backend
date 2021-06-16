@@ -1,4 +1,5 @@
 import enum
+from image_processing.img_compare import compare
 from ml_solitaire.yolov5v2.result import map_img_cards
 import cv2
 import ml_solitaire.cut_image as ml_sol
@@ -70,7 +71,8 @@ def ml_solution(image_from_api):
 #compare ml and opencv and return best solution
 def compare_solutions(opencv_solution, ml_solution, type):
     if type == comm.ImageCardType.Tableau:
-        return None #not implemented yet
+        return ml_solution
+        # return None #not implemented yet
     else:
         cards = []
         for i, ml_card in enumerate(ml_solution):
@@ -102,16 +104,25 @@ def api_endpoint():
     
     # call opencv and receive card object (image_processing/objects.py)
     cv_results = opencv_solution(test_img)
-    for x in cv_results[2]:
-        print(x)
-
-    test_img_ml = cv2.imread(g_shared.path_card_full_solitaire_black_clean_background, cv2.IMREAD_COLOR)
-    ml_solution(test_img_ml)
-    # call ml and receive card object (image_processing/objects.py)
-    # ml_results = ml_solution(test_img)
-    # for x in ml_results[2]:
+    # for x in cv_results[2]:
     #     print(x)
 
+    
+    # call ml and receive card object (image_processing/objects.py)
+    ml_results = ml_solution(test_img)
+    # for x in ml_results[2]:
+    #     print(x)
+    
+    # best_waste = compare_solutions(cv_results[0], ml_results[0], comm.ImageCardType.Waste)
+    # best_foundation = compare_solutions(cv_results[1], ml_results[1], comm.ImageCardType.Foundation)
+    # best_tableau = compare_solutions(cv_results[2], ml_results[2], comm.ImageCardType.Tableau)
+    solitaire_alg = {}
+    
+    solitaire_alg['waste'] = comm.map_opencv_alg(cv_results[0], comm.ImageCardType.Waste)
+    solitaire_alg['foundation'] = comm.map_opencv_alg(cv_results[1], comm.ImageCardType.Foundation)
+    solitaire_alg['tableau'] = comm.map_opencv_alg(ml_results[2], comm.ImageCardType.Tableau)
+    
+    print(solitaire_alg)
     # remake object to algorithm objects
     # call algo
 
