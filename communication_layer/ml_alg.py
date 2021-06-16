@@ -58,6 +58,8 @@ def map_opencv_alg(solution, type):
         for x in range(1, 5):
             found_card = False
             for card in solution:
+                if card.suit == None:
+                    continue
                 if card.suit.value == x:
                     json_card = _convert_cardobj_alg(card)
                     if json_card == None:
@@ -69,10 +71,14 @@ def map_opencv_alg(solution, type):
             if found_card == False:
                 alg_card = _foundation_set_none(x)
                 converted_to_alg.append(alg_card)
-      
-    if type == ImageCardType.Tableau:
-        print(solution)
 
+    if type == ImageCardType.Tableau:        
+        for col in solution:
+            column_arr = []
+            for card in col:
+                json_card = _convert_cardobj_alg(card)
+                column_arr.append(json_card)
+            converted_to_alg.append(column_arr)
     return converted_to_alg
 # def map_ml_alg(solution, type):
 #     return None

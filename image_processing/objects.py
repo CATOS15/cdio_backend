@@ -126,4 +126,4 @@ class Card:
 
 
     def __hash__(self):
-        return hash(('suit', self.suit, 'rank', self.rank))
+        return hash(('suit', self.suit,'rank', self.rank))

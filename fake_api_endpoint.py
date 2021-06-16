@@ -12,6 +12,8 @@ import image_processing.objects as obj
 import image_processing.debugging as debugging
 import image_processing.img_resolution as resolution
 import image_processing.g_img as g_img
+import json
+import algorithm.image_algorithm as alg
 
 
 path_cut_tableau = "images/tmp/cut_tableau/col_{}.png"
@@ -100,7 +102,7 @@ def _test_cut_three(solitaire_split):
 def api_endpoint():
     # test_img = cv2.imread(g_shared.path_card_full_solitaire_red_background_distinct, cv2.IMREAD_COLOR)
     # test_img = cv2.imread(g_shared.path_card_full_solitaire_red_background, cv2.IMREAD_COLOR)
-    test_img = cv2.imread(g_shared.path_card_full_solitaire_red_background, cv2.IMREAD_COLOR)
+    test_img = cv2.imread(g_shared.path_card_full_solitaire_black_clean_background, cv2.IMREAD_COLOR)
     
     # call opencv and receive card object (image_processing/objects.py)
     cv_results = opencv_solution(test_img)
@@ -120,13 +122,13 @@ def api_endpoint():
     solitaire_alg = {}
     
     solitaire_alg['waste'] = comm.map_opencv_alg(cv_results[0], comm.ImageCardType.Waste)
-    solitaire_alg['foundation'] = comm.map_opencv_alg(cv_results[1], comm.ImageCardType.Foundation)
-    # solitaire_alg['tableau'] = comm.map_opencv_alg(ml_results[2], comm.ImageCardType.Tableau)
+    solitaire_alg['fountains'] = comm.map_opencv_alg(cv_results[1], comm.ImageCardType.Foundation)
+    solitaire_alg['tableau'] = comm.map_opencv_alg(ml_results[2], comm.ImageCardType.Tableau)
     
-    print(solitaire_alg)
-    # remake object to algorithm objects
-    # call algo
-
+    # solitaire_json = json.dumps(solitaire_alg)
+    # print(alg.run_algorithm(solitaire_json))
+    bestmove = alg.run_algorithm(solitaire_alg)
+    print(bestmove["move"].description)
 
 
 api_endpoint()

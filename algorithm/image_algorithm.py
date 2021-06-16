@@ -366,5 +366,5 @@ def run_algorithm(data_solitaire):
         bestMove = {"move": Move(None,None,None,None,"")}
         bestMove["move"].description = "Træk kort"
         bestMove["move"].drawCard = True
-    print(bestMove)
+    # print(bestMove)
     return bestMove

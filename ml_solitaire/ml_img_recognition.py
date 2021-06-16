@@ -1,3 +1,4 @@
+from image_processing.g_img import Ranks
 import image_processing.flows as flows
 import image_processing.debugging as debugging
 import ml_solitaire.transform720 as tf720
@@ -19,7 +20,10 @@ def ml_flow_waste(waste_color_img):
         waste_cards.append(map_img_cards(image))
 
     # Check for duplicate
-    waste_result = list(set(waste_cards))
+    waste_no_duplicates = remove_duplicates(waste_cards)
+
+    # Sort cards
+    waste_result = sort_cards(waste_no_duplicates)
 
     return waste_result
 
@@ -39,7 +43,10 @@ def ml_flow_foundation(foundation_color_img):
         foundation_cards.append(map_img_cards(image))
 
     # Check for duplicate
-    foundation_result = list(set(foundation_cards))
+    foundation_no_duplicates = remove_duplicates(foundation_cards)
+
+    # Sort cards
+    foundation_result = sort_cards(foundation_no_duplicates)
 
     return foundation_result
 
@@ -59,8 +66,32 @@ def ml_flow_tableau(tableau_color_img):
        tableau_cards.append(map_img_cards(image))
 
     # Check for duplicate
-    s = set(tableau_cards)
-    tableau_result = list(s)
+    tableau_no_duplicates = remove_duplicates(tableau_cards)
+
+    # Sort cards
+    tableau_result = sort_cards(tableau_no_duplicates)
 
     return tableau_result
+
+
+
+def remove_duplicates(cards):
+    card_result = []
+
+    for column in cards:
+        card_result.append(list(set(column)))
+
+    return card_result
+
+
+def sort_cards(cards):
+    card_result = []
+
+    for column in cards:
+        card_result.append(sorted(column, key=lambda x: x.rank.value, reverse=True))
+
+    return card_result
+
+
+
 

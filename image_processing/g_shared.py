@@ -64,6 +64,8 @@ path_card_full_solitaire_red_background_distinct = 'images/slim_fit/full_solitai
 path_testimage724_1506 = 'images/slim_fit/testimage724_1506.png'
 path_card_full_solitaire_black_background = 'images/slim_fit/full_solitaire_black_background.png'
 path_card_full_solitaire_black_clean_background = 'images/slim_fit/full_solitaire_black_clean_background.png'
+path_card_full_solitaire_big_black_column1 = 'images/slim_fit/full_solitaire_big_black_column1.png'
+path_card_full_solitaire_big_black_column2 = 'images/slim_fit/full_solitaire_big_black_column2.png'
 
 
 
