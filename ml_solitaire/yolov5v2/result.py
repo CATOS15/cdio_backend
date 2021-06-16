@@ -55,14 +55,21 @@ def getCardsFromImage(path):
 
 
 def get_suit_value(s):
-    if s == 'd':
+    if s == 'c':
         return 1
-    elif s == 'h':
+    elif s == 'd':
         return 2
-    elif s == 's':
+    elif s == 'h':
         return 3
     else:
         return 4
+
+
+    # class Suits(Enum):
+    # CLUB = 1
+    # DIAMOND = 2
+    # HEART = 3
+    # SPADE = 4
 
 
 def get_card_value(s):

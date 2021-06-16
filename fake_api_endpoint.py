@@ -34,30 +34,31 @@ def ml_solution(image_from_api):
     # Split input image in three
     solitaire_split = flows.flow_ml_subdivide_tableau.cb_img_cut(image_from_api)
     
+    # Card recogniztion on each fraction (waste, foundation and tableau)
     waste_results = ml_imp.ml_flow_waste(solitaire_split[0])
     foundation_results = ml_imp.ml_flow_foundation(solitaire_split[1])
     tableau_results = ml_imp.ml_flow_tableau(solitaire_split[2]) 
 
-    print("-----waste:-----")
-    for column in waste_results:
-        print('[', end = '')
-        for card in column:
-            print(card)
-        print(']')
+    # print("-----waste:-----")
+    # for column in waste_results:
+    #     print('[', end = '')
+    #     for card in column:
+    #         print(card)
+    #     print(']')
 
-    print("-----foundation:-----")
-    for column in foundation_results:
-        print('[', end = '')
-        for card in column:
-            print(card)
-        print(']')
+    # print("-----foundation:-----")
+    # for column in foundation_results:
+    #     print('[', end = '')
+    #     for card in column:
+    #         print(card)
+    #     print(']')
 
-    print("-----tableau:-----")
-    for column in tableau_results:
-        print('[', end = '')
-        for card in column:
-            print(card)
-        print(']')
+    # print("-----tableau:-----")
+    # for column in tableau_results:
+    #     print('[', end = '')
+    #     for card in column:
+    #         print(card)
+    #     print(']')
 
     return (waste_results,foundation_results,tableau_results)
 
@@ -93,15 +94,15 @@ def _test_cut_three(solitaire_split):
 def api_endpoint():
     # test_img = cv2.imread(g_shared.path_card_full_solitaire_red_background_distinct, cv2.IMREAD_COLOR)
     # test_img = cv2.imread(g_shared.path_card_full_solitaire_red_background, cv2.IMREAD_COLOR)
-    test_img = cv2.imread(g_shared.path_card_full_solitaire_black_background, cv2.IMREAD_COLOR)
+    test_img = cv2.imread(g_shared.path_card_full_solitaire_red_background, cv2.IMREAD_COLOR)
     
     # call opencv and receive card object (image_processing/objects.py)
     cv_results = opencv_solution(test_img)
     for x in cv_results[2]:
         print(x)
 
-    
-    ml_solution(test_img)
+    test_img_ml = cv2.imread(g_shared.path_card_full_solitaire_black_clean_background, cv2.IMREAD_COLOR)
+    ml_solution(test_img_ml)
     # call ml and receive card object (image_processing/objects.py)
     # ml_results = ml_solution(test_img)
     # for x in ml_results[2]:

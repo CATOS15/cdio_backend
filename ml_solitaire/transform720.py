@@ -58,8 +58,10 @@ def transform_720(img):
 
     # cv2.imshow('CENTERED', result)
     # cv2.waitKey(0)
-    
-    return result
+
+
+    return cv2.cvtColor(result, cv2.COLOR_BGR2RGB)
+
 
 #transformed = transform_720('ml_solitaire\image_fountain.jpg')
 #cv2.imshow("resized", transformed)
