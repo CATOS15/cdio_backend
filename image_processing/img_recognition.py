@@ -6,13 +6,6 @@ import image_processing.img_resolution as resolution
 import image_processing.debugging as debugging
 import image_processing.flows as flows
 
-# Waste flow
-    # wash 
-    # contour 
-    # wash2 
-    # cut appropriately suit and number
-    # recognize number
-    # recognize suit
 
 def opencv_flow_waste(waste_color_image):
     # find card outlines
@@ -47,18 +40,42 @@ def opencv_flow_waste(waste_color_image):
         results.append(flows.flow_waste.execute_compare_by_template(card, tmpl_bin_img))
     return results
 
-# for x in results:
-#     print(x)
+
+def opencv_flow_tableau(tableau_color_img):
+    flow_tableau_washed = flows.opencv_flow_tableau.execute_wash(tableau_color_img, cv2.THRESH_BINARY)
+
+    # cut these outlines
+    flow_tableau_countours = flows.opencv_flow_tableau.execute_contour(
+        alg1=cv2.RETR_EXTERNAL, alg2=cv2.CHAIN_APPROX_SIMPLE, img_thresh=flow_tableau_washed, img_color=tableau_color_img)
+
+    debugging.print_results(flow_tableau_countours, g_shared.path_contours_sp1)
+    washed_images = []
+    for i, cunt in enumerate(flow_tableau_countours):
+        washed_images.append(flows.flow_waste.execute_wash(cunt, cv2.THRESH_BINARY))
+
+    debugging.print_results(washed_images, g_shared.path_contours_sp2)
+
+    tmpl_bin_img = resolution.bin_invert_templates(g_img.g_templates)
+
+    flow_tableau_cut = flows.opencv_flow_tableau.execute_cut_suit_rank(
+        washed_images, cv2.RETR_TREE, cv2.CHAIN_APPROX_SIMPLE)
+
+    # debugging.print_waste_cuts(flow_tableau_cut)
+
+    results = []
+    for i, card in enumerate(flow_tableau_cut):
+        results.append(flows.opencv_flow_tableau.execute_compare_by_template(card, tmpl_bin_img))
+    return results
 
 
 
-
-# TODO
-# WASTE
-    #Create Integration Test for Waste
-        #Create unit test for each algo in Waste
-        #Create Images for each unit test in waste (to compare)
-        
+# Waste flow
+    # wash
+    # contour
+    # wash2
+    # cut appropriately suit and number
+    # recognize number
+    # recognize suit
 
 # Notes
     # GaussianBlur
@@ -81,4 +98,3 @@ def opencv_flow_waste(waste_color_image):
 # cv2.imshow("flow waste washed", resize_image(flow_waste_washed))
 # cv2.waitKey(0)
 # print(Path(os.getcwd(), path_card_waste))
-

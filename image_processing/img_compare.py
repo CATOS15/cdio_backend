@@ -6,6 +6,7 @@ import image_processing.g_img as g_img
 import image_processing.img_resolution as resolution
 import image_processing.objects as objects
 
+
 # Ways to compute euclidian kernel w. Original Image
 # cv2.TM_CCOEFF
 # cv2.TM_CCOEFF_NORMED  # this works best so far
@@ -22,7 +23,7 @@ def compare_ranksuit(card, g_templates):
 
     for tmpl in g_templates:
         for _, cunt in enumerate(card[cut_suit_rank.suits_numbers]):
-            rzimage, rztemplate = resolution.ratio_img_resolution(cunt, tmpl.img)
+            rzimage, rztemplate = resolution.ratio_img_resolution2(cunt, tmpl.img)
             match = cv2.matchTemplate(
                 rzimage, rztemplate, template)
             min_val, max_val, min_loc, max_loc = cv2.minMaxLoc(match)

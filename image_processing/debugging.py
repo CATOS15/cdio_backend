@@ -3,6 +3,7 @@ import image_processing.g_shared as g_shared
 # from g_shared import path_tmpl_birck_rank_bin_inv
 # from g_shared import path_contours_sp3
 
+count_err = 0
 
 def resize_image(img):
     scale_percent = 10  # percent of original size
@@ -57,3 +58,4 @@ def print_waste_cuts(flow_waste_cuts):
 
     # if tmpl_card.type == CardType.RANK:
     #     tmpl_bin_inv(tmpl_card.img, path_tmpl_birck_rank_bin_inv, tmpl_card.value.name)
+
