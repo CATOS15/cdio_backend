@@ -7,7 +7,7 @@ import image_processing.debugging as debugging
 import image_processing.flows as flows
 
 
-def opencv_flow_waste(waste_color_image):
+def opencv_flow_waste(waste_color_image, tmpl_bin_img):
     # find card outlines
     flow_waste_washed = flows.flow_waste.execute_wash(waste_color_image, cv2.THRESH_BINARY)
     # flow_waste_washed = flows.flow_waste.execute_wash(g_shared.test, cv2.THRESH_BINARY) #works
@@ -29,8 +29,8 @@ def opencv_flow_waste(waste_color_image):
 
     # debugging.print_waste_cuts(flow_waste_cut)
 
-    # set to black/white and invert templates
-    tmpl_bin_img = resolution.bin_invert_templates(g_img.g_templates)
+    # # set to black/white and invert templates
+    # tmpl_bin_img = resolution.bin_invert_templates(g_img.g_templates)
 
     # uses all cards
     # compares all contours of a card with all templates
@@ -41,7 +41,7 @@ def opencv_flow_waste(waste_color_image):
     return results
 
 
-def opencv_flow_tableau(tableau_color_img):
+def opencv_flow_tableau(tableau_color_img, tmpl_bin_img):
     flow_tableau_washed = flows.opencv_flow_tableau.execute_wash(tableau_color_img, cv2.THRESH_BINARY)
 
     # cut these outlines
@@ -55,12 +55,12 @@ def opencv_flow_tableau(tableau_color_img):
 
     debugging.print_results(washed_images, g_shared.path_contours_sp2)
 
-    tmpl_bin_img = resolution.bin_invert_templates(g_img.g_templates)  #err here??
+    # tmpl_bin_img = resolution.bin_invert_templates(g_img.g_templates) 
 
     flow_tableau_cut = flows.opencv_flow_tableau.execute_cut_suit_rank(
         washed_images, cv2.RETR_TREE, cv2.CHAIN_APPROX_SIMPLE)
 
-    debugging.print_waste_cuts(flow_tableau_cut)
+    # debugging.print_waste_cuts(flow_tableau_cut)
 
     results = []
     for i, card in enumerate(flow_tableau_cut):
