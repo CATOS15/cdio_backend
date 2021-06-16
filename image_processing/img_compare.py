@@ -20,7 +20,6 @@ template = cv2.TM_CCOEFF_NORMED
 
 def compare_ranksuit(card, g_templates):
     finished_card = objects.Card(None, None, None, None)
-
     for tmpl in g_templates:
         for _, cunt in enumerate(card[cut_suit_rank.suits_numbers]):
             rzimage, rztemplate = resolution.ratio_img_resolution2(cunt, tmpl.img)

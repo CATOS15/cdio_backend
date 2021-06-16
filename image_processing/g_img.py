@@ -48,7 +48,6 @@ class Ranks(Enum):
     KING = 13
 
 
-
 # Ranks by color
 __tmpl_rank_2 = cv2.imread(g_shared.path_template_rank_2, cv2.IMREAD_COLOR)
 __tmpl_rank_3 = cv2.imread(g_shared.path_template_rank_3, cv2.IMREAD_COLOR)
@@ -74,13 +73,13 @@ __tmpl_suit_spade = cv2.imread(g_shared.path_template_suit_spade, cv2.IMREAD_COL
 club = objects.TemplateType(__tmpl_suit_club, CardType.SUIT, Suits.CLUB, g_threshold)
 
 diamond = objects.TemplateType(__tmpl_suit_diamond, CardType.SUIT,
-                       Suits.DIAMOND, g_threshold)
+                               Suits.DIAMOND, g_threshold)
 
 heart = objects.TemplateType(__tmpl_suit_heart, CardType.SUIT,
-                     Suits.HEART, g_threshold)
+                             Suits.HEART, g_threshold)
 
 spade = objects.TemplateType(__tmpl_suit_spade, CardType.SUIT,
-                     Suits.SPADE, g_threshold)
+                             Suits.SPADE, g_threshold)
 
 # Rank Templatetypes
 ace = objects.TemplateType(__tmpl_rank_ace, CardType.RANK, Ranks.ACE, g_threshold)
@@ -99,4 +98,3 @@ king = objects.TemplateType(__tmpl_rank_king, CardType.RANK, Ranks.KING, g_thres
 
 g_templates = [club, diamond, heart, spade, ace, two, three,
                four, five, six, seven, eight, nine, ten, jack, queen, king]
-
