@@ -70,6 +70,8 @@ def map_opencv_alg(solution, type):
                 alg_card = _foundation_set_none(x)
                 converted_to_alg.append(alg_card)
       
+    if type == ImageCardType.Tableau:
+        print(solution)
 
     return converted_to_alg
 # def map_ml_alg(solution, type):

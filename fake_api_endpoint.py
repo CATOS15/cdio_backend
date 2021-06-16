@@ -40,8 +40,8 @@ def ml_solution(image_from_api):
     solitaire_split = flows.flow_ml_subdivide_tableau.cb_img_cut(image_from_api)
     
     # Card recogniztion on each fraction (waste, foundation and tableau)
-    waste_results = ml_imp.ml_flow_waste(solitaire_split[0])
-    foundation_results = ml_imp.ml_flow_foundation(solitaire_split[1])
+    # waste_results = ml_imp.ml_flow_waste(solitaire_split[0])
+    # foundation_results = ml_imp.ml_flow_foundation(solitaire_split[1])
     tableau_results = ml_imp.ml_flow_tableau(solitaire_split[2]) 
 
     # print("-----waste:-----")
@@ -108,6 +108,7 @@ def api_endpoint():
     #     print(x)
 
     
+
     # call ml and receive card object (image_processing/objects.py)
     ml_results = ml_solution(test_img)
     # for x in ml_results[2]:
@@ -120,7 +121,7 @@ def api_endpoint():
     
     solitaire_alg['waste'] = comm.map_opencv_alg(cv_results[0], comm.ImageCardType.Waste)
     solitaire_alg['foundation'] = comm.map_opencv_alg(cv_results[1], comm.ImageCardType.Foundation)
-    solitaire_alg['tableau'] = comm.map_opencv_alg(ml_results[2], comm.ImageCardType.Tableau)
+    # solitaire_alg['tableau'] = comm.map_opencv_alg(ml_results[2], comm.ImageCardType.Tableau)
     
     print(solitaire_alg)
     # remake object to algorithm objects

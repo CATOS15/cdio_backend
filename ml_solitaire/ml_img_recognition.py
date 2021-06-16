@@ -59,7 +59,8 @@ def ml_flow_tableau(tableau_color_img):
        tableau_cards.append(map_img_cards(image))
 
     # Check for duplicate
-    tableau_result = list(set(tableau_cards))
+    s = set(tableau_cards)
+    tableau_result = list(s)
 
     return tableau_result
 
