@@ -16,3 +16,4 @@ flow_ml_subdivide_tableau = objects.Flow_ml(cb_img_cut=ml_cut_image.cut_img_cut_
 
 opencv_flow_tableau = objects.Flow(cb_wash=wash.otsu_wash, cb_contour=contour.contours_cut_columns,
                                   cb_cut_suit_rank=cut_suit_rank.find_by_hierachy_less_noise, cb_compare_by_template=compare.compare_ranksuit)
+

@@ -3,6 +3,7 @@ import pandas
 import json
 import cv2
 import image_processing.objects as obj
+import image_processing.g_img as g_img
 
 # TODO
 
@@ -35,7 +36,7 @@ def map_img_cards(path):
         json_card = result["name"]
         conf = result["confidence"]
         rank_suit = get_card_value(json_card)
-        card = obj.Card(rank_suit['suit'], rank_suit['number'], conf, conf)
+        card = obj.Card(g_img.Suits(rank_suit['suit']), g_img.Ranks(rank_suit['number']), conf, conf)
         pobjs.append(card)
     return pobjs
 

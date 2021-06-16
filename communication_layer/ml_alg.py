@@ -90,7 +90,7 @@ def ml_map_alg(dict_images):
 
 def opencv_ml_tableau_columns_color(img_tableau, has_background=False):
     thresh = image_processing.img_wash.otsu_wash(img_tableau, cv2.THRESH_BINARY)
-    columns_color = image_processing.img_contour.contours_cut_columns(thresh, img_tableau, cv2.RETR_EXTERNAL, cv2.CHAIN_APPROX_SIMPLE)
+    columns_color = image_processing.img_contour.contours_cut_columns(cv2.RETR_EXTERNAL, cv2.CHAIN_APPROX_SIMPLE,thresh, img_tableau)
     for i, column in enumerate(columns_color):
         cv2.imwrite(image_processing.g_shared.path_contours_sp1.format(i), column)
     return columns_color

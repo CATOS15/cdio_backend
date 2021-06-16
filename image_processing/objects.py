@@ -102,7 +102,7 @@ class Card:
         if self.suit == None:
             to_return += 'suit: None' 
         else:
-            to_return += 'suit: ' + self.suit.name
+             to_return += 'suit: ' + self.suit.name
         
         if self.rank == None:
             to_return += '\trank: None'

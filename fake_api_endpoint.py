@@ -2,6 +2,7 @@ import enum
 from ml_solitaire.yolov5v2.result import map_img_cards
 import cv2
 import ml_solitaire.cut_image as ml_sol
+import ml_solitaire.ml_img_recognition as ml_imp
 import communication_layer.ml_alg as comm
 import image_processing.g_shared as g_shared
 import image_processing.flows as flows
@@ -15,11 +16,8 @@ path_cut_three = "images/tmp/cut_in_three/cut_{}.png"
 
 #TODO
 #Order cards in sequential columns
-#Create first flow for foundation
 #Reevaluate tableau
-    #try multiple images w. a tableau
-    #try images w. multiple cards in each column for tableau
-    #consider contours and cutting technique
+#Create first flow for foundation
 
 # 0 = waste, 1 = foundation, 2 = tableau
 def opencv_solution(image_from_api):
@@ -33,25 +31,35 @@ def opencv_solution(image_from_api):
 
 
 def ml_solution(image_from_api):
-    # split image into three
+    # Split input image in three
     solitaire_split = flows.flow_ml_subdivide_tableau.cb_img_cut(image_from_api)
-    _test_cut_three(solitaire_split)
-
-    # cuts columns
-    #old flow
-    # tableau = flows.flow_ml_subdivide_tableau.cb_cut_columns(solitaire_split[2])
-    tableau = map_img_cards(solitaire_split[2]) #probably gives bad results
-    waste = map_img_cards(solitaire_split[0])
-    foundation = map_img_cards(solitaire_split[1])
-
-    for i, img in enumerate(tableau):
-        cv2.imwrite(path_cut_tableau.format(str(i)), img)
     
+    waste_results = ml_imp.ml_flow_waste(solitaire_split[0])
+    foundation_results = ml_imp.ml_flow_foundation(solitaire_split[1])
+    tableau_results = ml_imp.ml_flow_tableau(solitaire_split[2]) 
 
-    # #mapping to algorithm
-    # solitaire = {comm.ImageCardType.Waste: solitaire_split[0], comm.ImageCardType.Foundation: solitaire_split[1], comm.ImageCardType.Tableau: tableau}
-    return (waste, foundation, tableau)
-    # return flows.flow_ml_subdivide_tableau.cb_ml_execute(solitaire)
+    print("-----waste:-----")
+    for column in waste_results:
+        print('[', end = '')
+        for card in column:
+            print(card)
+        print(']')
+
+    print("-----foundation:-----")
+    for column in foundation_results:
+        print('[', end = '')
+        for card in column:
+            print(card)
+        print(']')
+
+    print("-----tableau:-----")
+    for column in tableau_results:
+        print('[', end = '')
+        for card in column:
+            print(card)
+        print(']')
+
+    return (waste_results,foundation_results,tableau_results)
 
 
 #compare ml and opencv and return best solution
@@ -92,6 +100,8 @@ def api_endpoint():
     for x in cv_results[2]:
         print(x)
 
+    
+    ml_solution(test_img)
     # call ml and receive card object (image_processing/objects.py)
     # ml_results = ml_solution(test_img)
     # for x in ml_results[2]:
