@@ -65,6 +65,7 @@ def get_suit_value(s):
         return 4
 
 
+
 def get_card_value(s):
     card = ""
     suit = ""
