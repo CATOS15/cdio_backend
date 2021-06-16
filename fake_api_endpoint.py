@@ -12,8 +12,11 @@ path_cut_three = "images/tmp/cut_in_three/cut_{}.png"
 
 #TODO
 #Order cards in sequential columns
-#Reevaluate tableau
 #Create first flow for foundation
+#Reevaluate tableau
+    #try multiple images w. a tableau
+    #try images w. multiple cards in each column for tableau
+    #consider contours and cutting technique
 
 # 0 = waste, 1 = foundation, 2 = tableau
 def opencv_solution(image_from_api):
@@ -30,6 +33,7 @@ def ml_solution(image_from_api):
     _test_cut_three(solitaire_split)
 
     # cuts columns
+    #old flow
     # tableau = flows.flow_ml_subdivide_tableau.cb_cut_columns(solitaire_split[2])
     tableau = map_img_cards(solitaire_split[2]) #probably gives bad results
     waste = map_img_cards(solitaire_split[0])

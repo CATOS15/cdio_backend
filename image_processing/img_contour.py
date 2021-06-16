@@ -13,12 +13,17 @@ def define_threshold(img, lower, upper):
 def contours_cut_columns(alg1, alg2, img_thresh, img_color):
     contours, _ = cv2.findContours(
         img_thresh, alg1, alg2)
+    #sort left-to-right
+    boundingBoxes = [cv2.boundingRect(c) for c in contours]
+    (cunts, boundingBoxes) = zip(*sorted(zip(contours, boundingBoxes), key=lambda b:b[1][0], reverse=False))
+    
     img_cunts = []
     cuntour_area_req = 42500
     # contours
-    for cunt in contours:
+    for cunt in cunts:
         if cv2.contourArea(cunt) > cuntour_area_req:
             img_cunts.append(np.array(__contour_draw(img_color, cunt)))
+    #sort left to right
     return img_cunts
 
 
