@@ -18,7 +18,10 @@ def ml_flow_waste(waste_color_img):
     for image in columns_color_waste_res720:
         waste_cards.append(map_img_cards(image))
 
-    return waste_cards
+    # Check for duplicate
+    waste_result = list(set(waste_cards))
+
+    return waste_result
 
 
 def ml_flow_foundation(foundation_color_img):
@@ -35,7 +38,10 @@ def ml_flow_foundation(foundation_color_img):
     for image in columns_color_foundation_res720:
         foundation_cards.append(map_img_cards(image))
 
-    return foundation_cards
+    # Check for duplicate
+    foundation_result = list(set(foundation_cards))
+
+    return foundation_result
 
 
 def ml_flow_tableau(tableau_color_img):
@@ -52,4 +58,8 @@ def ml_flow_tableau(tableau_color_img):
     for image in columns_color_tableau_res720:
        tableau_cards.append(map_img_cards(image))
 
-    return tableau_cards
+    # Check for duplicate
+    tableau_result = list(set(tableau_cards))
+
+    return tableau_result
+
