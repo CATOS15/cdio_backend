@@ -23,6 +23,10 @@ app.config["IMAGE_UPLOADS"] = "images"
 # app.config["IMAGE_TEST"] = url("C:\Users\Nikolai\Desktop\Python\cdio_backend")
 CORS(app)
 
+@app.route("/hello-world")
+def ok():
+    return "hello world"
+
 
 @app.route('/')
 def hello():
