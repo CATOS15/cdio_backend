@@ -62,7 +62,7 @@ def transform_720(img):
 
     return cv2.cvtColor(result, cv2.COLOR_BGR2RGB)
 
-
+#methods for testing
 #transformed = transform_720('ml_solitaire\image_fountain.jpg')
 #cv2.imshow("resized", transformed)
 #cv2.waitKey(0)
