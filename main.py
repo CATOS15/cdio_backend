@@ -31,7 +31,7 @@ def hello():
 @app.route('/upload', methods=['POST'])
 def calculateImage():
     imagefile = request.files.get('file')
-    imagefile.save("image.jpg")
+    # imagefile.save("image.jpg")
 
     image = cv2.imread(imagefile)
     three_image_tuple = ml_solitaire.cut_image.cut_img_cut_three(image)
