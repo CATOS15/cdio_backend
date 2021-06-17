@@ -42,8 +42,8 @@ def ml_solution(image_from_api):
     solitaire_split = flows.flow_ml_subdivide_tableau.cb_img_cut(image_from_api)
     
     # Card recogniztion on each fraction (waste, foundation and tableau)
-    # waste_results = ml_imp.ml_flow_waste(solitaire_split[0])
-    # foundation_results = ml_imp.ml_flow_foundation(solitaire_split[1])
+    waste_results = ml_imp.ml_flow_waste(solitaire_split[0])
+    foundation_results = ml_imp.ml_flow_foundation(solitaire_split[1])
     tableau_results = ml_imp.ml_flow_tableau(solitaire_split[2]) 
 
     # print("-----waste:-----")

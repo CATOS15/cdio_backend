@@ -8,7 +8,9 @@ import image_processing.g_img as g_img
 # TODO
 
 # Model
-model = torch.hub.load('ultralytics/yolov5', 'custom', path='ml_solitaire/yolov5v2/thebest.pt')
+model = torch.hub.load('ultralytics/yolov5', 'custom', force_reload=True, path='ml_solitaire/yolov5v2/cardrecognizer.pt')
+
+#model = torch.hub.load('ultralytics/yolov5','custom',force_reload=True,path='ml_solitaire/yolov5v2/cardrecognizer.pt')
 model.conf = 0.7
 foundation = 'fountains'
 tableau = 'tableau'
@@ -142,7 +144,7 @@ def addToFountain(cards, solitaire):
         counter2 += 1
 
 
-map_img_cards('ml_solitaire/yolov5v2/tableau.jpg')
+#map_img_cards('ml_solitaire/yolov5v2/tableau.jpg')
 # s = getCardsFromImage("ml_solitaire/yolov5v2/tableau.jpg")
 # s2 = getCardsFromImage("ml_solitaire/yolov5v2/fountain2.jpg")
 # s3 = getCardsFromImage("ml_solitaire/yolov5v2/waste.jpg")
