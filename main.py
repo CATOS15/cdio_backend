@@ -6,7 +6,6 @@ from flask import Flask, request
 from flask_cors import CORS
 
 import ml_solitaire.cut_image
-import communication_layer.ml_alg
 
 import cv2
 import json
@@ -16,6 +15,7 @@ import image_solutions as solution
 import communication_layer.ml_alg as comm
 import algorithm.image_algorithm as alg
 
+import numpy as np
 
 app = Flask(__name__)
 app.config['SECRET_KEY'] = 'back3nd_!cdio'
@@ -23,7 +23,7 @@ app.config["IMAGE_UPLOADS"] = "images"
 # app.config["IMAGE_TEST"] = url("C:\Users\Nikolai\Desktop\Python\cdio_backend")
 CORS(app)
 
-@app.route("/hello-world")
+@app.route("/hello-world", methods=['GET'])
 def ok():
     return "hello world"
 
@@ -34,10 +34,14 @@ def hello():
 
 @app.route('/upload', methods=['POST'])
 def calculate_solution():
+    #imagefile = request.files['file'].read()
+    #npimg = np.fromstring(imagefile, np.uint8)
+    #imagefile = cv2.imdecode(npimg, cv2.IMREAD_COLOR)
     imagefile = request.files.get('file')
-    # imagefile.save("image.jpg")
+    imagefile.save("image.jpg")
 
-    image = cv2.imread(imagefile)
+    image = cv2.imread("image.jpg")
+    
     three_image_tuple = ml_solitaire.cut_image.cut_img_cut_three(image)
 
     cv_results = solution.opencv_solution(three_image_tuple)
@@ -47,7 +51,7 @@ def calculate_solution():
     solitaire_alg['waste'] = comm.map_opencv_alg(cv_results[0], comm.ImageCardType.Waste)
     solitaire_alg['fountains'] = comm.map_opencv_alg(cv_results[1], comm.ImageCardType.Foundation)
     solitaire_alg['tableau'] = comm.map_opencv_alg(ml_results[2], comm.ImageCardType.Tableau)
-    # solitaire_json = json.dumps(solitaire_alg)
+    #solitaire_json = json.dumps(solitaire_alg)
     bestmove = alg.run_algorithm(solitaire_alg)
     return json.dumps(bestmove)
 

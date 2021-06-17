@@ -8,9 +8,8 @@ import image_processing.g_img as g_img
 # TODO
 
 # Model
-model = torch.hub.load('ultralytics/yolov5', 'custom', force_reload=True, path='ml_solitaire/yolov5v2/cardrecognizer.pt')
+model = torch.hub.load('ultralytics/yolov5', 'custom', path='ml_solitaire/yolov5v2/cardrecognizer.pt')
 
-#model = torch.hub.load('ultralytics/yolov5','custom',force_reload=True,path='ml_solitaire/yolov5v2/cardrecognizer.pt')
 model.conf = 0.7
 foundation = 'fountains'
 tableau = 'tableau'
