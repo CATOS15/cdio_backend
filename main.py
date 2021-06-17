@@ -12,6 +12,11 @@ import cv2
 import json
 import random
 
+import image_solutions as solution
+import communication_layer.ml_alg as comm
+import algorithm.image_algorithm as alg
+
+
 app = Flask(__name__)
 app.config['SECRET_KEY'] = 'back3nd_!cdio'
 app.config["IMAGE_UPLOADS"] = "images"
@@ -31,19 +36,16 @@ def calculateImage():
     image = cv2.imread(imagefile)
     three_image_tuple = ml_solitaire.cut_image.cut_img_cut_three(image)
 
-    #return (drawpile, fountain, piles)
-    
-    dict_images = {
-        {"waste" : three_image_tuple[0], "ImageCardType" : ImageCardType.Waste},
-        {"foundation" : three_image_tuple[1], "ImageCardType" : ImageCardType.Foundation},
-        {"tableau" : three_image_tuple[2], "ImageCardType" : ImageCardType.Tableau},
-    }
-  
-    data_solitaire = communication_layer.ml_alg.ml_map_alg(dict_images)
+    cv_results = solution.opencv_solution(three_image_tuple)
+    ml_results = solution.ml_solution(three_image_tuple)
 
-    #indsæt data_soliatire i algoritmen
-    json_object = json.dumps(getAlgData())
-    return json_object
+    solitaire_alg = {}
+    solitaire_alg['waste'] = comm.map_opencv_alg(cv_results[0], comm.ImageCardType.Waste)
+    solitaire_alg['fountains'] = comm.map_opencv_alg(cv_results[1], comm.ImageCardType.Foundation)
+    solitaire_alg['tableau'] = comm.map_opencv_alg(ml_results[2], comm.ImageCardType.Tableau)
+    # solitaire_json = json.dumps(solitaire_alg)
+    bestmove = alg.run_algorithm(solitaire_alg)
+    return json.dumps(bestmove)
 
 @app.route("/algtest", methods = ['POST'])
 def algtestpost():

@@ -46,26 +46,7 @@ def ml_solution(image_from_api):
     foundation_results = ml_imp.ml_flow_foundation(solitaire_split[1])
     tableau_results = ml_imp.ml_flow_tableau(solitaire_split[2]) 
 
-    # print("-----waste:-----")
-    # for column in waste_results:
-    #     print('[', end = '')
-    #     for card in column:
-    #         print(card)
-    #     print(']')
 
-    # print("-----foundation:-----")
-    # for column in foundation_results:
-    #     print('[', end = '')
-    #     for card in column:
-    #         print(card)
-    #     print(']')
-
-    # print("-----tableau:-----")
-    # for column in tableau_results:
-    #     print('[', end = '')
-    #     for card in column:
-    #         print(card)
-    #     print(']')
 
     return (waste_results,foundation_results,tableau_results)
 
@@ -93,42 +74,37 @@ def compare_solutions(opencv_solution, ml_solution, type):
         return cards
 
 
-def _test_cut_three(solitaire_split):
-    cv2.imwrite(path_cut_three.format("0"), solitaire_split[0])
-    cv2.imwrite(path_cut_three.format("1"), solitaire_split[1])
-    cv2.imwrite(path_cut_three.format("2"), solitaire_split[2])
 
-
-def api_endpoint():
-    # test_img = cv2.imread(g_shared.path_card_full_solitaire_red_background_distinct, cv2.IMREAD_COLOR)
-    # test_img = cv2.imread(g_shared.path_card_full_solitaire_red_background, cv2.IMREAD_COLOR)
-    test_img = cv2.imread(g_shared.path_card_full_solitaire_black_clean_background, cv2.IMREAD_COLOR)
+# def api_endpoint():
+#     # test_img = cv2.imread(g_shared.path_card_full_solitaire_red_background_distinct, cv2.IMREAD_COLOR)
+#     # test_img = cv2.imread(g_shared.path_card_full_solitaire_red_background, cv2.IMREAD_COLOR)
+#     test_img = cv2.imread(g_shared.path_card_full_solitaire_black_clean_background, cv2.IMREAD_COLOR)
     
-    # call opencv and receive card object (image_processing/objects.py)
-    cv_results = opencv_solution(test_img)
-    # for x in cv_results[2]:
-    #     print(x)
+#     # call opencv and receive card object (image_processing/objects.py)
+#     cv_results = opencv_solution(test_img)
+#     # for x in cv_results[2]:
+#     #     print(x)
 
     
 
-    # call ml and receive card object (image_processing/objects.py)
-    ml_results = ml_solution(test_img)
-    # for x in ml_results[2]:
-    #     print(x)
+#     # call ml and receive card object (image_processing/objects.py)
+#     ml_results = ml_solution(test_img)
+#     # for x in ml_results[2]:
+#     #     print(x)
     
-    # best_waste = compare_solutions(cv_results[0], ml_results[0], comm.ImageCardType.Waste)
-    # best_foundation = compare_solutions(cv_results[1], ml_results[1], comm.ImageCardType.Foundation)
-    # best_tableau = compare_solutions(cv_results[2], ml_results[2], comm.ImageCardType.Tableau)
-    solitaire_alg = {}
+#     # best_waste = compare_solutions(cv_results[0], ml_results[0], comm.ImageCardType.Waste)
+#     # best_foundation = compare_solutions(cv_results[1], ml_results[1], comm.ImageCardType.Foundation)
+#     # best_tableau = compare_solutions(cv_results[2], ml_results[2], comm.ImageCardType.Tableau)
+#     solitaire_alg = {}
     
-    solitaire_alg['waste'] = comm.map_opencv_alg(cv_results[0], comm.ImageCardType.Waste)
-    solitaire_alg['fountains'] = comm.map_opencv_alg(cv_results[1], comm.ImageCardType.Foundation)
-    solitaire_alg['tableau'] = comm.map_opencv_alg(ml_results[2], comm.ImageCardType.Tableau)
+#     solitaire_alg['waste'] = comm.map_opencv_alg(cv_results[0], comm.ImageCardType.Waste)
+#     solitaire_alg['fountains'] = comm.map_opencv_alg(cv_results[1], comm.ImageCardType.Foundation)
+#     solitaire_alg['tableau'] = comm.map_opencv_alg(ml_results[2], comm.ImageCardType.Tableau)
     
-    # solitaire_json = json.dumps(solitaire_alg)
-    # print(alg.run_algorithm(solitaire_json))
-    bestmove = alg.run_algorithm(solitaire_alg)
-    print(bestmove["move"].description)
+#     # solitaire_json = json.dumps(solitaire_alg)
+#     # print(alg.run_algorithm(solitaire_json))
+#     bestmove = alg.run_algorithm(solitaire_alg)
+#     print(bestmove["move"].description)
 
 
-api_endpoint()
+# api_endpoint()
