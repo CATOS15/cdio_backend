@@ -8,7 +8,7 @@
 
 #ignore weight for machine learning
 ml_solitaire/yolov5v2/thebest.pt
-
+ml_solitaire/yolov5v2/cardrecognizer.pt
 
 .image_processing/templates/card/result/*
 image_processing/templates/card/result/*
