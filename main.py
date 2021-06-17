@@ -29,7 +29,7 @@ def hello():
     return "CDIO API"
 
 @app.route('/upload', methods=['POST'])
-def calculateImage():
+def calculate_solution():
     imagefile = request.files.get('file')
     # imagefile.save("image.jpg")
 
