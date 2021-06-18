@@ -4,8 +4,6 @@ import numpy as np
 from enum import Enum
 import image_processing.objects as objects
 import image_processing.g_shared as g_shared
-# if you don't start the directory at cdio_backend, check win/linux/etc. and set base_path appropriately
-# base_path = os.getcwd()
 
 # global variables
 g_threshold = 0.70

@@ -1,7 +1,5 @@
 import cv2
 import image_processing.g_shared as g_shared
-# from g_shared import path_tmpl_birck_rank_bin_inv
-# from g_shared import path_contours_sp3
 
 count_err = 0
 
@@ -56,37 +54,22 @@ def print_waste_cuts(flow_waste_cuts):
 def print_ml_results(fraction_name, results):
     print("-----" + fraction_name + "------")
     for column in results:
-        print('[', end = '')
+        print('[', end='')
         for card in column:
             print(card)
         print(']')
 
-    #Examples
-    # print("-----waste:-----")
-    # for column in waste_results:
-    #     print('[', end = '')
-    #     for card in column:
-    #         print(card)
-    #     print(']')
 
-    # print("-----foundation:-----")
-    # for column in foundation_results:
-    #     print('[', end = '')
-    #     for card in column:
-    #         print(card)
-    #     print(']')
-
-    # print("-----tableau:-----")
-    # for column in tableau_results:
-    #     print('[', end = '')
-    #     for card in column:
-    #         print(card)
-    #     print(']')
-
-# Example
-    # if tmpl_card.type == CardType.SUIT:
-    #     tmpl_bin_inv(tmpl_card.img, path_tmpl_birck_suit_bin_inv, tmpl_card.value.name)
-
-    # if tmpl_card.type == CardType.RANK:
-    #     tmpl_bin_inv(tmpl_card.img, path_tmpl_birck_rank_bin_inv, tmpl_card.value.name)
-
+def print_image_info(img):
+    print(img.shape)
+    # get dimensions of image
+    dimensions = img.shape
+    
+    # height, width, number of channels in image
+    height = img.shape[0]
+    width = img.shape[1]
+    channels = img.shape[2]
+    print('Image Dimension    : ',dimensions)
+    print('Image Height       : ',height)
+    print('Image Width        : ',width)
+    print('Number of Channels : ',channels)

@@ -2,10 +2,6 @@ import cv2
 import numpy as np
 import math
 
-# read image
-# path_image = 'ml_solitaire\solitaire_ex1.jpg' #hav projektet åbent i CDIO_BACKEND som hoved folder
-# img = cv2.imread(path_image)
-
 def cut_img_cut_three(img):
 
     #dimensions for image
@@ -22,40 +18,8 @@ def cut_img_cut_three(img):
     fountain = img[0:top_height, left_width:width]
     piles = img[top_height:height, 0:width]
 
-    #save images
-    # cv2.imwrite('ml_solitaire\image_drawpile.jpg', drawpile)
-    # cv2.imwrite('ml_solitaire\image_fountain.jpg', fountain)
-    # cv2.imwrite('ml_solitaire\image_piles.jpg', piles)
     return (drawpile, fountain, piles)
 
-    """ cv2.imshow("cropped", drawpile)
-    cv2.waitKey(0)
-
-    cv2.imshow("cropped", fountain)
-    cv2.waitKey(0)
-
-    cv2.imshow("cropped", piles)
-    cv2.waitKey(0)
-    return 
-    
-    def save_images():
-    cv2.imwrite('image_drawpile.jpg', drawpile)
-    cv2.imwrite('image_fountain.jpg', fountain)
-    cv2.imwrite('image_piles.jpg', piles) """
-
-def print_image_info(img):
-    print(img.shape)
-    # get dimensions of image
-    dimensions = img.shape
-    
-    # height, width, number of channels in image
-    height = img.shape[0]
-    width = img.shape[1]
-    channels = img.shape[2]
-    print('Image Dimension    : ',dimensions)
-    print('Image Height       : ',height)
-    print('Image Width        : ',width)
-    print('Number of Channels : ',channels)
 
 def cut_7_images(img):
     #dimensions for image

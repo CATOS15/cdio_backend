@@ -1,11 +1,5 @@
-#transform you cool image into an even cooler version in 720x720 with a yellow background
 import cv2
-import numpy as np
 import math
-#import imutils
-
-# path_image = 'ml_solitaire\solitaire_ex1.jpg'
-# img = cv2.imread(path_image)
 
 def transform_720(img):
     #dimensions for image
@@ -20,7 +14,6 @@ def transform_720(img):
     bg_width = yellow_square.shape[1]
 
     #gør input 720 bredde eller højde
-    #allerede firkantet
     if((height < 720) and (width < 720)):
         scaledimg = image720
     
@@ -40,8 +33,6 @@ def transform_720(img):
         dimensioner = (720, math.floor(height*scale))
         scaledimg = cv2.resize(image720, dimensioner, interpolation = cv2.INTER_AREA)
 
-    #giv det en background
-    #ligger det skalerede billede oveni det andet billede med et offset så det er i midten
 
     img = scaledimg
     s_height, s_width, lort = scaledimg.shape
@@ -51,19 +42,5 @@ def transform_720(img):
 
     result = yellow_square.copy()
     result[yoff:yoff+s_height, xoff:xoff+s_width] = scaledimg
-
-    # cv2.imwrite('ml_solitaire\pestgul.png', scaledimg)
-    # cv2.imshow("resized", scaledimg)
-    # cv2.waitKey(0)
-
-    # cv2.imshow('CENTERED', result)
-    # cv2.waitKey(0)
-
-
     return cv2.cvtColor(result, cv2.COLOR_BGR2RGB)
-
-#methods for testing
-#transformed = transform_720('ml_solitaire\image_fountain.jpg')
-#cv2.imshow("resized", transformed)
-#cv2.waitKey(0)
 

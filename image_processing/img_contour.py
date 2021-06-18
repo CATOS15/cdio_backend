@@ -1,12 +1,11 @@
 import cv2
 import numpy as np
-# from g_img import *
 
 
 def define_threshold(img, lower, upper):
     img_grey = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)
     # use threshold to identify patterns
-    ret_sample1, thresh_sample1 = cv2.threshold(img_grey, lower, upper, 0)
+    _, thresh_sample1 = cv2.threshold(img_grey, lower, upper, 0)
     return thresh_sample1
 
 
@@ -51,7 +50,7 @@ def contour_approximation(alg1, alg2, img_thresh, img_color=None):
     return cunt_flattened
 
 
-# flattener: www.pyimagesearch.com/2014/08/25/4-point-opencv-getperspective-transform-example/
+# NB! Code taken from: www.pyimagesearch.com/2014/08/25/4-point-opencv-getperspective-transform-example/
 # makes a small x*x image for a single contour
 def flat_image(image, pts, w, h):
     temp_rect = np.zeros((4, 2), dtype="float32")
@@ -112,9 +111,6 @@ def flat_image(image, pts, w, h):
     widthB = np.sqrt(width_top)
     maxWidth = max(int(widthA), int(widthB))
 
-
-    # heightA = np.sqrt(((tr[0] - br[0]) ** 2) + ((tr[1] - br[1]) ** 2))
-    # heightB = np.sqrt(((tl[0] - bl[0]) ** 2) + ((tl[1] - bl[1]) ** 2))
     height_buttom = (tr[0][0] - br[0][0]) ** 2 + ((tr[0][1] - br[0][1]) ** 2)
     height_top = (tl[0][0] - bl[0][0]) ** 2 + ((tl[0][1] - bl[0][1]) ** 2)
     heightA = np.sqrt(height_buttom)
@@ -132,7 +128,6 @@ def flat_image(image, pts, w, h):
     # and warp card image
     M = cv2.getPerspectiveTransform(temp_rect,dst)
     warp = cv2.warpPerspective(image, M, (maxWidth, maxHeight))
-    # warp = cv2.cvtColor(warp,cv2.COLOR_BGR2GRAY)
 
     return warp
 

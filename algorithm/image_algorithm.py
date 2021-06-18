@@ -32,27 +32,6 @@ class Move:
     def toJSON (self):
         return json.dumps(self.__dict__)
 
-#Ledig plads for en konge bliver Card(14, None)
-
-# fountains = [
-#     Fountain(1, suit.DIAMOND),
-#     Fountain(1, suit.HEART),
-#     Fountain(2, suit.SPADE),
-#     Fountain(0, suit.CLUBS)
-# ] 
-
-# tableau = [
-#     [Card(13, suit.SPADE), Card(12, suit.DIAMOND), Card(11, suit.CLUBS), Card(10, suit.DIAMOND), Card(9, suit.CLUBS)],
-#     [Card(13, suit.CLUBS)],
-#     [Card(11, suit.HEART)],
-#     [],
-#     [Card(6, suit.HEART), Card(5, suit.CLUBS), Card(4, suit.HEART), Card(3, suit.SPADE)],
-#     [None, Card(8, suit.DIAMOND), Card(7, suit.SPADE)],
-#     [None, None, Card(10, suit.SPADE), Card(9, suit.HEART), Card(8, suit.CLUBS), Card(7, suit.HEART)]
-# ]
-
-#waste = [Card(7, suit.DIAMOND)]
-
 fountains = [
     Fountain(0, suit.DIAMOND),
     Fountain(0, suit.HEART),
@@ -335,15 +314,6 @@ def run_algorithm(data_solitaire):
     if fountains[0].count == 13 and fountains[1].count == 13 and fountains[2].count == 13 and fountains[3].count == 13:
         bestMove = {"won": True}
         return bestMove
-
-    #for x in get_moves():
-        #print(x.description)
-
-    #print("\n")
-    #print("Bedste træk:")
-    #if bestMove != None:
-        #print("Antal træk " + str(bestMove["numberOfMoves"]) + " giver " + str(bestMove["point"]) + " point")
-        #print(bestMove["move"].description)
 
     if(bestMove != None):
         bestMove["move"].drawCard = False

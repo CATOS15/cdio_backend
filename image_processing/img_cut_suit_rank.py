@@ -1,7 +1,6 @@
 import cv2
 import numpy as np
 import image_processing.img_contour as contour
-# from img_contour import __contour_draw
 
 suits_numbers = "suits_numbers"
 face_cards = "face_cards"
@@ -83,10 +82,3 @@ def cut_all_suit_rank(contours, alg1, alg2):
 # foo2 = hierachy[0][0][2] #index 2
 # foo3 = hierachy[0][0][3] #index 3
 # foo4 = hierachy[0][1][3] #next contour relationship
-
-
-# things that can go wrong
-# minimum recognition is to large - we skip potential positives
-# minimum recognition is to small - we get face cards
-
-# we need to consider

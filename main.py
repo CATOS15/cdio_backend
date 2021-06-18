@@ -1,4 +1,3 @@
-from communication_layer.ml_alg import ImageCardType
 from flask.helpers import make_response
 from flask.json import jsonify
 from algorithm.image_algorithm import Fountain, run_algorithm
@@ -9,7 +8,6 @@ import ml_solitaire.cut_image
 
 import cv2
 import json
-import random
 
 import image_solutions as solution
 import communication_layer.ml_alg as comm
@@ -20,13 +18,7 @@ import numpy as np
 app = Flask(__name__)
 app.config['SECRET_KEY'] = 'back3nd_!cdio'
 app.config["IMAGE_UPLOADS"] = "images"
-# app.config["IMAGE_TEST"] = url("C:\Users\Nikolai\Desktop\Python\cdio_backend")
 CORS(app)
-
-@app.route("/hello-world", methods=['GET'])
-def ok():
-    return "hello world"
-
 
 @app.route('/')
 def hello():
@@ -46,7 +38,6 @@ def calculate_solution():
     solitaire_alg['waste'] = comm.map_opencv_alg(cv_results[0], comm.ImageCardType.Waste)
     solitaire_alg['fountains'] = comm.map_opencv_alg(cv_results[1], comm.ImageCardType.Foundation)
     solitaire_alg['tableau'] = comm.map_opencv_alg(ml_results[2], comm.ImageCardType.Tableau)
-    #solitaire_json = json.dumps(solitaire_alg)
     bestmove = alg.run_algorithm(solitaire_alg)
     return json.dumps(bestmove["move"].description)
 

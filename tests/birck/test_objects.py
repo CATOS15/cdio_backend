@@ -16,24 +16,3 @@ class ContourMatch():
 
     def __str__(self):
         return "name: " + self.name + "\tmatch_deck:" + str(self.match_deck) + "\tmatch_card: " + str(self.match_card)
-
-
-# class Foo():
-
-#     def __init__(self):
-#         self.paths = []
-#         self.color_imgs = []
-#         self.shapes = []
-#         self.masks = []
-
-#     def append_path(self, path):
-#         self.paths.append(path)
-
-#     def append_color_img(self, img):
-#         self.color_imgs.append(img)
-
-#     def append_shapes(self, shape):
-#         self.shapes.append(shape)
-
-#     def append_masks(self, mask):
-#         self.masks.append(mask)

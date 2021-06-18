@@ -1,13 +1,9 @@
 import torch
-import pandas
 import json
 import cv2
 import image_processing.objects as obj
 import image_processing.g_img as g_img
 
-# TODO
-
-# Model
 model = torch.hub.load('ultralytics/yolov5', 'custom', path='ml_solitaire/yolov5v2/cardrecognizer.pt')
 
 model.conf = 0.7
@@ -30,8 +26,6 @@ def map_img_cards(path):
     resultsPanda = results.pandas().xyxy[0].to_json(orient="records")
     resultsJSON = json.loads(resultsPanda)
 
-
-    # s = set()
     pobjs = []
     for result in resultsJSON:
         json_card = result["name"]
@@ -66,13 +60,6 @@ def get_suit_value(s):
         return 4
 
 
-    # class Suits(Enum):
-    # CLUB = 1
-    # DIAMOND = 2
-    # HEART = 3
-    # SPADE = 4
-
-
 def get_card_value(s):
     card = ""
     suit = ""
@@ -93,63 +80,4 @@ def get_card_value(s):
     elif int(card) > 1 and int(card) < 10:
         return {'number': int(card), 'suit': get_suit_value(suit)}
 
-    
     return -1
-
-
-def addToWaste(cards, solitaire):
-    if len(cards) > 1:
-        print("Error: Too many cards in waste, 1 < waste")
-        return
-
-    for card in cards:
-        cardObj = get_card_value(card)
-        solitaire[waste].append(cardObj)
-
-
-def addStackToTableau(cards, solitaire):
-    columnArr = []
-    for card in cards:
-        cardObj = get_card_value(card)
-        columnArr.append(cardObj)
-    sortedCol = sorted(columnArr, key=lambda k: k['number'], reverse=True)
-    solitaire['stacks'].append(sortedCol)
-
-
-def addToFountain(cards, solitaire):
-    fountainArr = []
-
-    for card in cards:
-        cardObj = get_card_value(card)
-        fountainArr.append(cardObj)
-
-    if len(fountainArr) > 4:
-        print("Error: Too many cards in fountain, 4 < fountain")
-        for x in range(0, 4):
-            solitaire['fountains'].append({'number': 0, 'suit': x+1})
-        return
-
-    sortedFountain = sorted(fountainArr, key=lambda k: k['suit'])
-    # print(sortedFountain)
-
-    counter2 = 1
-    fountainCounter = 0
-    for card in range(0, 4):
-        if sortedFountain[fountainCounter]['suit'] == counter2:
-            solitaire['fountains'].append(sortedFountain[fountainCounter])
-            fountainCounter += 1
-        else:
-            solitaire['fountains'].append({'number': 0, 'suit': counter2})
-        counter2 += 1
-
-
-#map_img_cards('ml_solitaire/yolov5v2/tableau.jpg')
-# s = getCardsFromImage("ml_solitaire/yolov5v2/tableau.jpg")
-# s2 = getCardsFromImage("ml_solitaire/yolov5v2/fountain2.jpg")
-# s3 = getCardsFromImage("ml_solitaire/yolov5v2/waste.jpg")
-# addStackToTableau(s, data_solitaire)
-# addStackToTableau(s, data_solitaire)
-# addToWaste(s3, data_solitaire)
-# addToFountain(s2, data_solitaire)
-
-# print(data_solitaire)
