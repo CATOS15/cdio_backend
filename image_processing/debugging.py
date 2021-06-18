@@ -1,4 +1,5 @@
 import cv2
+import math
 import image_processing.g_shared as g_shared
 
 count_err = 0
@@ -73,3 +74,49 @@ def print_image_info(img):
     print('Image Height       : ',height)
     print('Image Width        : ',width)
     print('Number of Channels : ',channels)
+
+
+
+def cut_7_images(img):
+    #dimensions for image
+    height = img.shape[0]
+    width = img.shape[1]
+    heightratio = 7/24 #1/3, 7/24 or 1/4
+    #cropped image *zones
+    top_height = math.floor(height*1/3)
+
+    #cropped images
+    column1 = img[top_height:height, 0:math.floor(width*1/7)]
+    column2 = img[top_height:height, math.floor(width*1/7):math.floor(width*2/7)]
+    column3 = img[top_height:height, math.floor(width*2/7):math.floor(width*3/7)]
+    column4 = img[top_height:height, math.floor(width*3/7):math.floor(width*4/7)]
+    column5 = img[top_height:height, math.floor(width*4/7):math.floor(width*5/7)]
+    column6 = img[top_height:height, math.floor(width*5/7):math.floor(width*6/7)]
+    column7 = img[top_height:height, math.floor(width*6/7):width]
+
+    #save images
+    cv2.imwrite('ml_solitaire\image_column1.jpg', column1)
+    cv2.imwrite('ml_solitaire\image_column2.jpg', column2)
+    cv2.imwrite('ml_solitaire\image_column3.jpg', column3)
+    cv2.imwrite('ml_solitaire\image_column4.jpg', column4)
+    cv2.imwrite('ml_solitaire\image_column5.jpg', column5)
+    cv2.imwrite('ml_solitaire\image_column6.jpg', column6)
+    cv2.imwrite('ml_solitaire\image_column7.jpg', column7)
+
+def show_cut_images(img):
+    drawpile_path = 'ml_solitaire\image_drawpile.jpg'
+    fountain_path = 'ml_solitaire\image_fountain.jpg'
+    piles_path = 'ml_solitaire\image_piles.jpg'
+
+    image_drawpile = cv2.imread(drawpile_path)
+    image_fountain = cv2.imread(fountain_path)
+    image_piles = cv2.imread(piles_path)
+
+    cv2.imshow("cropped", image_drawpile)
+    cv2.waitKey(0)
+
+    cv2.imshow("cropped", image_fountain)
+    cv2.waitKey(0)
+
+    cv2.imshow("cropped", image_piles)
+    cv2.waitKey(0)
