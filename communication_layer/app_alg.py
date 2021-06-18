@@ -5,14 +5,8 @@ def convert_alg_to_app_json(bestmove):
         return {
             "firstcard": "No card",
             "secondcard": "No card",
-            "movemessage": "failure"
+            "movemessage": "unable to recognize cards"
         }
-    # if move.fromCard.number == None :            
-    #     result["firstcard"] = "cannot identify first card"
-
-    # if move.toCard.number == None:
-    #     result["secondcard"] = "cannot identify second card"
-
     if type(move) != str:
         firstcard = str(getCardCharFromNumber(move.fromCard.number)) + \
             str(getColourCharFromNumber(move.fromCard.suit))
