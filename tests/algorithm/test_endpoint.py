@@ -1,7 +1,7 @@
+from flask import request
 from flask.json import jsonify
 from flask.helpers import make_response
 from algorithm.image_algorithm import Fountain, run_algorithm
-from flask import request
 
 def simple_test():
     bestMove = run_algorithm(request.get_json())

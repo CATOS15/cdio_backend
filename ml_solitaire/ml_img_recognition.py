@@ -1,6 +1,4 @@
-from image_processing.g_img import Ranks
 import image_processing.flows as flows
-import image_processing.debugging as debugging
 import ml_solitaire.transform720 as tf720
 from ml_solitaire.yolov5v2.result import map_img_cards
 

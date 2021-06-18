@@ -1,15 +1,13 @@
-import ml_solitaire.yolov5v2.result
-import ml_solitaire.transform720
-from enum import Enum
-import image_processing.img_contour
-import image_processing.img_wash
 import cv2
+import ml_solitaire.transform720
+import image_processing.img_wash
 import image_processing.g_shared
-import image_processing.objects as obj
-# import image_processing.templates.test.full_deck
+import image_processing.img_contour
+import ml_solitaire.yolov5v2.result
+
+from enum import Enum
 
 path_img = "communication_layer/img{}.png"
-
 
 class ImageCardType(Enum):
     Waste = 1
@@ -17,33 +15,8 @@ class ImageCardType(Enum):
     Tableau = 3
     Column = 4
 
-# from ml to alg
-
-
 number = 'number'
 suit = 'suit'
-
-# examples(dict_images: [path/image object : ImageCardType])
-opencvbilledobjekt = cv2.imread("image.jpg")
-
-# dict_images = {
-#     {"img_obj": opencvbilledobjekt, "ImageCardType": 1},
-#     {"img_obj2": opencvbilledobjekt, "ImageCardType": 1},
-#     {"img_obj3": opencvbilledobjekt, "ImageCardType": 1},
-# }
-
-# dict_images_withpath = {
-#         {"path" : "/her", "ImageCardType" : 1},
-#         {"path" : "/her", "ImageCardType" : 1},
-#     }
-
-# examples(dict_images: [path : ImageCardType])
-
-# tableau: ['number': 11, 'suit':3]
-# def foo_map_alg(solution, type):
-#     if type == ImageCardType.Waste:
-#         for card in solution:
-#             print(card)
 
 
 def map_opencv_alg(solution, type):
@@ -80,12 +53,7 @@ def map_opencv_alg(solution, type):
                 column_arr.append(json_card)
             converted_to_alg.append(column_arr)
     return converted_to_alg
-# def map_ml_alg(solution, type):
-#     return None
 
-
-# def _foundation_write_none(card, number):
-#     return _foundation_check_none(card.rank, card.suit, number)
 
 def _foundation_set_none(suit_val):
     foo = {}
@@ -110,8 +78,6 @@ def ml_map_alg(dict_images):
         ],
     }
 
-    # print(dict_images)
-
     # run yolo recognition thingy here
     counter = 0
     for img_type, img in dict_images.items():
@@ -119,26 +85,19 @@ def ml_map_alg(dict_images):
             changed_img = []
             for im in img:
                 yellowBG = ml_solitaire.transform720.transform_720(im)
-                #cv2.imwrite(path_img.format(counter), yellowBG)
-                #counter += 1
                 changed_img.append(yellowBG)
-                # im = yellowBG
             dict_images[img_type] = changed_img
         else:
             yellowBG = ml_solitaire.transform720.transform_720(img)
-            #cv2.imwrite(path_img.format(counter), yellowBG)
-            #counter += 1
             dict_images[img_type] = yellowBG
 
     for img_type, img in dict_images.items():
-        # print(img)
         counter += 1
         if img_type is not ImageCardType.Tableau:
             result_set = ml_solitaire.yolov5v2.result.getCardsFromImage(img)
 
         if img_type == ImageCardType.Tableau:
             for col in img:
-                #cv2.imwrite(path_img.format(counter), col)
                 counter += 1
                 col_set = ml_solitaire.yolov5v2.result.getCardsFromImage(col)
                 ml_solitaire.yolov5v2.result.addStackToTableau(col_set, data_solitaire)
