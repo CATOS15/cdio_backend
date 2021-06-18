@@ -5,7 +5,8 @@ import ml_solitaire.cut_image
 import image_solutions as solution
 import algorithm.image_algorithm as alg
 import communication_layer.ml_alg as comm
-import tests.algorithm.test_endpoint as alg
+import communication_layer.app_alg as app_comm
+# import tests.algorithm.test_endpoint as alg
 
 from flask_cors import CORS
 from flask.json import jsonify
@@ -37,7 +38,10 @@ def calculate_solution():
     solitaire_alg['fountains'] = comm.map_opencv_alg(cv_results[1], comm.ImageCardType.Foundation)
     solitaire_alg['tableau'] = comm.map_opencv_alg(ml_results[2], comm.ImageCardType.Tableau)
     bestmove = alg.run_algorithm(solitaire_alg)
-    return json.dumps(bestmove["move"].description)
+    foo = app_comm.convert_alg_to_app_json(bestmove)
+    
+    # return json.dumps(bestmove)
+    return foo
 
 @app.route("/algtest", methods = ['POST'])
 def algtestpost():
