@@ -6,8 +6,8 @@ path_cut_tableau = "images/tmp/cut_tableau/col_{}.png"
 path_cut_three = "images/tmp/cut_in_three/cut_{}.png"
 
 path_templates = 'image_processing/templates'
-path_tmpl_birck_rank = path_templates + '/number/birck_rank/'
-path_tmpl_birck_suit = path_templates + '/suits/birck_suit/'
+path_tmpl_birck_rank = path_templates + '/number/slim_rank/'
+path_tmpl_birck_suit = path_templates + '/suits/slim_suit/'
 path_tmpl_birck_rank_bin_inv = path_tmpl_birck_rank + 'bin_inverted/{}.png'
 path_tmpl_birck_suit_bin_inv = path_tmpl_birck_suit + 'bin_inverted/{}.png'
 
