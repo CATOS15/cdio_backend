@@ -7,7 +7,6 @@ from numpy.core.fromnumeric import resize
 def opencv_flow_waste(waste_color_image, tmpl_bin_img):
     # find card outlines
     flow_waste_washed = flows.flow_waste.execute_wash(waste_color_image, cv2.THRESH_BINARY)
-    # flow_waste_washed = flows.flow_waste.execute_wash(g_shared.test, cv2.THRESH_BINARY) #works
 
     # cut these outlines
     flow_waste_countours = flows.flow_waste.execute_contour(
@@ -17,8 +16,6 @@ def opencv_flow_waste(waste_color_image, tmpl_bin_img):
     washed_images = []
     for i, cunt in enumerate(flow_waste_countours):
         washed_images.append(flows.flow_waste.execute_wash(cunt, cv2.THRESH_BINARY))
-
-    # debugging.print_results(washed_images, g_shared.path_contours_sp2)
 
     # cut out images
     flow_waste_cut = flows.flow_waste.execute_cut_suit_rank(
@@ -39,12 +36,9 @@ def opencv_flow_tableau(tableau_color_img, tmpl_bin_img):
     flow_tableau_countours = flows.opencv_flow_tableau.execute_contour(
         alg1=cv2.RETR_EXTERNAL, alg2=cv2.CHAIN_APPROX_SIMPLE, img_thresh=flow_tableau_washed, img_color=tableau_color_img)
 
-    # debugging.print_results(flow_tableau_countours, g_shared.path_contours_sp1)
     washed_images = []
     for i, cunt in enumerate(flow_tableau_countours):
         washed_images.append(flows.flow_waste.execute_wash(cunt, cv2.THRESH_BINARY))
-
-    # debugging.print_results(washed_images, g_shared.path_contours_sp2)
 
     flow_tableau_cut = flows.opencv_flow_tableau.execute_cut_suit_rank(
         washed_images, cv2.RETR_TREE, cv2.CHAIN_APPROX_SIMPLE)

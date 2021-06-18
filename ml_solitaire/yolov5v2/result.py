@@ -1,15 +1,15 @@
-import torch
-import json
 import cv2
+import json
+import torch
 import image_processing.objects as obj
 import image_processing.g_img as g_img
 
 model = torch.hub.load('ultralytics/yolov5', 'custom', path='ml_solitaire/yolov5v2/cardrecognizer.pt')
 
 model.conf = 0.7
-foundation = 'fountains'
-tableau = 'tableau'
 waste = 'waste'
+tableau = 'tableau'
+foundation = 'fountains'
 
 data_solitaire = {
     tableau: [
