@@ -1,10 +1,7 @@
 import cv2
-from numpy.core.fromnumeric import resize
-import image_processing.g_img as g_img
-import image_processing.g_shared as g_shared
-import image_processing.img_resolution as resolution
-import image_processing.debugging as debugging
 import image_processing.flows as flows
+
+from numpy.core.fromnumeric import resize
 
 
 def opencv_flow_waste(waste_color_image, tmpl_bin_img):

@@ -1,21 +1,17 @@
-from flask.helpers import make_response
-from flask.json import jsonify
-from algorithm.image_algorithm import Fountain, run_algorithm
-from flask import Flask, request
-from flask_cors import CORS
-
-import ml_solitaire.cut_image
-
 import cv2
 import json
-
-import image_solutions as solution
-import communication_layer.ml_alg as comm
-import algorithm.image_algorithm as alg
-
 import numpy as np
-
+import ml_solitaire.cut_image
+import image_solutions as solution
+import algorithm.image_algorithm as alg
+import communication_layer.ml_alg as comm
 import tests.algorithm.test_endpoint as alg
+
+from flask_cors import CORS
+from flask.json import jsonify
+from flask import Flask, request
+from flask.helpers import make_response
+from algorithm.image_algorithm import Fountain, run_algorithm
 
 app = Flask(__name__)
 app.config['SECRET_KEY'] = 'back3nd_!cdio'

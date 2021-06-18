@@ -1,7 +1,6 @@
 import math
 
 def cut_img_cut_three(img):
-
     #dimensions for image
     height = img.shape[0]
     width = img.shape[1]

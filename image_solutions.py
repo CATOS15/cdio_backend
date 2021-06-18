@@ -1,15 +1,13 @@
-from image_processing.img_compare import compare
-from ml_solitaire.yolov5v2.result import map_img_cards
-import ml_solitaire.ml_img_recognition as ml_imp
+import image_processing.objects as obj
+import image_processing.g_img as g_img
 import communication_layer.ml_alg as comm
 import image_processing.img_recognition as imp
-import image_processing.objects as obj
+import ml_solitaire.ml_img_recognition as ml_imp
 import image_processing.img_resolution as resolution
-import image_processing.g_img as g_img
 
+from image_processing.img_compare import compare
+from ml_solitaire.yolov5v2.result import map_img_cards
 
-path_cut_tableau = "images/tmp/cut_tableau/col_{}.png"
-path_cut_three = "images/tmp/cut_in_three/cut_{}.png"
 
 # 0 = waste, 1 = foundation, 2 = tableau
 def opencv_solution(img_fractions):

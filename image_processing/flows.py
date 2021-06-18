@@ -1,10 +1,10 @@
-import image_processing.objects as objects
 import image_processing.img_wash as wash
-import image_processing.img_contour as contour
-import image_processing.img_cut_suit_rank as cut_suit_rank
-import image_processing.img_compare as compare
-import ml_solitaire.cut_image as ml_cut_image
+import image_processing.objects as objects
 import communication_layer.ml_alg as ml_alg
+import ml_solitaire.cut_image as ml_cut_image
+import image_processing.img_contour as contour
+import image_processing.img_compare as compare
+import image_processing.img_cut_suit_rank as cut_suit_rank
 
 
 flow_waste = objects.Flow(cb_wash=wash.otsu_wash, cb_contour=contour.contour_approximation,

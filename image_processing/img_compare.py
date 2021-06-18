@@ -1,10 +1,9 @@
-import enum
 import cv2
 import numpy as np
-import image_processing.img_cut_suit_rank as cut_suit_rank
 import image_processing.g_img as g_img
-import image_processing.img_resolution as resolution
 import image_processing.objects as objects
+import image_processing.img_resolution as resolution
+import image_processing.img_cut_suit_rank as cut_suit_rank
 
 
 # Ways to compute euclidian kernel w. Original Image

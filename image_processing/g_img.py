@@ -1,6 +1,4 @@
-import os
 import cv2
-import numpy as np
 from enum import Enum
 import image_processing.objects as objects
 import image_processing.g_shared as g_shared

@@ -1,4 +1,5 @@
 import cv2
+
 from image_processing.img_wash import templ_threshold
 
 def ratio_img_resolution2(img_from, img_template):
