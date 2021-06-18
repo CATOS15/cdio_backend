@@ -1,4 +1,5 @@
 import cv2
+import copy
 
 from image_processing.img_wash import templ_threshold
 
@@ -51,8 +52,8 @@ def avg_columns_width(washed_images):
 def bin_invert_templates(g_templates):
     black_white_templates = []
     for tmpl in g_templates:
-        tmp = tmpl        
-        grey_img = cv2.cvtColor(tmpl.img, cv2.COLOR_BGR2GRAY)
+        tmp = copy.deepcopy(tmpl)
+        grey_img = cv2.cvtColor(tmp.img, cv2.COLOR_BGR2GRAY)
         flipped = cv2.bitwise_not(grey_img)
         blur = cv2.GaussianBlur(flipped, (5, 5), 0)
         _, th = cv2.threshold(blur, 0, 255, cv2.THRESH_BINARY_INV+cv2.THRESH_OTSU)

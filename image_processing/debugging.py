@@ -120,3 +120,11 @@ def show_cut_images(img):
 
     cv2.imshow("cropped", image_piles)
     cv2.waitKey(0)
+
+
+def save_blackwhite_inverted_g_templates(path):
+    for i,tmpl in enumerate(g_shared.g_templates):
+        tmp = tmpl
+        grey_img = cv2.cvtColor(tmp.img, cv2.COLOR_BGR2GRAY)
+        flipped = cv2.bitwise_not(grey_img)
+        cv2.imwrite(path.format(i), flipped)
