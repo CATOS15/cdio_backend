@@ -1,7 +1,7 @@
 def convert_alg_to_app_json(bestmove):
     # result = {}
     move = bestmove["move"]
-    if move == None or move.fromCard.number == None or move.toCard.number == None:
+    if move == None or move.fromCard == None or move.toCard == None:
         return {
             "firstcard": "No card",
             "secondcard": "No card",
