@@ -25,28 +25,20 @@ path_cut_three = "images/tmp/cut_in_three/cut_{}.png"
 #Create first flow for foundation
 
 # 0 = waste, 1 = foundation, 2 = tableau
-def opencv_solution(image_from_api):
-    solitaire_split = flows.flow_ml_subdivide_tableau.cb_img_cut(image_from_api)
-    # debugging.print_results(solitaire_split, g_shared.path_contours_sp4)
-        # set to black/white and invert templates
+def opencv_solution(solitaire_split):
     tmpl_bin_img = resolution.bin_invert_templates(g_img.g_templates)
-    # error when making grey-templates for more than 1 tableau
+
     waste_results = imp.opencv_flow_waste(solitaire_split[0], tmpl_bin_img) 
     foundation_results = imp.opencv_flow_waste(solitaire_split[1], tmpl_bin_img)
     tableau_results = imp.opencv_flow_tableau(solitaire_split[2], tmpl_bin_img)
     return (waste_results, foundation_results, tableau_results)
 
 
-def ml_solution(image_from_api):
-    # Split input image in three
-    solitaire_split = flows.flow_ml_subdivide_tableau.cb_img_cut(image_from_api)
-    
+def ml_solution(solitaire_split):    
     # Card recogniztion on each fraction (waste, foundation and tableau)
     waste_results = ml_imp.ml_flow_waste(solitaire_split[0])
     foundation_results = ml_imp.ml_flow_foundation(solitaire_split[1])
     tableau_results = ml_imp.ml_flow_tableau(solitaire_split[2]) 
-
-
 
     return (waste_results,foundation_results,tableau_results)
 

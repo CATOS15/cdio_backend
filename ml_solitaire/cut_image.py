@@ -26,7 +26,6 @@ def cut_img_cut_three(img):
     # cv2.imwrite('ml_solitaire\image_drawpile.jpg', drawpile)
     # cv2.imwrite('ml_solitaire\image_fountain.jpg', fountain)
     # cv2.imwrite('ml_solitaire\image_piles.jpg', piles)
-
     return (drawpile, fountain, piles)
 
     """ cv2.imshow("cropped", drawpile)
@@ -37,9 +36,9 @@ def cut_img_cut_three(img):
 
     cv2.imshow("cropped", piles)
     cv2.waitKey(0)
-    return """
-
-""" def save_images():
+    return 
+    
+    def save_images():
     cv2.imwrite('image_drawpile.jpg', drawpile)
     cv2.imwrite('image_fountain.jpg', fountain)
     cv2.imwrite('image_piles.jpg', piles) """

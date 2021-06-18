@@ -33,14 +33,9 @@ def hello():
     return "CDIO API"
 
 @app.route('/upload', methods=['POST'])
-def calculate_solution():
-    #imagefile = request.files['file'].read()
-    #npimg = np.fromstring(imagefile, np.uint8)
-    #imagefile = cv2.imdecode(npimg, cv2.IMREAD_COLOR)
-    imagefile = request.files.get('file')
-    imagefile.save("image.jpg")
-
-    image = cv2.imread("image.jpg")
+def calculate_solution():    
+    imagefile = request.files['file'].read()
+    image = cv2.imdecode(np.fromstring(imagefile, np.uint8), cv2.IMREAD_COLOR)
     
     three_image_tuple = ml_solitaire.cut_image.cut_img_cut_three(image)
 
@@ -53,7 +48,7 @@ def calculate_solution():
     solitaire_alg['tableau'] = comm.map_opencv_alg(ml_results[2], comm.ImageCardType.Tableau)
     #solitaire_json = json.dumps(solitaire_alg)
     bestmove = alg.run_algorithm(solitaire_alg)
-    return json.dumps(bestmove)
+    return json.dumps(bestmove["move"].description)
 
 @app.route("/algtest", methods = ['POST'])
 def algtestpost():
