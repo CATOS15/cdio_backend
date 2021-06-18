@@ -24,7 +24,7 @@ def hello():
 @app.route('/upload', methods=['POST'])
 def calculate_solution():    
     imagefile = request.files['file'].read()
-    image = cv2.imdecode(np.fromstring(imagefile, np.uint8), cv2.IMREAD_COLOR)
+    image = cv2.imdecode(np.frombuffer(imagefile, np.uint8), cv2.IMREAD_COLOR)
     
     three_image_tuple = ml_solitaire.cut_image.cut_img_cut_three(image)
 
