@@ -25,23 +25,28 @@ def load_images_from_folder(folder):
             images.append({'filename':filename, 'image':img})
     return images
 
-
+def test_images(fileimages):
+    values = []
+    for image in fileimages:
+        temp = []
+        results = model(image['image'])
+        resultsPanda = results.pandas().xyxy[0].to_json(orient="records")
+        resultsJSON = json.loads(resultsPanda)
+        temp.append(image['filename'])
+        for result in resultsJSON:
+            name = result["name"]
+            conf = result["confidence"]
+            temp.append({name,(round(conf, 2))})
+        values.append(temp)
+    return values
 
 #test RandomImages folder
 images = load_images_from_folder(path)
+result = test_images(images)
+for each in result:
+    print(each)
 
-for image in images:
-    values = []
 
-    results = model(image['image'])
-    resultsPanda = results.pandas().xyxy[0].to_json(orient="records")
-    resultsJSON = json.loads(resultsPanda)
-    values.append(image['filename'])
-    for result in resultsJSON:
-        name = result["name"]
-        conf = result["confidence"]
-        values.append({name,(round(conf, 2))})
-    print(values)
     
 #print(images)
 
@@ -50,5 +55,3 @@ for image in images:
 # 3. find gennemsnits confidence og fjern dublicates
 # 3.1 EXTRA find højeste og laveste konfidens
 # 4. gem værdier så de kan manuelt checkes. 
-
-#print(resultsJSON)
