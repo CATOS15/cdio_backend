@@ -4,8 +4,8 @@ def convert_alg_to_app_json(bestmove):
     if move == None or move.fromCard == None or move.toCard == None:
         return {
             #pick random firstcard and secondcard
-            "firstcard": "No card",
-            "secondcard": "No card",
+            "firstcard": "random",
+            "secondcard": "random",
             "movemessage": "unable to recognize cards"
         }
     if type(move) != str:
