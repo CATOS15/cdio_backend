@@ -2,11 +2,12 @@ from enum import Enum
 import copy
 import json
 from operator import itemgetter
-class suit(Enum):
-    DIAMOND = 1
-    HEART = 2
-    SPADE = 3
-    CLUBS = 4
+import image_processing.g_img as g_img
+# class suit(Enum):
+#     DIAMOND = 1
+#     HEART = 2
+#     SPADE = 3
+#     CLUBS = 4
 
 class Card:
     def __init__(self, number, suit):
@@ -33,10 +34,10 @@ class Move:
         return json.dumps(self.__dict__)
 
 fountains = [
-    Fountain(0, suit.DIAMOND),
-    Fountain(0, suit.HEART),
-    Fountain(0, suit.SPADE),
-    Fountain(0, suit.CLUBS)
+    Fountain(0, g_img.Suits.DIAMOND),
+    Fountain(0, g_img.Suits.HEART),
+    Fountain(0, g_img.Suits.SPADE),
+    Fountain(0, g_img.Suits.CLUB)
 ]
 tableau = [
     [],
@@ -270,10 +271,10 @@ def run_algorithm(data_solitaire):
     global originalFountains, originalTableau, originalWaste, tableau, fountains, waste
 
     fountains = [
-        Fountain(0, suit.DIAMOND),
-        Fountain(0, suit.HEART),
-        Fountain(0, suit.SPADE),
-        Fountain(0, suit.CLUBS)
+        Fountain(0, g_img.Suits.DIAMOND),
+        Fountain(0, g_img.Suits.HEART),
+        Fountain(0, g_img.Suits.SPADE),
+        Fountain(0, g_img.Suits.CLUB)
     ]
     tableau = [
         [],
@@ -292,17 +293,17 @@ def run_algorithm(data_solitaire):
             if data_card is None:
                 tableau[index].append(None)
             else:
-                tableau[index].append(Card(data_card['number'], suit(data_card['suit'])))
+                tableau[index].append(Card(data_card['number'], g_img.Suits(data_card['suit'])))
         index += 1
 
     index = 0
     for data_fountain in data_solitaire['fountains']:
-        fountains[index] = Fountain(data_fountain['number'], suit(data_fountain['suit']))
+        fountains[index] = Fountain(data_fountain['number'], g_img.Suits(data_fountain['suit']))
         index += 1
 
     index = 0
     for data_waste in data_solitaire['waste']:
-        waste.append(Card(data_waste['number'], suit(data_waste['suit'])))
+        waste.append(Card(data_waste['number'], g_img.Suits(data_waste['suit'])))
         index += 1
 
     originalFountains = copy.copy(fountains)
