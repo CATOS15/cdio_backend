@@ -1,9 +1,10 @@
+from image_processing.img_compare import compare
 import cv2
 import numpy as np
 import ml_solitaire.cut_image
 import image_solutions as solution
 import algorithm.image_algorithm as alg
-import communication_layer.ml_alg as comm
+import communication_layer.ml_opencv as ml_opencv
 import communication_layer.app_alg as app_comm
 
 from flask_cors import CORS
@@ -26,15 +27,12 @@ def calculate_solution():
     imagefile = request.files['file'].read()
     image = cv2.imdecode(np.frombuffer(imagefile, np.uint8), cv2.IMREAD_COLOR)
     
-    three_image_tuple = ml_solitaire.cut_image.cut_img_cut_three(image)
+    image_fractions = ml_solitaire.cut_image.cut_img_cut_three(image)
 
-    cv_results = solution.opencv_solution(three_image_tuple)
-    ml_results = solution.ml_solution(three_image_tuple)
+    cv_res = solution.opencv_solution(image_fractions)
+    ml_res = solution.ml_solution(image_fractions)
 
-    solitaire_alg = {}
-    solitaire_alg['waste'] = comm.map_opencv_alg(cv_results[0], comm.ImageCardType.Waste)
-    solitaire_alg['fountains'] = comm.map_opencv_alg(cv_results[1], comm.ImageCardType.Foundation)
-    solitaire_alg['tableau'] = comm.map_opencv_alg(ml_results[2], comm.ImageCardType.Tableau)
+    solitaire_alg = ml_opencv.compare_results(cv_res, ml_res)
     bestmove = alg.run_algorithm(solitaire_alg)
     return app_comm.convert_alg_to_app_json(bestmove)
     
@@ -42,6 +40,8 @@ def calculate_solution():
 def algtestpost():
     res = alg.simple_test()
     return res
+
+
 
 if __name__ == '__main__':
     app.run(host='0.0.0.0', port=5005)

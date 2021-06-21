@@ -11,11 +11,11 @@ from ml_solitaire.yolov5v2.result import map_img_cards
 
 # 0 = waste, 1 = foundation, 2 = tableau
 def opencv_solution(img_fractions):
-    tmpl_bin_img = resolution.bin_invert_templates(g_img.g_templates)
+    inv_bin_templates = resolution.bin_invert_templates(g_img.g_templates)
 
-    waste_results = imp.opencv_flow_waste(img_fractions[0], tmpl_bin_img) 
-    foundation_results = imp.opencv_flow_waste(img_fractions[1], tmpl_bin_img)
-    tableau_results = imp.opencv_flow_tableau(img_fractions[2], tmpl_bin_img)
+    waste_results = imp.opencv_flow_waste(img_fractions[0], inv_bin_templates) 
+    foundation_results = imp.opencv_flow_waste(img_fractions[1], inv_bin_templates)
+    tableau_results = imp.opencv_flow_tableau(img_fractions[2], inv_bin_templates)
     return (waste_results, foundation_results, tableau_results)
 
 
