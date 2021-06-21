@@ -50,14 +50,14 @@ def getCardsFromImage(path):
 
 
 def get_suit_value(s):
-    if s == 'c':
-        return 1
-    elif s == 'd':
-        return 2
+    if s == 'd':
+        return g_img.Suits.DIAMOND.value
     elif s == 'h':
-        return 3
+        return g_img.Suits.HEART.value
+    elif s == 's': #c for clubs
+        return g_img.Suits.SPADE.value
     else:
-        return 4
+        return g_img.Suits.CLUB.value
 
 
 def get_card_value(s):
