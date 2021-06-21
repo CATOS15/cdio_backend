@@ -7,33 +7,6 @@ import image_processing.objects as objects
 import tests.birck.g_tests_shared as shared
 from image_processing.img_contour import contour_approximation
 
-# Birck Wash Tests
-class TestContur(unittest.TestCase):
-    otsu_capprox = objects.Flow(cb_wash=wash.otsu_wash, cb_contour=contour_approximation, cb_cut_suit_rank=None, cb_compare_by_template=None)
-
-    cmatches = []
-    cmatches.append(tobj.ContourMatch("mask_eight_diamond_131", shared.mask_eight_diamond_131))
-    cmatches.append(tobj.ContourMatch("mask_eight_diamond_132", shared.mask_eight_diamond_132))
-    cmatches.append(tobj.ContourMatch("mask_eight_heart_160", shared.mask_eight_heart_160))
-    cmatches.append(tobj.ContourMatch("mask_king_diamond_128", shared.mask_king_diamond_128))
-    cmatches.append(tobj.ContourMatch("mask_two_diamond", shared.mask_two_diamond_190))
-
-    # uses I2
-    # https://docs.opencv.org/3.4/d3/dc0/group__imgproc__shape.html#gaf2b97a230b51856d09a2d934b78c015f
-    # https://learnopencv.com/shape-matching-using-hu-moments-c-python/
-    def test_contour_approximation(self):
-        contours_result = []
-        for cmatch in self.cmatches:
-            contours = self.otsu_capprox.execute_contour(cv2.RETR_EXTERNAL, cv2.CHAIN_APPROX_SIMPLE, cmatch.ground_truth)
-            boundingBoxes = [cv2.boundingRect(c) for c in contours]
-            (cnts_sorted, boundingBoxes) = zip(*sorted(zip(contours, boundingBoxes), key=lambda b: b[1][0], reverse=False))
-            cnt_deck = cnts_sorted[0]  # deck
-            cnt_card = cnts_sorted[1]  # card
-            cmatch.find_best_result(cv2.matchShapes(cmatch.ground_truth, cnt_deck, cv2.CONTOURS_MATCH_I2, None), True)
-            cmatch.find_best_result(cv2.matchShapes(cmatch.ground_truth, cnt_card, cv2.CONTOURS_MATCH_I2, None), False)
-            contours_result.append(cmatch)
-        for result in contours_result:
-            print(result)
 
 # Tests washing
 class TestWash(unittest.TestCase):
@@ -74,17 +47,15 @@ class TestWash(unittest.TestCase):
         wash_results = self._wash_array(self.otsu_simple.cb_wash)
 
         for i, threshold_img in enumerate(wash_results):
-            pearson_results.append(pearson_corr_coeff(threshold_img, shared.mask_imgs[i]))
             accuracy_results.append(accuracy(threshold_img, shared.mask_imgs[i]))
+            pearson_results.append(pearson_corr_coeff(threshold_img, shared.mask_imgs[i]))
             tanimoto_results.append(tanimoto_corr_coeff(threshold_img, shared.mask_imgs[i]))
 
         print(pearson_results)
-        print(tanimoto_results)
         print(accuracy_results)
+        print(tanimoto_results)
 
 # pearson correlation coefficient
-
-
 def pearson_corr_coeff(img_test, ground_truth_mask):
     img_test_average = np.mean(img_test)
     ground_truth_mask_average = np.mean(ground_truth_mask)
@@ -124,6 +95,35 @@ def accuracy(img_test, ground_truth_mask):
                 m_11 += 1
 
     return (m_11 + m_00) / (m_10 + m_01 + m_11 + m_00)
+
+
+# Birck Wash Tests
+# class TestContur(unittest.TestCase):
+#     otsu_capprox = objects.Flow(cb_wash=wash.otsu_wash, cb_contour=contour_approximation, cb_cut_suit_rank=None, cb_compare_by_template=None)
+
+#     cmatches = []
+#     cmatches.append(tobj.ContourMatch("mask_eight_diamond_131", shared.mask_eight_diamond_131))
+#     cmatches.append(tobj.ContourMatch("mask_eight_diamond_132", shared.mask_eight_diamond_132))
+#     cmatches.append(tobj.ContourMatch("mask_eight_heart_160", shared.mask_eight_heart_160))
+#     cmatches.append(tobj.ContourMatch("mask_king_diamond_128", shared.mask_king_diamond_128))
+#     cmatches.append(tobj.ContourMatch("mask_two_diamond", shared.mask_two_diamond_190))
+
+#     # uses I2
+#     # https://docs.opencv.org/3.4/d3/dc0/group__imgproc__shape.html#gaf2b97a230b51856d09a2d934b78c015f
+#     # https://learnopencv.com/shape-matching-using-hu-moments-c-python/
+#     def test_contour_approximation(self):
+#         contours_result = []
+#         for cmatch in self.cmatches:
+#             contours = self.otsu_capprox.execute_contour(cv2.RETR_EXTERNAL, cv2.CHAIN_APPROX_SIMPLE, cmatch.ground_truth)
+#             boundingBoxes = [cv2.boundingRect(c) for c in contours]
+#             (cnts_sorted, boundingBoxes) = zip(*sorted(zip(contours, boundingBoxes), key=lambda b: b[1][0], reverse=False))
+#             cnt_deck = cnts_sorted[0]  # deck
+#             cnt_card = cnts_sorted[1]  # card
+#             cmatch.find_best_result(cv2.matchShapes(cmatch.ground_truth, cnt_deck, cv2.CONTOURS_MATCH_I2, None), True)
+#             cmatch.find_best_result(cv2.matchShapes(cmatch.ground_truth, cnt_card, cv2.CONTOURS_MATCH_I2, None), False)
+#             contours_result.append(cmatch)
+#         for result in contours_result:
+#             print(result)
 
 
 if __name__ == '__main__':
