@@ -29,15 +29,10 @@ def calculate_solution():
     
     image_fractions = ml_solitaire.cut_image.cut_img_cut_three(image)
 
-    for i, img in enumerate(image_fractions):
-        cv2.imwrite("images/tmp/{}.png".format(i), img)
-
     cv_res = solution.opencv_solution(image_fractions)
     ml_res = solution.ml_solution(image_fractions)
 
     solitaire_alg = ml_opencv.compare_results(cv_res, ml_res)
-    print("-----><<<<<<----")
-    print(solitaire_alg)
     bestmove = alg.run_algorithm(solitaire_alg)
     return app_comm.convert_alg_to_app_json(bestmove)
     
