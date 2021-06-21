@@ -54,7 +54,7 @@ def get_suit_value(s):
         return g_img.Suits.DIAMOND.value
     elif s == 'h':
         return g_img.Suits.HEART.value
-    elif s == 's': #c for clubs
+    elif s == 's': 
         return g_img.Suits.SPADE.value
     else:
         return g_img.Suits.CLUB.value
