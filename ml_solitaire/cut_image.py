@@ -4,7 +4,7 @@ def cut_img_cut_three(img):
     #dimensions for image
     height = img.shape[0]
     width = img.shape[1]
-    heightratio = 1/3 #hvor meget plads der er i toppen af linjegrided
+    heightratio = 7/24 #hvor meget plads der er i toppen af linjegrided
 
     #cropped image *zones
     left_width = math.floor(width*2/5)
