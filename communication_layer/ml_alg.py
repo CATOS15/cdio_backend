@@ -3,6 +3,7 @@ import ml_solitaire.transform720
 import image_processing.img_wash
 import image_processing.g_shared
 import image_processing.img_contour
+import image_processing.objects as obj
 import ml_solitaire.yolov5v2.result
 
 from enum import Enum
@@ -19,15 +20,69 @@ number = 'number'
 suit = 'suit'
 
 
-def map_opencv_alg(solution, type):
+def map_ml_alg(solution, img_type):
     converted_to_alg = []
-    if type == ImageCardType.Waste:
+    if img_type == ImageCardType.Waste:
         for card in solution:
+            if len(card) == 0:
+                continue
+
+            for single_card in card:             
+                json_card = _convert_cardobj_alg(single_card)
+                if json_card == None:
+                    continue
+                if json_card != None:
+                    converted_to_alg.append(json_card)
+            
+
+    if img_type == ImageCardType.Foundation:
+        for x in range(1, 5):
+            found_card = False
+            for col_card in solution:
+                if len(col_card) == 0:
+                    # converted_to_alg.append(_foundation_set_none(x))
+                    continue
+                card = col_card[0]
+                if card.suit == None:
+                    continue
+                if card.suit.value == x:
+                    json_card = _convert_cardobj_alg(card)
+                    if json_card == None:
+                        json_card = _foundation_set_none(x)
+                    converted_to_alg.append(json_card)
+                    found_card = True
+                    break
+
+            if found_card == False:
+                alg_card = _foundation_set_none(x)
+                converted_to_alg.append(alg_card)
+
+    if img_type == ImageCardType.Tableau:        
+        for col in solution:
+            column_arr = []
+            for card in col:
+                json_card = _convert_cardobj_alg(card)
+                column_arr.append(json_card)
+            converted_to_alg.append(column_arr)
+
+
+    return converted_to_alg
+
+
+def map_opencv_alg(solution, img_type):
+    converted_to_alg = []
+    if img_type == ImageCardType.Waste:
+        for card in solution:
+            if card.suit == None or card.number == None:
+                _foundation_set_none(1)
+                continue
             json_card = _convert_cardobj_alg(card)
+            if json_card == None:
+                json_card = _foundation_set_none(1)
             if json_card != None:
                 converted_to_alg.append(json_card)
 
-    if type == ImageCardType.Foundation:
+    if img_type == ImageCardType.Foundation:
         for x in range(1, 5):
             found_card = False
             for card in solution:
@@ -45,7 +100,7 @@ def map_opencv_alg(solution, type):
                 alg_card = _foundation_set_none(x)
                 converted_to_alg.append(alg_card)
 
-    if type == ImageCardType.Tableau:        
+    if img_type == ImageCardType.Tableau:        
         for col in solution:
             column_arr = []
             for card in col:
@@ -54,6 +109,8 @@ def map_opencv_alg(solution, type):
             converted_to_alg.append(column_arr)
     return converted_to_alg
 
+def _waste_set_none():
+    return 
 
 def _foundation_set_none(suit_val):
     foo = {}

@@ -330,7 +330,7 @@ def run_algorithm(data_solitaire):
                 bestMove["move"].toCard = None
 
         if (bestMove["point"] < 20 and bestMove["numberOfMoves"] == 1) or (bestMove["point"] < 40 and bestMove["numberOfMoves"] == 2):
-            bestMove["move"].description = "Træk kort! Hvis ikke muligt udfør -> " + bestMove["move"].description
+            bestMove["move"].description = "Træk kort! \nHvis ikke muligt udfør -> " + bestMove["move"].description
             bestMove["move"].drawCard = True
 
     else:

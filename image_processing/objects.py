@@ -106,7 +106,7 @@ class Card:
         return to_return
     
     def __eq__(self, other):
-        return self.suit==other.suit and self.rank==other.rank
+        return isinstance(other, Card) and (self.suit==other.suit and self.rank==other.rank)
 
 
     def __hash__(self):
