@@ -22,10 +22,10 @@ class CardType(Enum):
 
 
 class Suits(Enum):
-    CLUB = 1
-    DIAMOND = 2
-    HEART = 3
-    SPADE = 4
+    DIAMOND = 1
+    HEART = 2
+    SPADE = 3
+    CLUB = 4
 
 
 class Ranks(Enum):
