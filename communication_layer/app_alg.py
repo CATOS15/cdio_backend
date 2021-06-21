@@ -18,6 +18,7 @@ def convert_alg_to_app_json(bestmove):
         if (bestmove["point"] < 20 and bestmove["numberOfMoves"] == 1) or (bestmove["point"] < 40 and bestmove["numberOfMoves"] == 2):
             firstcard = "flip"
             secondcard = "random"
+            movemessage = "flip a card from waste"
     else:
         movemessage = str(move)
 
