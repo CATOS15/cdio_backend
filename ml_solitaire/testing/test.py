@@ -9,7 +9,7 @@ import ml_solitaire.yolov5v2.result as mapcards
 
 
 #ML model loading and confidence
-model = torch.hub.load('ultralytics/yolov5', 'custom', path='C:/Users/tobia/OneDrive/Skrivebord/University/4.semester/CDIO/cdio_backend/cdio_backend/ml_solitaire/yolov5v2/cardrecognizer.pt', force_reload=True)
+model = torch.hub.load('ultralytics/yolov5', 'custom', path='ml_solitaire\yolov5v2\cardrecognizer.pt', force_reload=True)
 model.conf = 0.7
 #img = cv2.imread('ml_solitaire/yolov5v2/testing/*.jpg')[:, :, ::-1]
 
