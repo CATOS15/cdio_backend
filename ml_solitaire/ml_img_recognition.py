@@ -1,3 +1,11 @@
+#Gruppe 15
+#Christian Frost s184140
+#Mikkel Lindtner s205421 
+#Nikolai Stein s205469
+#Oliver Christensen s176352
+#Søren Andersen s182881
+#Tobias Kristensen s195458
+
 import image_processing.flows as flows
 import ml_solitaire.transform720 as tf720
 from ml_solitaire.yolov5v2.result import map_img_cards

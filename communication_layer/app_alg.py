@@ -1,3 +1,11 @@
+#Gruppe 15
+#Christian Frost s184140
+#Mikkel Lindtner s205421 
+#Nikolai Stein s205469
+#Oliver Christensen s176352
+#Søren Andersen s182881
+#Tobias Kristensen s195458
+
 def convert_alg_to_app_json(bestmove):
     # result = {}
     move = bestmove["move"]

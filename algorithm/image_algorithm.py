@@ -1,3 +1,11 @@
+#Gruppe 15
+#Christian Frost s184140
+#Mikkel Lindtner s205421 
+#Nikolai Stein s205469
+#Oliver Christensen s176352
+#Søren Andersen s182881
+#Tobias Kristensen s195458
+
 from enum import Enum
 import copy
 import json
@@ -8,6 +16,7 @@ import image_processing.g_img as g_img
 #     HEART = 2
 #     SPADE = 3
 #     CLUBS = 4
+ 
 
 class Card:
     def __init__(self, number, suit):

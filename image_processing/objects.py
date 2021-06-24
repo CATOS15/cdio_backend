@@ -1,3 +1,11 @@
+#Gruppe 15
+#Christian Frost s184140
+#Mikkel Lindtner s205421 
+#Nikolai Stein s205469
+#Oliver Christensen s176352
+#Søren Andersen s182881
+#Tobias Kristensen s195458
+
 class DrawSquare:
     def __init__(self, color, thicc):
         self.color = color
